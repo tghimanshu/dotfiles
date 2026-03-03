@@ -1,0 +1,79 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# .taskrc — Taskwarrior configuration
+# Copy to: ~/.taskrc
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Data location ─────────────────────────────────────────────────────────────
+data.location=~/.local/share/task
+
+# ── Default command (what 'task' alone shows) ─────────────────────────────────
+default.command=next
+
+# ── Journal / dependency features ─────────────────────────────────────────────
+journal.time=on
+dependency.reminder=on
+
+# ── Urgency weights (tuned for developer life) ────────────────────────────────
+# Higher = bigger boost to urgency score
+urgency.due.coefficient=12.0        # due dates matter a lot
+urgency.blocking.coefficient=8.0    # tasks blocking others matter
+urgency.project.coefficient=1.0
+urgency.active.coefficient=4.0
+urgency.scheduled.coefficient=7.0
+urgency.age.coefficient=2.0
+urgency.tags.coefficient=1.0
+
+# Priority boosts
+urgency.priority.coefficient=6.0
+urgency.user.tag.urgent.coefficient=10.0   # +urgent gets a big bump
+urgency.user.tag.blocked.coefficient=-5.0  # +blocked drops in urgency
+
+# ── UDA: custom fields ────────────────────────────────────────────────────────
+# Estimated time in minutes — helps with planning
+uda.estimate.type=numeric
+uda.estimate.label=Est(min)
+
+# ── Reports ───────────────────────────────────────────────────────────────────
+
+# 'task next' — your primary view: most urgent things to do
+report.next.columns=id,start.age,entry.age,depends,priority,project,tags,recur,scheduled.countdown,due.relative,until.remaining,description,urgency
+report.next.labels=ID,Active,Age,Deps,P,Project,Tags,Recur,Sched,Due,Until,Description,Urg
+report.next.sort=urgency-
+report.next.filter=status:pending
+
+# 'task today' — what's due today or overdue
+report.today.description=Tasks due today or overdue
+report.today.columns=id,priority,project,tags,due,description
+report.today.labels=ID,P,Project,Tags,Due,Description
+report.today.sort=urgency-
+report.today.filter=status:pending due.before:tomorrow+1d
+
+# 'task week' — everything this week
+report.week.description=Tasks due this week
+report.week.columns=id,priority,project,tags,due,estimate,description
+report.week.labels=ID,P,Project,Tags,Due,Est,Description
+report.week.sort=due+,urgency-
+report.week.filter=status:pending due.before:+7d
+
+# ── Colours ───────────────────────────────────────────────────────────────────
+color=on
+color.due=color208                  # due tasks — orange
+color.due.today=bold color196       # due today — bright red
+color.overdue=bold color196         # overdue — bright red
+color.tag.urgent=bold color196      # +urgent tag — bright red
+color.tag.blocked=color244          # +blocked — grey (de-emphasis)
+color.tag.quick=color82             # +quick — green
+color.project=color39               # project names — cyan
+color.priority.H=bold color196      # high priority — red
+color.priority.M=color208           # medium priority — orange
+color.priority.L=color244           # low priority — grey
+color.active=bold color82           # active/started tasks — bright green
+color.completed=color244            # completed — grey
+
+# ── Sync (Inthe.AM) ────────────────────────────────────────────────────────────
+# Uncomment and fill in after setting up inthe.am
+# taskd.server=inthe.am:53589
+# taskd.credentials=<group>/<user>/<key>
+# taskd.certificate=~/.task/inthe.am.cert.pem
+# taskd.key=~/.task/inthe.am.key.pem
+# taskd.ca=~/.task/inthe.am.ca.pem

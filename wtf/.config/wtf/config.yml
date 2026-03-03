@@ -1,0 +1,150 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# wtf terminal dashboard config
+# Install:  go install github.com/wtfutil/wtf@latest   OR  yay -S wtfutil
+# Run:      wtf
+# Config:   ~/.config/wtf/config.yml   ← symlink this file there
+#
+# Layout (3 columns):
+#   LEFT   → Clock · System stats · Git repos
+#   CENTER → Tasks (Taskwarrior) · Todo scratch
+#   RIGHT  → GitHub activity · Weather
+# ─────────────────────────────────────────────────────────────────────────────
+
+wtf:
+  # Refresh the whole dashboard every 60 seconds
+  refreshInterval: 60
+  openFileUtil: "nvim"
+
+  colors:
+    border:
+      focusable: "darkslateblue"
+      focused:   "darkorange"
+      normal:    "gray"
+
+  grid:
+    # 3 columns: 30% | 40% | 30%
+    columns: [30, 40, 30]
+    # 5 rows
+    rows: [5, 5, 5, 5, 6]
+
+modules:
+
+  # ── Clock ──────────────────────────────────────────────────────────────────
+  clocks:
+    colors:
+      rows:
+        even: "lightblue"
+        odd:  "white"
+    enabled: true
+    locations:
+      Home: "Asia/Kolkata"
+      UTC:  "UTC"
+    position:
+      top:    0
+      left:   0
+      height: 1
+      width:  1
+    refreshInterval: 1
+    sort: "alphabetical"
+    title: " Time"
+    type: "clocks"
+
+  # ── System resource usage ──────────────────────────────────────────────────
+  system:
+    enabled: true
+    position:
+      top:    1
+      left:   0
+      height: 2
+      width:  1
+    refreshInterval: 5
+    title: " System"
+    type: "system"
+
+  # ── Git: recent repos you're working in ───────────────────────────────────
+  # Lists uncommitted changes across your projects
+  gitrepos:
+    enabled: true
+    position:
+      top:    3
+      left:   0
+      height: 2
+      width:  1
+    refreshInterval: 60
+    repositories:
+      # Add your active project paths here
+      - "~/Workspace"
+      - "~/personal"
+      - "~/notes"
+    title: " Git Repos"
+    type: "gitrepos"
+
+  # ── Taskwarrior — your task list ──────────────────────────────────────────
+  # Requires: taskwarrior installed (sudo pacman -S task)
+  # Shows tasks due today + high priority
+  taskwarrior:
+    enabled: true
+    position:
+      top:    0
+      left:   1
+      height: 3
+      width:  1
+    refreshInterval: 60
+    title: " Tasks"
+    type: "taskwarrior"
+
+  # ── Todo scratch pad (quick notes, no setup needed) ───────────────────────
+  todo:
+    checkedIcon: "x"
+    colors:
+      checked: gray
+      highlight:
+        fore: "black"
+        back: "orange"
+    enabled: true
+    filePath: "~/.config/wtf/todo.md"
+    position:
+      top:    3
+      left:   1
+      height: 2
+      width:  1
+    refreshInterval: 3600
+    title: "󰍖 Scratch Pad"
+    type: "todo"
+
+  # ── GitHub — open PRs, issues, reviews ────────────────────────────────────
+  # Requires: GITHUB_TOKEN env var (use your Student Pack PAT)
+  # Add to ~/.zshrc:  export GITHUB_TOKEN="ghp_xxxxxxxxxxxx"
+  github:
+    apiKey: "${GITHUB_TOKEN}"
+    enabled: true
+    position:
+      top:    0
+      left:   2
+      height: 3
+      width:  1
+    refreshInterval: 300
+    repositories:
+      # Add repos you actively watch/contribute to
+      # - "owner/repo-name"
+    showStats: true
+    title: " GitHub"
+    type: "github"
+    username: "himanshu"   # ← change to your GitHub username
+
+  # ── Weather ───────────────────────────────────────────────────────────────
+  # No API key needed for wttr.in
+  weather:
+    city:            ""         # leave blank — uses IP geolocation automatically
+    enabled:         true
+    language:        "en"
+    position:
+      top:    3
+      left:   2
+      height: 2
+      width:  1
+    refreshInterval: 1800       # 30 min
+    tempUnit:        "C"
+    title:           " Weather"
+    type:            "weather"
+    useEmoji:        true

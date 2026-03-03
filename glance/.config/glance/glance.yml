@@ -1,0 +1,169 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Glance — Personal Life Dashboard
+# Install (Docker):
+#   docker run -d -p 4000:8080 \
+#     -v ~/.config/glance:/app/config \
+#     --name glance glanceapp/glance
+#
+# Docs: https://github.com/glanceapp/glance
+# Access: http://localhost:4000
+# ─────────────────────────────────────────────────────────────────────────────
+
+server:
+  port: 8080
+
+theme:
+  background-color: 240 10 6
+  primary-color: 217 92 83
+  positive-color: 115 54 76
+  negative-color: 0 72 63
+
+pages:
+  - name: Life OS
+    columns:
+      # ── LEFT COLUMN ──────────────────────────────────────────────────────
+      - size: small
+        widgets:
+          - type: clock
+            hour-format: 24h
+            timezones:
+              - timezone: Asia/Kolkata
+                label: IST
+              - timezone: UTC
+                label: UTC
+
+          - type: monitor
+            title: Local Services
+            sites:
+              - title: Open WebUI
+                url: http://localhost:3000
+                icon: si:ollama
+              - title: Glance
+                url: http://localhost:4000
+                icon: si:glance
+
+          - type: bookmarks
+            title: Dev Environment
+            groups:
+              - title: Code
+                links:
+                  - title: GitHub
+                    url: https://github.com
+                    icon: si:github
+                  - title: GitHub Copilot
+                    url: https://github.com/copilot
+                    icon: si:githubcopilot
+                  - title: Student Pack
+                    url: https://education.github.com/pack
+                    icon: si:github
+              - title: Deploy
+                links:
+                  - title: Vercel
+                    url: https://vercel.com/dashboard
+                    icon: si:vercel
+                  - title: Railway
+                    url: https://railway.app/dashboard
+                    icon: si:railway
+                  - title: Render
+                    url: https://dashboard.render.com
+                    icon: si:render
+
+      # ── MIDDLE COLUMN ─────────────────────────────────────────────────────
+      - size: full
+        widgets:
+          - type: bookmarks
+            title: AI & LLM
+            groups:
+              - title: Local
+                links:
+                  - title: Open WebUI (Ollama)
+                    url: http://localhost:3000
+                    icon: si:ollama
+              - title: Cloud
+                links:
+                  - title: Gemini
+                    url: https://gemini.google.com
+                    icon: si:googlegemini
+                  - title: Perplexity
+                    url: https://www.perplexity.ai
+                    icon: si:perplexity
+                  - title: Hugging Face
+                    url: https://huggingface.co
+                    icon: si:huggingface
+                  - title: Google Colab
+                    url: https://colab.research.google.com
+                    icon: si:googlecolab
+
+          - type: bookmarks
+            title: Learning
+            groups:
+              - title: Practice
+                links:
+                  - title: LeetCode
+                    url: https://leetcode.com
+                    icon: si:leetcode
+                  - title: Exercism
+                    url: https://exercism.org/dashboard
+                    icon: si:exercism
+                  - title: Anki
+                    url: https://ankiweb.net
+                    icon: si:anki
+              - title: Courses
+                links:
+                  - title: roadmap.sh
+                    url: https://roadmap.sh
+                    icon: si:roadmapdotsh
+                  - title: CS50x
+                    url: https://cs50.harvard.edu/x
+                    icon: di:harvard
+                  - title: MIT OCW
+                    url: https://ocw.mit.edu
+                    icon: di:mit
+
+      # ── RIGHT COLUMN ──────────────────────────────────────────────────────
+      - size: small
+        widgets:
+          - type: bookmarks
+            title: Documentation
+            groups:
+              - title: Dev
+                links:
+                  - title: DevDocs
+                    url: https://devdocs.io
+                    icon: si:devdocs
+                  - title: Neovim Docs
+                    url: https://neovim.io/doc/user/
+                    icon: si:neovim
+                  - title: MDN
+                    url: https://developer.mozilla.org
+                    icon: si:mdnwebdocs
+                  - title: Python Docs
+                    url: https://docs.python.org/3
+                    icon: si:python
+                  - title: cppreference
+                    url: https://en.cppreference.com
+                    icon: si:cplusplus
+                  - title: Taskwarrior
+                    url: https://taskwarrior.org/docs
+                    icon: si:taskwarrior
+
+          - type: bookmarks
+            title: Utilities
+            groups:
+              - title: Tools
+                links:
+                  - title: Excalidraw
+                    url: https://excalidraw.com
+                    icon: si:excalidraw
+                  - title: RegExr
+                    url: https://regexr.com
+                    icon: si:regex
+                  - title: JSON Crack
+                    url: https://jsoncrack.com
+                    icon: si:json
+                  - title: Crontab Guru
+                    url: https://crontab.guru
+                    icon: si:linux
+                  - title: Explainshell
+                    url: https://explainshell.com
+                    icon: si:gnubash
