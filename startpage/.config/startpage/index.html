@@ -61,9 +61,9 @@
 
     /* ── Layout ─────────────────────────────────────────────────────────────── */
     .container {
-      max-width: 1380px;
+      max-width: 1600px;
       margin: 0 auto;
-      padding: 20px 20px 72px;
+      padding: 20px 24px 80px;
     }
 
     /* ── Header ─────────────────────────────────────────────────────────────── */
@@ -72,7 +72,7 @@
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
       gap: 16px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       padding-bottom: 16px;
       border-bottom: 1px solid var(--border);
     }
@@ -132,7 +132,7 @@
     .search-wrap {
       position: relative;
       width: 100%;
-      max-width: 460px;
+      max-width: 520px;
       justify-self: center;
     }
 
@@ -155,7 +155,7 @@
       color: var(--text);
       font-family: var(--font);
       font-size: 12px;
-      padding: 7px 36px 7px 32px;
+      padding: 7px 56px 7px 32px;
       outline: none;
       transition: border-color 0.15s, box-shadow 0.15s;
     }
@@ -181,9 +181,9 @@
     /* ── Help bar ───────────────────────────────────────────────────────────── */
     .help-bar {
       display: flex;
-      gap: 16px;
+      gap: 14px;
       flex-wrap: wrap;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       font-size: 10.5px;
       color: var(--text-faint);
     }
@@ -205,7 +205,7 @@
     .tabs {
       display: flex;
       gap: 3px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .tab {
@@ -235,9 +235,18 @@
     /* ── Grid ───────────────────────────────────────────────────────────────── */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       gap: 14px;
       align-items: start;
+    }
+
+    /* wide card spans 2 columns on large screens */
+    .card-wide {
+      grid-column: span 2;
+    }
+
+    @media (max-width: 900px) {
+      .card-wide { grid-column: span 1; }
     }
 
     /* ── Card ───────────────────────────────────────────────────────────────── */
@@ -276,6 +285,30 @@
       flex-shrink: 0;
     }
 
+    .card-title-actions {
+      margin-left: auto;
+      display: flex;
+      gap: 6px;
+    }
+
+    .card-action-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-faint);
+      cursor: pointer;
+      font-family: var(--font);
+      font-size: 10px;
+      padding: 1px 6px;
+      transition: all 0.15s;
+      line-height: 1.5;
+    }
+
+    .card-action-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
     /* ── Clock card ─────────────────────────────────────────────────────────── */
     .clock-time {
       font-size: 38px;
@@ -303,6 +336,226 @@
       margin-top: 10px;
       color: var(--text-faint);
       font-size: 11px;
+    }
+
+    /* ── Weather card ───────────────────────────────────────────────────────── */
+    .weather-main {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .weather-icon {
+      font-size: 32px;
+      line-height: 1;
+    }
+
+    .weather-temp {
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -1.5px;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .weather-unit {
+      font-size: 14px;
+      color: var(--text-faint);
+      font-weight: 400;
+    }
+
+    .weather-desc {
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+      text-transform: capitalize;
+    }
+
+    .weather-meta {
+      display: flex;
+      gap: 14px;
+      font-size: 10px;
+      color: var(--text-faint);
+    }
+
+    .weather-meta span { white-space: nowrap; }
+
+    .weather-loading {
+      font-size: 11px;
+      color: var(--text-faint);
+      padding: 6px 0;
+    }
+
+    /* ── Pomodoro card ──────────────────────────────────────────────────────── */
+    .pomo-display {
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: -2px;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .pomo-phase {
+      font-size: 10px;
+      color: var(--text-faint);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .pomo-controls {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .pomo-btn {
+      flex: 1;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-dim);
+      cursor: pointer;
+      font-family: var(--font);
+      font-size: 11px;
+      padding: 5px 8px;
+      transition: all 0.15s;
+      line-height: 1;
+    }
+
+    .pomo-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .pomo-btn.active-btn {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: hsl(222, 14%, 7%);
+    }
+
+    .pomo-progress {
+      height: 3px;
+      background: var(--bg4);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+
+    .pomo-progress-bar {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: width 1s linear;
+      width: 100%;
+    }
+
+    .pomo-sessions {
+      margin-top: 8px;
+      font-size: 10px;
+      color: var(--text-faint);
+    }
+
+    .pomo-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--bg4);
+      margin-right: 3px;
+    }
+
+    .pomo-dot.done { background: var(--accent); }
+
+    /* ── Notes card ─────────────────────────────────────────────────────────── */
+    .notes-area {
+      width: 100%;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 11.5px;
+      line-height: 1.6;
+      padding: 8px 10px;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.15s;
+      min-height: 110px;
+    }
+
+    .notes-area:focus {
+      border-color: var(--accent);
+    }
+
+    .notes-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 6px;
+      font-size: 10px;
+      color: var(--text-faint);
+    }
+
+    .notes-saved { color: var(--positive); opacity: 0; transition: opacity 0.3s; }
+    .notes-saved.show { opacity: 1; }
+
+    /* ── Calendar card ──────────────────────────────────────────────────────── */
+    .cal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    .cal-nav {
+      background: none;
+      border: none;
+      color: var(--text-faint);
+      cursor: pointer;
+      font-size: 12px;
+      padding: 0 4px;
+      line-height: 1;
+      transition: color 0.15s;
+    }
+
+    .cal-nav:hover { color: var(--accent); }
+
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+      font-size: 10.5px;
+      text-align: center;
+    }
+
+    .cal-dow {
+      color: var(--text-faint);
+      font-size: 9.5px;
+      padding-bottom: 4px;
+      letter-spacing: 0.3px;
+    }
+
+    .cal-day {
+      padding: 3px 2px;
+      border-radius: 3px;
+      color: var(--text-dim);
+      line-height: 1.4;
+      cursor: default;
+      transition: background 0.1s;
+    }
+
+    .cal-day:hover { background: var(--bg3); color: var(--text); }
+    .cal-day.other-month { color: var(--text-faint); opacity: 0.45; }
+    .cal-day.today {
+      background: var(--accent);
+      color: hsl(222, 14%, 7%);
+      font-weight: 700;
+      border-radius: 3px;
     }
 
     /* ── Link item ──────────────────────────────────────────────────────────── */
@@ -427,6 +680,8 @@
     .monitor-info {}
     .monitor-name { font-size: 12px; color: var(--text); }
     .monitor-url  { font-size: 10px; color: var(--text-faint); }
+    .monitor-right { display: flex; align-items: center; gap: 8px; }
+    .monitor-latency { font-size: 10px; color: var(--text-faint); }
 
     .status-dot {
       width: 7px;
@@ -440,6 +695,37 @@
     .status-dot.up       { background: var(--positive); box-shadow: 0 0 6px var(--positive); }
     .status-dot.down     { background: var(--danger); }
     .status-dot.checking { background: var(--warn); }
+
+    /* ── Keyboard shortcut table ─────────────────────────────────────────────── */
+    .shortcut-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      font-size: 11px;
+      margin: 1px 0;
+    }
+
+    .shortcut-row:hover { background: var(--bg3); }
+
+    .shortcut-key {
+      display: inline-block;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-bottom-width: 2px;
+      border-radius: 3px;
+      padding: 0px 6px;
+      color: var(--text-dim);
+      font-family: var(--font);
+      font-size: 10px;
+      line-height: 1.7;
+      min-width: 28px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .shortcut-desc { color: var(--text-dim); }
 
     /* ── Page visibility ────────────────────────────────────────────────────── */
     .page { display: none; }
@@ -484,6 +770,671 @@
 
     #hint-status.visible { opacity: 1; }
 
+    /* ── Toast notification ─────────────────────────────────────────────────── */
+    #toast {
+      position: fixed;
+      bottom: 48px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg3);
+      border: 1px solid var(--border-hi);
+      border-radius: var(--radius);
+      padding: 5px 16px;
+      font-size: 11px;
+      color: var(--text-dim);
+      box-shadow: var(--shadow);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    #toast.show { opacity: 1; }
+
+    /* ── Bookmarks bar ───────────────────────────────────────────────────────── */
+    .bookmarks-bar {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 14px;
+      padding: 8px 12px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .bm-label {
+      font-size: 9.5px;
+      color: var(--text-faint);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding-right: 6px;
+      border-right: 1px solid var(--border);
+      margin-right: 2px;
+      white-space: nowrap;
+    }
+
+    .bm-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      color: var(--text-dim);
+      font-size: 11px;
+      transition: background 0.1s, color 0.1s;
+      white-space: nowrap;
+    }
+
+    .bm-item:hover { background: var(--bg3); color: var(--accent); }
+
+    .bm-icon {
+      font-size: 12px;
+      line-height: 1;
+    }
+
+    .bm-sep {
+      flex: 1;
+    }
+
+    .bm-cmd-btn {
+      background: none;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      margin-left: auto;
+    }
+
+    .bm-cmd-btn:hover { border-color: var(--accent); }
+
+    /* ── GitHub Activity ─────────────────────────────────────────────────────── */
+    .gh-act-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .gh-act-item:last-child { border-bottom: none; }
+
+    .gh-act-icon {
+      font-size: 13px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .gh-act-text { flex: 1; min-width: 0; color: var(--text-dim); }
+
+    .gh-act-text a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .gh-act-text a:hover { text-decoration: underline; }
+
+    .gh-act-time {
+      font-size: 9.5px;
+      color: var(--text-faint);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* ── Command palette ─────────────────────────────────────────────────────── */
+    #cmd-overlay {
+      position: fixed;
+      inset: 0;
+      background: hsl(222 14% 4% / 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 900;
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 12vh;
+    }
+
+    #cmd-overlay.open { display: flex; }
+
+    #cmd-palette {
+      width: 100%;
+      max-width: 600px;
+      background: var(--bg2);
+      border: 1px solid var(--border-hi);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 48px hsl(0 0% 0% / 0.5);
+      overflow: hidden;
+    }
+
+    #cmd-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    #cmd-input-icon {
+      color: var(--text-faint);
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    #cmd-input {
+      flex: 1;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 13px;
+      outline: none;
+    }
+
+    #cmd-input::placeholder { color: var(--text-faint); }
+
+    #cmd-results {
+      max-height: 380px;
+      overflow-y: auto;
+      padding: 6px 0;
+    }
+
+    .cmd-section-label {
+      padding: 4px 16px 2px;
+      font-size: 9.5px;
+      color: var(--text-faint);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    .cmd-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 16px;
+      cursor: pointer;
+      transition: background 0.08s;
+    }
+
+    .cmd-item:hover, .cmd-item.cmd-selected {
+      background: var(--bg3);
+    }
+
+    .cmd-item-icon {
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      background: var(--bg4);
+      border-radius: 3px;
+      color: var(--text-faint);
+      flex-shrink: 0;
+    }
+
+    .cmd-item-img {
+      width: 18px;
+      height: 18px;
+      border-radius: 3px;
+      object-fit: contain;
+      flex-shrink: 0;
+      opacity: 0.8;
+    }
+
+    .cmd-item-text { flex: 1; min-width: 0; }
+
+    .cmd-item-name {
+      font-size: 12px;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cmd-item-name mark {
+      background: var(--accent-glow);
+      color: var(--accent);
+      border-radius: 2px;
+      padding: 0 1px;
+    }
+
+    .cmd-item-sub {
+      font-size: 10px;
+      color: var(--text-faint);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cmd-item-tag {
+      font-size: 9.5px;
+      color: var(--text-faint);
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 1px 5px;
+      flex-shrink: 0;
+    }
+
+    #cmd-footer {
+      display: flex;
+      gap: 14px;
+      padding: 6px 16px;
+      border-top: 1px solid var(--border);
+      font-size: 10px;
+      color: var(--text-faint);
+    }
+
+    #cmd-footer kbd {
+      display: inline-block;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-bottom-width: 2px;
+      border-radius: 3px;
+      padding: 0 4px;
+      font-family: var(--font);
+      font-size: 9px;
+      line-height: 1.6;
+      color: var(--text-dim);
+    }
+
+    /* ── Todo widget ─────────────────────────────────────────────────────────── */
+    .todo-input-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .todo-input {
+      flex: 1;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 11.5px;
+      padding: 5px 9px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .todo-input:focus { border-color: var(--accent); }
+    .todo-input::placeholder { color: var(--text-faint); }
+
+    .todo-add-btn {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-dim);
+      cursor: pointer;
+      font-family: var(--font);
+      font-size: 13px;
+      padding: 4px 10px;
+      transition: all 0.15s;
+      line-height: 1;
+    }
+
+    .todo-add-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .todo-list { list-style: none; }
+
+    .todo-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 6px;
+      border-radius: var(--radius-sm);
+      transition: background 0.1s;
+      margin: 1px 0;
+    }
+
+    .todo-item:hover { background: var(--bg3); }
+
+    .todo-item:hover .todo-del { opacity: 1; }
+
+    .todo-cb {
+      width: 14px;
+      height: 14px;
+      border: 1.5px solid var(--border-hi);
+      border-radius: 3px;
+      cursor: pointer;
+      flex-shrink: 0;
+      appearance: none;
+      -webkit-appearance: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg3);
+      transition: all 0.15s;
+      position: relative;
+    }
+
+    .todo-cb:checked {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .todo-cb:checked::after {
+      content: '';
+      display: block;
+      width: 8px;
+      height: 5px;
+      border-left: 2px solid hsl(222,14%,7%);
+      border-bottom: 2px solid hsl(222,14%,7%);
+      transform: rotate(-45deg) translateY(-1px);
+      position: absolute;
+    }
+
+    .todo-text {
+      flex: 1;
+      font-size: 11.5px;
+      color: var(--text);
+      cursor: pointer;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .todo-item.done .todo-text {
+      color: var(--text-faint);
+      text-decoration: line-through;
+    }
+
+    .todo-del {
+      background: none;
+      border: none;
+      color: var(--text-faint);
+      cursor: pointer;
+      font-size: 13px;
+      line-height: 1;
+      opacity: 0;
+      padding: 0 2px;
+      transition: color 0.1s, opacity 0.15s;
+    }
+
+    .todo-del:hover { color: var(--danger); }
+
+    .todo-footer {
+      margin-top: 6px;
+      font-size: 10px;
+      color: var(--text-faint);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .todo-clear-btn {
+      background: none;
+      border: none;
+      color: var(--text-faint);
+      cursor: pointer;
+      font-family: var(--font);
+      font-size: 10px;
+      padding: 0;
+      transition: color 0.15s;
+    }
+
+    .todo-clear-btn:hover { color: var(--danger); }
+
+    /* ── HN Headlines card ───────────────────────────────────────────────────── */
+    .hn-item {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      padding: 5px 8px;
+      border-radius: var(--radius-sm);
+      transition: background 0.1s;
+      margin: 1px 0;
+    }
+
+    .hn-item:hover { background: var(--bg3); }
+
+    .hn-num {
+      font-size: 9.5px;
+      color: var(--text-faint);
+      min-width: 14px;
+      flex-shrink: 0;
+      line-height: 1.6;
+    }
+
+    .hn-link {
+      font-size: 11.5px;
+      color: var(--text);
+      text-decoration: none;
+      line-height: 1.4;
+      flex: 1;
+    }
+
+    .hn-link:hover { color: var(--accent); }
+
+    .hn-meta {
+      font-size: 9.5px;
+      color: var(--text-faint);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .hn-loading {
+      font-size: 11px;
+      color: var(--text-faint);
+      padding: 6px 8px;
+    }
+
+    /* ── Countdown widget ────────────────────────────────────────────────────── */
+    .countdown-add-row {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .countdown-name-input {
+      flex: 1;
+      min-width: 80px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 11px;
+      padding: 4px 8px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .countdown-date-input {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 11px;
+      padding: 4px 8px;
+      outline: none;
+      transition: border-color 0.15s;
+      color-scheme: dark;
+    }
+
+    .countdown-name-input:focus,
+    .countdown-date-input:focus { border-color: var(--accent); }
+
+    .countdown-add-btn {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-dim);
+      cursor: pointer;
+      font-family: var(--font);
+      font-size: 12px;
+      padding: 4px 10px;
+      transition: all 0.15s;
+    }
+
+    .countdown-add-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .countdown-list { list-style: none; }
+
+    .countdown-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 8px;
+      border-radius: var(--radius-sm);
+      transition: background 0.1s;
+      margin: 1px 0;
+    }
+
+    .countdown-item:hover { background: var(--bg3); }
+    .countdown-item:hover .countdown-del { opacity: 1; }
+
+    .countdown-info { flex: 1; min-width: 0; }
+
+    .countdown-event {
+      font-size: 11.5px;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .countdown-date-lbl {
+      font-size: 9.5px;
+      color: var(--text-faint);
+    }
+
+    .countdown-days {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      color: var(--accent);
+      line-height: 1;
+      text-align: right;
+      flex-shrink: 0;
+      margin: 0 10px;
+    }
+
+    .countdown-days.past { color: var(--text-faint); font-size: 14px; }
+
+    .countdown-days-label {
+      font-size: 9px;
+      color: var(--text-faint);
+      text-align: right;
+      letter-spacing: 0.3px;
+    }
+
+    .countdown-del {
+      background: none;
+      border: none;
+      color: var(--text-faint);
+      cursor: pointer;
+      font-size: 13px;
+      line-height: 1;
+      opacity: 0;
+      padding: 0 2px;
+      transition: color 0.1s, opacity 0.15s;
+    }
+
+    .countdown-del:hover { color: var(--danger); }
+
+    /* ── GitHub Activity card ────────────────────────────────────────────────── */
+    .gh-event {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 5px 8px;
+      border-radius: var(--radius-sm);
+      margin: 1px 0;
+      transition: background 0.1s;
+    }
+
+    .gh-event:hover { background: var(--bg3); }
+
+    .gh-event-icon {
+      font-size: 11px;
+      flex-shrink: 0;
+      line-height: 1.6;
+      color: var(--text-faint);
+    }
+
+    .gh-event-body { flex: 1; min-width: 0; }
+
+    .gh-event-text {
+      font-size: 11px;
+      color: var(--text);
+      line-height: 1.4;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .gh-event-text a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .gh-event-time {
+      font-size: 9.5px;
+      color: var(--text-faint);
+    }
+
+    /* ── Contribution graph ──────────────────────────────────────────────────── */
+    .contrib-wrap {
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .contrib-grid {
+      display: flex;
+      gap: 2px;
+    }
+
+    .contrib-col {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .contrib-cell {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      background: var(--bg4);
+      flex-shrink: 0;
+      cursor: default;
+      transition: opacity 0.15s;
+    }
+
+    .contrib-cell:hover { opacity: 0.75; }
+
+    .contrib-cell[data-level="1"] { background: hsl(217,91%,20%); }
+    .contrib-cell[data-level="2"] { background: hsl(217,91%,35%); }
+    .contrib-cell[data-level="3"] { background: hsl(217,91%,50%); }
+    .contrib-cell[data-level="4"] { background: hsl(217,91%,65%); }
+
+    [data-theme="light"] .contrib-cell[data-level="1"] { background: hsl(217,91%,80%); }
+    [data-theme="light"] .contrib-cell[data-level="2"] { background: hsl(217,91%,65%); }
+    [data-theme="light"] .contrib-cell[data-level="3"] { background: hsl(217,91%,48%); }
+    [data-theme="light"] .contrib-cell[data-level="4"] { background: hsl(217,91%,35%); }
+
+    .contrib-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 6px;
+      font-size: 10px;
+      color: var(--text-faint);
+    }
+
+    .contrib-legend {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .contrib-legend-cell {
+      width: 8px;
+      height: 8px;
+      border-radius: 1px;
+    }
+
     /* ── Responsive ─────────────────────────────────────────────────────────── */
     @media (max-width: 700px) {
       .header {
@@ -513,7 +1464,7 @@
       <input
         id="search"
         type="text"
-        placeholder="Search or press / to focus..."
+        placeholder="Search or press / to focus  (!g !ddg !yt !gh !npm)"
         autocomplete="off"
         spellcheck="false"
         aria-label="Search"
@@ -532,16 +1483,74 @@
     <span><kbd>f</kbd> hints</span>
     <span><kbd>j</kbd><kbd>k</kbd> scroll</span>
     <span><kbd>g</kbd><kbd>G</kbd> top/bottom</span>
-    <span><kbd>1</kbd><kbd>2</kbd> pages</span>
+    <span><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> pages</span>
     <span><kbd>Enter</kbd> open</span>
+    <span><kbd>Ctrl+K</kbd> palette</span>
     <span><kbd>t</kbd> theme</span>
+    <span><kbd>p</kbd> pomodoro</span>
     <span><kbd>Esc</kbd> clear</span>
+    <span><kbd>!yt</kbd> <kbd>!gh</kbd> <kbd>!npm</kbd> engines</span>
   </div>
 
   <!-- Tabs -->
   <div class="tabs" role="tablist">
     <button class="tab active" data-page="0" role="tab" aria-selected="true">1 — Life OS</button>
     <button class="tab"        data-page="1" role="tab" aria-selected="false">2 — Feeds</button>
+    <button class="tab"        data-page="2" role="tab" aria-selected="false">3 — Tools</button>
+  </div>
+
+  <!-- Bookmarks Bar -->
+  <div class="bookmarks-bar" id="bookmarks-bar">
+    <a class="bm-item" href="http://localhost:3000" target="_blank" title="Open WebUI">
+      <span class="bm-icon">🤖</span><span class="bm-label">WebUI</span>
+    </a>
+    <a class="bm-item" href="https://github.com/tghimanshu" target="_blank" title="GitHub">
+      <span class="bm-icon">⌥</span><span class="bm-label">GitHub</span>
+    </a>
+    <a class="bm-item" href="https://chatgpt.com" target="_blank" title="ChatGPT">
+      <span class="bm-icon">◆</span><span class="bm-label">ChatGPT</span>
+    </a>
+    <a class="bm-item" href="https://claude.ai" target="_blank" title="Claude">
+      <span class="bm-icon">⊹</span><span class="bm-label">Claude</span>
+    </a>
+    <a class="bm-item" href="https://vercel.com/dashboard" target="_blank" title="Vercel">
+      <span class="bm-icon">▲</span><span class="bm-label">Vercel</span>
+    </a>
+    <a class="bm-item" href="https://excalidraw.com" target="_blank" title="Excalidraw">
+      <span class="bm-icon">✏</span><span class="bm-label">Draw</span>
+    </a>
+    <a class="bm-item" href="https://devdocs.io" target="_blank" title="DevDocs">
+      <span class="bm-icon">{}</span><span class="bm-label">Docs</span>
+    </a>
+    <a class="bm-item" href="https://news.ycombinator.com" target="_blank" title="Hacker News">
+      <span class="bm-icon">Y</span><span class="bm-label">HN</span>
+    </a>
+    <a class="bm-item" href="https://obsidian.md" target="_blank" title="Obsidian">
+      <span class="bm-icon">◉</span><span class="bm-label">Obsidian</span>
+    </a>
+    <a class="bm-item" href="http://localhost:9000" target="_blank" title="Portainer">
+      <span class="bm-icon">🐳</span><span class="bm-label">Portainer</span>
+    </a>
+    <span class="bm-sep"></span>
+    <button class="bm-item bm-cmd-btn" id="bm-cmd-open" title="Command Palette (Ctrl+K)">
+      <span class="bm-icon">⌘</span><span class="bm-label">Ctrl+K</span>
+    </button>
+  </div>
+
+  <!-- Command Palette -->
+  <div id="cmd-overlay" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div id="cmd-palette">
+      <div id="cmd-input-wrap">
+        <span id="cmd-input-icon">⌘</span>
+        <input id="cmd-input" type="text" placeholder="Search links, pages, actions…" autocomplete="off" spellcheck="false" />
+      </div>
+      <div id="cmd-results"></div>
+      <div id="cmd-footer">
+        <span><kbd>↑↓</kbd> navigate</span>
+        <span><kbd>↵</kbd> open</span>
+        <span><kbd>esc</kbd> close</span>
+      </div>
+    </div>
   </div>
 
   <!-- Grid -->
@@ -557,6 +1566,48 @@
       <div class="clock-greeting" id="clock-greeting"></div>
     </div>
 
+    <!-- Weather -->
+    <div class="card page active" data-page="0">
+      <div class="card-title">
+        <span class="card-title-dot"></span>Weather
+        <div class="card-title-actions">
+          <button class="card-action-btn" id="weather-reload-btn" title="Refresh weather">↻</button>
+          <button class="card-action-btn" id="weather-unit-btn">°C</button>
+        </div>
+      </div>
+      <div id="weather-body">
+        <div class="weather-loading">Fetching weather...</div>
+      </div>
+    </div>
+
+    <!-- Pomodoro -->
+    <div class="card page active" data-page="0" id="pomo-card">
+      <div class="card-title"><span class="card-title-dot"></span>Focus Timer</div>
+      <div class="pomo-display" id="pomo-display">25:00</div>
+      <div class="pomo-phase" id="pomo-phase">FOCUS</div>
+      <div class="pomo-controls">
+        <button class="pomo-btn active-btn" id="pomo-start">Start</button>
+        <button class="pomo-btn" id="pomo-pause">Pause</button>
+        <button class="pomo-btn" id="pomo-reset">Reset</button>
+        <button class="pomo-btn" id="pomo-skip">Skip</button>
+      </div>
+      <div class="pomo-progress"><div class="pomo-progress-bar" id="pomo-bar"></div></div>
+      <div class="pomo-sessions" id="pomo-sessions"></div>
+    </div>
+
+    <!-- Calendar -->
+    <div class="card page active" data-page="0">
+      <div class="card-title">
+        <span class="card-title-dot"></span>Calendar
+        <div class="card-title-actions">
+          <button class="cal-nav card-action-btn" id="cal-prev">‹</button>
+          <button class="cal-nav card-action-btn" id="cal-next">›</button>
+        </div>
+      </div>
+      <div class="cal-header"><span id="cal-month-label"></span></div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+
     <!-- Local Services -->
     <div class="card page active" data-page="0">
       <div class="card-title"><span class="card-title-dot"></span>Local Services</div>
@@ -565,21 +1616,55 @@
           <div class="monitor-name">Open WebUI</div>
           <div class="monitor-url">localhost:3000</div>
         </div>
-        <div class="status-dot checking" data-url="http://localhost:3000" id="dot-webui"></div>
+        <div class="monitor-right">
+          <span class="monitor-latency" id="lat-webui"></span>
+          <div class="status-dot checking" data-url="http://localhost:3000" id="dot-webui"></div>
+        </div>
       </div>
       <div class="monitor-row">
         <div class="monitor-info">
           <div class="monitor-name">Ollama API</div>
           <div class="monitor-url">localhost:11434</div>
         </div>
-        <div class="status-dot checking" data-url="http://localhost:11434" id="dot-ollama"></div>
+        <div class="monitor-right">
+          <span class="monitor-latency" id="lat-ollama"></span>
+          <div class="status-dot checking" data-url="http://localhost:11434" id="dot-ollama"></div>
+        </div>
       </div>
       <div class="monitor-row">
         <div class="monitor-info">
           <div class="monitor-name">Life OS</div>
           <div class="monitor-url">localhost:4000</div>
         </div>
-        <div class="status-dot up"></div>
+        <div class="monitor-right">
+          <span class="monitor-latency" id="lat-lifeos"></span>
+          <div class="status-dot checking" id="dot-lifeos"></div>
+        </div>
+      </div>
+      <div class="monitor-row">
+        <div class="monitor-info">
+          <div class="monitor-name">Portainer</div>
+          <div class="monitor-url">localhost:9000</div>
+        </div>
+        <div class="monitor-right">
+          <span class="monitor-latency" id="lat-portainer"></span>
+          <div class="status-dot checking" id="dot-portainer"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Notes -->
+    <div class="card page active" data-page="0">
+      <div class="card-title">
+        <span class="card-title-dot"></span>Scratch Pad
+        <div class="card-title-actions">
+          <button class="card-action-btn" id="notes-clear-btn">clear</button>
+        </div>
+      </div>
+      <textarea class="notes-area" id="notes-area" placeholder="Type a quick note... (auto-saved)"></textarea>
+      <div class="notes-footer">
+        <span id="notes-chars">0 chars</span>
+        <span class="notes-saved" id="notes-saved">saved</span>
       </div>
     </div>
 
@@ -621,6 +1706,11 @@
         <span class="link-icon-txt">▶</span>
         <span class="link-text"><span class="link-name">Google Colab</span><span class="link-desc">Free GPU notebooks</span></span>
       </a>
+      <a class="link-item" href="https://aistudio.google.com" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">✦</span>
+        <span class="link-text"><span class="link-name">AI Studio</span><span class="link-desc">Google AI Studio / Gemini API</span></span>
+      </a>
     </div>
 
     <!-- Dev -->
@@ -650,6 +1740,11 @@
         <span class="hint-badge"></span>
         <span class="link-icon-txt">⬡</span>
         <span class="link-text"><span class="link-name">Render</span><span class="link-desc">Web services &amp; cron</span></span>
+      </a>
+      <a class="link-item" href="https://www.cloudflare.com/dashboard" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">☁</span>
+        <span class="link-text"><span class="link-name">Cloudflare</span><span class="link-desc">DNS, CDN, tunnels</span></span>
       </a>
       <a class="link-item" href="https://education.github.com/pack" target="_blank">
         <span class="hint-badge"></span>
@@ -691,6 +1786,11 @@
         <span class="link-icon-txt">M</span>
         <span class="link-text"><span class="link-name">MIT OCW</span><span class="link-desc">Open courseware</span></span>
       </a>
+      <a class="link-item" href="https://app.daily.dev" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">▣</span>
+        <span class="link-text"><span class="link-name">daily.dev</span><span class="link-desc">Dev news feed</span></span>
+      </a>
     </div>
 
     <!-- Docs -->
@@ -720,6 +1820,11 @@
         <span class="hint-badge"></span>
         <span class="link-icon-txt">C+</span>
         <span class="link-text"><span class="link-name">cppreference</span><span class="link-desc">C / C++ reference</span></span>
+      </a>
+      <a class="link-item" href="https://docs.docker.com" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">🐳</span>
+        <span class="link-text"><span class="link-name">Docker Docs</span><span class="link-desc">Containers & compose</span></span>
       </a>
     </div>
 
@@ -756,12 +1861,87 @@
         <span class="link-icon-txt">⇄</span>
         <span class="link-text"><span class="link-name">Transform</span><span class="link-desc">Convert between data formats</span></span>
       </a>
+      <a class="link-item" href="https://www.epochconverter.com" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">⧖</span>
+        <span class="link-text"><span class="link-name">Epoch Converter</span><span class="link-desc">Unix timestamp tool</span></span>
+      </a>
+      <a class="link-item" href="https://squoosh.app" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">🖼</span>
+        <span class="link-text"><span class="link-name">Squoosh</span><span class="link-desc">Image compress &amp; convert</span></span>
+      </a>
+    </div>
+
+    <!-- Todo / Task List -->
+    <div class="card page active" data-page="0" id="todo-card">
+      <div class="card-title">
+        <span class="card-title-dot"></span>Tasks
+        <div class="card-title-actions">
+          <button class="card-action-btn" id="todo-clear-done-btn">clear done</button>
+        </div>
+      </div>
+      <div class="todo-input-row">
+        <input class="todo-input" id="todo-input" type="text" placeholder="Add a task…" autocomplete="off" />
+        <button class="todo-add-btn" id="todo-add-btn">+</button>
+      </div>
+      <ul class="todo-list" id="todo-list"></ul>
+      <div class="todo-footer">
+        <span id="todo-count">0 tasks</span>
+      </div>
+    </div>
+
+    <!-- Countdown Timers -->
+    <div class="card page active" data-page="0" id="countdown-card">
+      <div class="card-title"><span class="card-title-dot"></span>Countdowns</div>
+      <div class="countdown-add-row">
+        <input class="countdown-name-input" id="cd-name" type="text" placeholder="Event name…" />
+        <input class="countdown-date-input" id="cd-date" type="date" />
+        <button class="countdown-add-btn" id="cd-add-btn">+</button>
+      </div>
+      <ul class="countdown-list" id="countdown-list"></ul>
     </div>
 
     <!-- No results placeholder -->
     <div class="no-results" id="no-results">No matches found</div>
 
     <!-- ════ PAGE 1: Feeds ══════════════════════════════════════════════════ -->
+
+    <!-- HN Headlines -->
+    <div class="card page" data-page="1" id="hn-card">
+      <div class="card-title">
+        <span class="card-title-dot"></span>Hacker News
+        <div class="card-title-actions">
+          <button class="card-action-btn" id="hn-reload-btn">↻</button>
+        </div>
+      </div>
+      <div id="hn-body"><div class="hn-loading">Loading stories…</div></div>
+    </div>
+
+    <!-- GitHub Activity -->
+    <div class="card page" data-page="1" id="gh-activity-card">
+      <div class="card-title">
+        <span class="card-title-dot"></span>GitHub Activity
+        <div class="card-title-actions">
+          <button class="card-action-btn" id="gh-reload-btn">↻</button>
+        </div>
+      </div>
+      <div id="gh-activity-body"><div class="hn-loading">Loading activity…</div></div>
+    </div>
+
+    <!-- GitHub Contribution Graph (wide) -->
+    <div class="card page card-wide" data-page="1" id="contrib-card">
+      <div class="card-title">
+        <span class="card-title-dot"></span>Contributions — tghimanshu
+        <div class="card-title-actions">
+          <span id="contrib-total" style="font-size:10px;color:var(--text-faint);font-weight:400;text-transform:none;letter-spacing:0;"></span>
+        </div>
+      </div>
+      <div class="contrib-wrap" id="contrib-wrap">
+        <div class="hn-loading">Loading contributions…</div>
+      </div>
+      <div class="contrib-legend" id="contrib-legend"></div>
+    </div>
 
     <!-- Social -->
     <div class="card page" data-page="1">
@@ -785,6 +1965,11 @@
         <span class="hint-badge"></span>
         <span class="link-icon-txt">in</span>
         <span class="link-text"><span class="link-name">LinkedIn</span><span class="link-desc">Professional network</span></span>
+      </a>
+      <a class="link-item" href="https://dev.to" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">⌥</span>
+        <span class="link-text"><span class="link-name">DEV Community</span><span class="link-desc">Dev articles &amp; posts</span></span>
       </a>
     </div>
 
@@ -821,6 +2006,16 @@
         <span class="link-icon-txt">r/</span>
         <span class="link-text"><span class="link-name">r/selfhosted</span></span>
       </a>
+      <a class="link-item" href="https://reddit.com/r/unixporn" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">r/</span>
+        <span class="link-text"><span class="link-name">r/unixporn</span></span>
+      </a>
+      <a class="link-item" href="https://lobste.rs" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">🦞</span>
+        <span class="link-text"><span class="link-name">Lobste.rs</span><span class="link-desc">Curated tech links</span></span>
+      </a>
     </div>
 
     <!-- Dotfiles & Config -->
@@ -848,11 +2043,206 @@
       </a>
     </div>
 
+    <!-- Music -->
+    <div class="card page" data-page="1">
+      <div class="card-title"><span class="card-title-dot"></span>Music</div>
+      <a class="link-item" href="https://open.spotify.com" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">♪</span>
+        <span class="link-text"><span class="link-name">Spotify</span><span class="link-desc">Music &amp; podcasts</span></span>
+      </a>
+      <a class="link-item" href="https://music.youtube.com" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">▶</span>
+        <span class="link-text"><span class="link-name">YouTube Music</span><span class="link-desc">Streaming</span></span>
+      </a>
+      <a class="link-item" href="https://www.last.fm" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">♫</span>
+        <span class="link-text"><span class="link-name">Last.fm</span><span class="link-desc">Scrobble &amp; discover</span></span>
+      </a>
+      <a class="link-item" href="https://musicforprogramming.net" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">~</span>
+        <span class="link-text"><span class="link-name">musicForProgramming</span><span class="link-desc">Focus music</span></span>
+      </a>
+      <a class="link-item" href="https://mynoise.net" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">≋</span>
+        <span class="link-text"><span class="link-name">myNoise</span><span class="link-desc">Ambient noise generator</span></span>
+      </a>
+    </div>
+
+    <!-- Finance -->
+    <div class="card page" data-page="1">
+      <div class="card-title"><span class="card-title-dot"></span>Finance</div>
+      <a class="link-item" href="https://finance.yahoo.com" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">$</span>
+        <span class="link-text"><span class="link-name">Yahoo Finance</span><span class="link-desc">Markets &amp; news</span></span>
+      </a>
+      <a class="link-item" href="https://www.tradingview.com" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">📈</span>
+        <span class="link-text"><span class="link-name">TradingView</span><span class="link-desc">Charts &amp; analysis</span></span>
+      </a>
+      <a class="link-item" href="https://coinmarketcap.com" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">₿</span>
+        <span class="link-text"><span class="link-name">CoinMarketCap</span><span class="link-desc">Crypto prices</span></span>
+      </a>
+    </div>
+
+    <!-- ════ PAGE 2: Tools ══════════════════════════════════════════════════ -->
+
+    <!-- Writing -->
+    <div class="card page" data-page="2">
+      <div class="card-title"><span class="card-title-dot"></span>Writing</div>
+      <a class="link-item" href="https://obsidian.md" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">◉</span>
+        <span class="link-text"><span class="link-name">Obsidian</span><span class="link-desc">Knowledge base</span></span>
+      </a>
+      <a class="link-item" href="https://notion.so" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">N</span>
+        <span class="link-text"><span class="link-name">Notion</span><span class="link-desc">Notes &amp; projects</span></span>
+      </a>
+      <a class="link-item" href="https://www.overleaf.com" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">TeX</span>
+        <span class="link-text"><span class="link-name">Overleaf</span><span class="link-desc">LaTeX editor</span></span>
+      </a>
+      <a class="link-item" href="https://typst.app" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">T</span>
+        <span class="link-text"><span class="link-name">Typst</span><span class="link-desc">Modern markup &amp; typesetting</span></span>
+      </a>
+      <a class="link-item" href="https://hemingwayapp.com" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">H</span>
+        <span class="link-text"><span class="link-name">Hemingway</span><span class="link-desc">Writing clarity editor</span></span>
+      </a>
+    </div>
+
+    <!-- Cloud & Storage -->
+    <div class="card page" data-page="2">
+      <div class="card-title"><span class="card-title-dot"></span>Cloud &amp; Storage</div>
+      <a class="link-item" href="https://drive.google.com" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">▲</span>
+        <span class="link-text"><span class="link-name">Google Drive</span><span class="link-desc">Files &amp; docs</span></span>
+      </a>
+      <a class="link-item" href="https://www.dropbox.com" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">□</span>
+        <span class="link-text"><span class="link-name">Dropbox</span><span class="link-desc">Cloud storage</span></span>
+      </a>
+      <a class="link-item" href="https://mega.nz" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">M</span>
+        <span class="link-text"><span class="link-name">MEGA</span><span class="link-desc">Encrypted storage</span></span>
+      </a>
+      <a class="link-item" href="https://console.aws.amazon.com" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">AWS</span>
+        <span class="link-text"><span class="link-name">AWS Console</span><span class="link-desc">Amazon Web Services</span></span>
+      </a>
+      <a class="link-item" href="https://console.cloud.google.com" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">GCP</span>
+        <span class="link-text"><span class="link-name">GCP Console</span><span class="link-desc">Google Cloud</span></span>
+      </a>
+    </div>
+
+    <!-- Design -->
+    <div class="card page" data-page="2">
+      <div class="card-title"><span class="card-title-dot"></span>Design</div>
+      <a class="link-item" href="https://www.figma.com" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">◈</span>
+        <span class="link-text"><span class="link-name">Figma</span><span class="link-desc">UI design &amp; prototyping</span></span>
+      </a>
+      <a class="link-item" href="https://coolors.co" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">◑</span>
+        <span class="link-text"><span class="link-name">Coolors</span><span class="link-desc">Color palette generator</span></span>
+      </a>
+      <a class="link-item" href="https://fonts.google.com" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">Aa</span>
+        <span class="link-text"><span class="link-name">Google Fonts</span><span class="link-desc">Web typography</span></span>
+      </a>
+      <a class="link-item" href="https://www.svgrepo.com" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">⬡</span>
+        <span class="link-text"><span class="link-name">SVG Repo</span><span class="link-desc">Free SVG icons</span></span>
+      </a>
+      <a class="link-item" href="https://undraw.co/illustrations" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">🎨</span>
+        <span class="link-text"><span class="link-name">unDraw</span><span class="link-desc">Open source illustrations</span></span>
+      </a>
+    </div>
+
+    <!-- NPM / Package search -->
+    <div class="card page" data-page="2">
+      <div class="card-title"><span class="card-title-dot"></span>Package Registries</div>
+      <a class="link-item" href="https://www.npmjs.com" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">npm</span>
+        <span class="link-text"><span class="link-name">npm</span><span class="link-desc">Node.js packages</span></span>
+      </a>
+      <a class="link-item" href="https://pypi.org" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">🐍</span>
+        <span class="link-text"><span class="link-name">PyPI</span><span class="link-desc">Python packages</span></span>
+      </a>
+      <a class="link-item" href="https://crates.io" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">⚙</span>
+        <span class="link-text"><span class="link-name">crates.io</span><span class="link-desc">Rust crates</span></span>
+      </a>
+      <a class="link-item" href="https://pkg.go.dev" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">Go</span>
+        <span class="link-text"><span class="link-name">pkg.go.dev</span><span class="link-desc">Go packages</span></span>
+      </a>
+      <a class="link-item" href="https://hub.docker.com" target="_blank">
+        <span class="hint-badge"></span>
+        <span class="link-icon-txt">🐳</span>
+        <span class="link-text"><span class="link-name">Docker Hub</span><span class="link-desc">Container images</span></span>
+      </a>
+    </div>
+
+    <!-- Keyboard shortcuts reference -->
+    <div class="card page" data-page="2">
+      <div class="card-title"><span class="card-title-dot"></span>Keyboard Shortcuts</div>
+      <div class="shortcut-row"><span class="shortcut-key">Ctrl+K</span><span class="shortcut-desc">Command palette</span></div>
+      <div class="shortcut-row"><span class="shortcut-key">/</span><span class="shortcut-desc">Focus search bar</span></div>
+      <div class="shortcut-row"><span class="shortcut-key">f</span><span class="shortcut-desc">Hint mode (Vimium-style nav)</span></div>
+      <div class="shortcut-row"><span class="shortcut-key">t</span><span class="shortcut-desc">Toggle dark / light theme</span></div>
+      <div class="shortcut-row"><span class="shortcut-key">p</span><span class="shortcut-desc">Start / pause Pomodoro</span></div>
+      <div class="shortcut-row"><span class="shortcut-key">j / k</span><span class="shortcut-desc">Scroll down / up</span></div>
+      <div class="shortcut-row"><span class="shortcut-key">g / G</span><span class="shortcut-desc">Jump to top / bottom</span></div>
+      <div class="shortcut-row"><span class="shortcut-key">1 2 3</span><span class="shortcut-desc">Switch page</span></div>
+      <div class="shortcut-row"><span class="shortcut-key">Enter</span><span class="shortcut-desc">Open first match or search</span></div>
+      <div class="shortcut-row"><span class="shortcut-key">Esc</span><span class="shortcut-desc">Clear search / exit hints</span></div>
+      <div class="shortcut-row"><span class="shortcut-key">!ddg</span><span class="shortcut-desc">Search with DuckDuckGo</span></div>
+      <div class="shortcut-row"><span class="shortcut-key">!yt</span><span class="shortcut-desc">Search YouTube</span></div>
+      <div class="shortcut-row"><span class="shortcut-key">!gh</span><span class="shortcut-desc">Search GitHub</span></div>
+      <div class="shortcut-row"><span class="shortcut-key">!npm</span><span class="shortcut-desc">Search npm packages</span></div>
+      <div class="shortcut-row"><span class="shortcut-key">!pypi</span><span class="shortcut-desc">Search PyPI packages</span></div>
+    </div>
+
   </div><!-- /grid -->
 </div><!-- /container -->
 
 <!-- Hint mode status indicator -->
 <div id="hint-status">HINT MODE — type a key to open</div>
+
+<!-- Toast -->
+<div id="toast"></div>
 
 <script>
 // ── Theme ─────────────────────────────────────────────────────────────────────
@@ -865,7 +2255,6 @@ function applyTheme(t) {
   localStorage.setItem('theme', t);
 }
 
-// Load saved theme or detect system preference
 const saved = localStorage.getItem('theme');
 if (saved) {
   applyTheme(saved);
@@ -881,9 +2270,20 @@ themeBtn.addEventListener('click', () => {
   applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
 });
 
+// ── Toast ─────────────────────────────────────────────────────────────────────
+const toastEl = document.getElementById('toast');
+let toastTimer;
+function showToast(msg, duration = 2000) {
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove('show'), duration);
+}
+
 // ── Clock ─────────────────────────────────────────────────────────────────────
 const DAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MONTHS_LONG = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
 function greeting(h) {
   if (h < 5)  return 'Good night.';
@@ -935,17 +2335,20 @@ const searchEl    = document.getElementById('search');
 const engineBadge = document.getElementById('engine-badge');
 const noResults   = document.getElementById('no-results');
 
-// Search engines
 const ENGINES = {
   google: q => `https://www.google.com/search?q=${encodeURIComponent(q)}`,
   ddg:    q => `https://duckduckgo.com/?q=${encodeURIComponent(q)}`,
+  yt:     q => `https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,
+  gh:     q => `https://github.com/search?q=${encodeURIComponent(q)}`,
+  npm:    q => `https://www.npmjs.com/search?q=${encodeURIComponent(q)}`,
+  pypi:   q => `https://pypi.org/search/?q=${encodeURIComponent(q)}`,
 };
 
 let activeEngine = 'google';
 
 function setEngine(name) {
   activeEngine = name;
-  engineBadge.textContent = name === 'ddg' ? 'ddg' : 'google';
+  engineBadge.textContent = name;
 }
 
 function clearSearch() {
@@ -983,15 +2386,27 @@ function filterLinks(q) {
   noResults.classList.toggle('visible', !!q && !anyVisible);
 }
 
+// parse engine prefix: returns { engine, query } or null
+function parseEnginePrefix(val) {
+  const m = val.match(/^!(ddg|d|g|yt|gh|npm|pypi)\s+(.*)/i);
+  if (!m) return null;
+  const tag = m[1].toLowerCase();
+  const q   = m[2];
+  if (tag === 'd' || tag === 'ddg') return { engine: 'ddg', query: q };
+  if (tag === 'g')   return { engine: 'google', query: q };
+  if (tag === 'yt')  return { engine: 'yt',  query: q };
+  if (tag === 'gh')  return { engine: 'gh',  query: q };
+  if (tag === 'npm') return { engine: 'npm', query: q };
+  if (tag === 'pypi') return { engine: 'pypi', query: q };
+  return null;
+}
+
 searchEl.addEventListener('input', () => {
   const val = searchEl.value;
-  // detect engine prefix: "!ddg query" or "!g query"
-  if (val.startsWith('!ddg ') || val.startsWith('!d ')) {
-    setEngine('ddg');
-    filterLinks(val.replace(/^![a-z]+ /, ''));
-  } else if (val.startsWith('!g ')) {
-    setEngine('google');
-    filterLinks(val.replace(/^!g /, ''));
+  const parsed = parseEnginePrefix(val);
+  if (parsed) {
+    setEngine(parsed.engine);
+    filterLinks(parsed.query);
   } else {
     setEngine('google');
     filterLinks(val);
@@ -1061,23 +2476,19 @@ document.addEventListener('keydown', e => {
       searchEl.blur();
       clearSearch();
     }
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && document.activeElement === searchEl) {
       const q = searchEl.value.trim();
       if (q) {
-        let query = q;
-        let engine = activeEngine;
-        // strip prefix
-        const m = q.match(/^!(ddg|d|g) (.+)/);
-        if (m) {
-          engine = m[1] === 'g' ? 'google' : 'ddg';
-          query  = m[2];
-        }
-        // check if there's a direct link match first
-        const first = document.querySelector(`.page[data-page="${currentPage}"] .link-item:not(.hidden)`);
-        if (first && !q.startsWith('!')) {
-          first.click();
+        const parsed = parseEnginePrefix(q);
+        if (parsed) {
+          window.location.href = ENGINES[parsed.engine](parsed.query);
         } else {
-          window.location.href = ENGINES[engine](query);
+          const first = document.querySelector(`.page[data-page="${currentPage}"] .link-item:not(.hidden)`);
+          if (first) {
+            first.click();
+          } else {
+            window.location.href = ENGINES['google'](q);
+          }
         }
         clearSearch();
         searchEl.blur();
@@ -1103,6 +2514,10 @@ document.addEventListener('keydown', e => {
       e.preventDefault();
       applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
       break;
+    case 'p':
+      e.preventDefault();
+      pomoToggle();
+      break;
     case 'j':
       window.scrollBy({ top: 100, behavior: 'smooth' });
       break;
@@ -1115,31 +2530,787 @@ document.addEventListener('keydown', e => {
       break;
     case '1': switchPage(0); break;
     case '2': switchPage(1); break;
+    case '3': switchPage(2); break;
   }
 });
 
 // ── Service status checks ──────────────────────────────────────────────────────
-async function checkService(dotId, url) {
+async function checkService(dotId, url, latId) {
   const dot = document.getElementById(dotId);
+  const latEl = latId ? document.getElementById(latId) : null;
   if (!dot) return;
+  dot.className = 'status-dot checking';
   try {
-    const ctrl = new AbortController();
+    const ctrl  = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), 3000);
+    const t0    = performance.now();
     await fetch(url, { method: 'HEAD', mode: 'no-cors', signal: ctrl.signal });
     clearTimeout(timer);
+    const ms = Math.round(performance.now() - t0);
     dot.className = 'status-dot up';
+    if (latEl) latEl.textContent = `${ms}ms`;
   } catch {
     dot.className = 'status-dot down';
+    if (latEl) latEl.textContent = '';
   }
 }
 
 function pollServices() {
-  checkService('dot-webui',  'http://localhost:3000');
-  checkService('dot-ollama', 'http://localhost:11434');
+  checkService('dot-webui',    'http://localhost:3000',  'lat-webui');
+  checkService('dot-ollama',   'http://localhost:11434', 'lat-ollama');
+  checkService('dot-lifeos',   'http://localhost:4000',  'lat-lifeos');
+  checkService('dot-portainer','http://localhost:9000',  'lat-portainer');
 }
 
 pollServices();
 setInterval(pollServices, 30_000);
+
+// ── Pomodoro timer ─────────────────────────────────────────────────────────────
+const POMO_PHASES = [
+  { label: 'FOCUS',      duration: 25 * 60 },
+  { label: 'SHORT BREAK', duration: 5 * 60 },
+  { label: 'FOCUS',      duration: 25 * 60 },
+  { label: 'SHORT BREAK', duration: 5 * 60 },
+  { label: 'FOCUS',      duration: 25 * 60 },
+  { label: 'SHORT BREAK', duration: 5 * 60 },
+  { label: 'FOCUS',      duration: 25 * 60 },
+  { label: 'LONG BREAK', duration: 15 * 60 },
+];
+
+let pomoPhaseIdx   = 0;
+let pomoSecondsLeft = POMO_PHASES[0].duration;
+let pomoRunning    = false;
+let pomoInterval   = null;
+let pomoSessions   = 0; // completed focus blocks
+
+const pomoDisplay = document.getElementById('pomo-display');
+const pomoPhaseEl = document.getElementById('pomo-phase');
+const pomoBar     = document.getElementById('pomo-bar');
+const pomoSessEl  = document.getElementById('pomo-sessions');
+
+function pomoFmt(s) {
+  const m = Math.floor(s / 60);
+  const ss = s % 60;
+  return `${String(m).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;
+}
+
+function pomoRender() {
+  const phase    = POMO_PHASES[pomoPhaseIdx];
+  const pct      = (pomoSecondsLeft / phase.duration) * 100;
+  pomoDisplay.textContent = pomoFmt(pomoSecondsLeft);
+  pomoPhaseEl.textContent = phase.label;
+  pomoBar.style.width     = pct + '%';
+
+  // session dots (max 8)
+  let dots = '';
+  for (let i = 0; i < 4; i++) {
+    dots += `<span class="pomo-dot${i < pomoSessions ? ' done' : ''}"></span>`;
+  }
+  pomoSessEl.innerHTML = `Sessions: ${dots} (${pomoSessions}/4)`;
+
+  document.getElementById('pomo-start').classList.toggle('active-btn', !pomoRunning);
+  document.getElementById('pomo-pause').classList.toggle('active-btn', pomoRunning);
+}
+
+function pomoTick() {
+  if (pomoSecondsLeft <= 0) {
+    // advance phase
+    if (POMO_PHASES[pomoPhaseIdx].label === 'FOCUS') pomoSessions++;
+    pomoPhaseIdx = (pomoPhaseIdx + 1) % POMO_PHASES.length;
+    pomoSecondsLeft = POMO_PHASES[pomoPhaseIdx].duration;
+    showToast(`Pomodoro: ${POMO_PHASES[pomoPhaseIdx].label} — start!`);
+    if (pomoRunning) {
+      // keep running into next phase
+    }
+  } else {
+    pomoSecondsLeft--;
+  }
+  pomoRender();
+}
+
+function pomoToggle() {
+  if (pomoRunning) {
+    clearInterval(pomoInterval);
+    pomoRunning = false;
+  } else {
+    pomoRunning = true;
+    pomoInterval = setInterval(pomoTick, 1000);
+  }
+  pomoRender();
+}
+
+function pomoReset() {
+  clearInterval(pomoInterval);
+  pomoRunning = false;
+  pomoSecondsLeft = POMO_PHASES[pomoPhaseIdx].duration;
+  pomoRender();
+}
+
+function pomoSkip() {
+  clearInterval(pomoInterval);
+  if (POMO_PHASES[pomoPhaseIdx].label === 'FOCUS') pomoSessions++;
+  pomoPhaseIdx = (pomoPhaseIdx + 1) % POMO_PHASES.length;
+  pomoSecondsLeft = POMO_PHASES[pomoPhaseIdx].duration;
+  if (pomoRunning) pomoInterval = setInterval(pomoTick, 1000);
+  showToast(`Skipped to: ${POMO_PHASES[pomoPhaseIdx].label}`);
+  pomoRender();
+}
+
+document.getElementById('pomo-start').addEventListener('click', pomoToggle);
+document.getElementById('pomo-pause').addEventListener('click', pomoToggle);
+document.getElementById('pomo-reset').addEventListener('click', pomoReset);
+document.getElementById('pomo-skip').addEventListener('click', pomoSkip);
+
+pomoRender();
+
+// ── Notes / Scratch Pad ────────────────────────────────────────────────────────
+const notesArea   = document.getElementById('notes-area');
+const notesChars  = document.getElementById('notes-chars');
+const notesSaved  = document.getElementById('notes-saved');
+const notesClearBtn = document.getElementById('notes-clear-btn');
+
+// Load saved note
+notesArea.value = localStorage.getItem('scratch-notes') || '';
+notesChars.textContent = `${notesArea.value.length} chars`;
+
+let notesSaveTimer;
+notesArea.addEventListener('input', () => {
+  notesChars.textContent = `${notesArea.value.length} chars`;
+  notesSaved.classList.remove('show');
+  clearTimeout(notesSaveTimer);
+  notesSaveTimer = setTimeout(() => {
+    localStorage.setItem('scratch-notes', notesArea.value);
+    notesSaved.classList.add('show');
+    setTimeout(() => notesSaved.classList.remove('show'), 1500);
+  }, 600);
+});
+
+notesClearBtn.addEventListener('click', () => {
+  if (notesArea.value.length === 0) return;
+  if (confirm('Clear scratch pad?')) {
+    notesArea.value = '';
+    localStorage.removeItem('scratch-notes');
+    notesChars.textContent = '0 chars';
+  }
+});
+
+// ── Calendar ───────────────────────────────────────────────────────────────────
+let calDate = new Date();
+
+function buildCalendar() {
+  const now   = new Date();
+  const year  = calDate.getFullYear();
+  const month = calDate.getMonth();
+
+  document.getElementById('cal-month-label').textContent =
+    `${MONTHS_LONG[month]} ${year}`;
+
+  const grid = document.getElementById('cal-grid');
+  grid.innerHTML = '';
+
+  // Day-of-week headers
+  ['Su','Mo','Tu','We','Th','Fr','Sa'].forEach(d => {
+    const el = document.createElement('div');
+    el.className = 'cal-dow';
+    el.textContent = d;
+    grid.appendChild(el);
+  });
+
+  const firstDay = new Date(year, month, 1).getDay(); // 0=Sun
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const daysInPrev  = new Date(year, month, 0).getDate();
+
+  // Prev month tail
+  for (let i = firstDay - 1; i >= 0; i--) {
+    const el = document.createElement('div');
+    el.className = 'cal-day other-month';
+    el.textContent = daysInPrev - i;
+    grid.appendChild(el);
+  }
+
+  // Current month
+  for (let d = 1; d <= daysInMonth; d++) {
+    const el = document.createElement('div');
+    el.className = 'cal-day';
+    const isToday = d === now.getDate() && month === now.getMonth() && year === now.getFullYear();
+    if (isToday) el.classList.add('today');
+    el.textContent = d;
+    grid.appendChild(el);
+  }
+
+  // Next month fill
+  const total = firstDay + daysInMonth;
+  const remainder = total % 7 === 0 ? 0 : 7 - (total % 7);
+  for (let d = 1; d <= remainder; d++) {
+    const el = document.createElement('div');
+    el.className = 'cal-day other-month';
+    el.textContent = d;
+    grid.appendChild(el);
+  }
+}
+
+document.getElementById('cal-prev').addEventListener('click', () => {
+  calDate = new Date(calDate.getFullYear(), calDate.getMonth() - 1, 1);
+  buildCalendar();
+});
+
+document.getElementById('cal-next').addEventListener('click', () => {
+  calDate = new Date(calDate.getFullYear(), calDate.getMonth() + 1, 1);
+  buildCalendar();
+});
+
+buildCalendar();
+
+// ── Weather ────────────────────────────────────────────────────────────────────
+let weatherUseCelsius = true;
+let weatherData = null;
+
+const WMO_ICONS = {
+  0: '☀️', 1: '🌤', 2: '⛅', 3: '☁️',
+  45: '🌫', 48: '🌫',
+  51: '🌦', 53: '🌦', 55: '🌧',
+  61: '🌧', 63: '🌧', 65: '🌧',
+  71: '🌨', 73: '🌨', 75: '🌨',
+  80: '🌦', 81: '🌧', 82: '⛈',
+  95: '⛈', 96: '⛈', 99: '⛈',
+};
+
+const WMO_DESC = {
+  0:'Clear sky', 1:'Mainly clear', 2:'Partly cloudy', 3:'Overcast',
+  45:'Foggy', 48:'Icy fog',
+  51:'Light drizzle', 53:'Drizzle', 55:'Dense drizzle',
+  61:'Light rain', 63:'Rain', 65:'Heavy rain',
+  71:'Light snow', 73:'Snow', 75:'Heavy snow',
+  80:'Light showers', 81:'Showers', 82:'Heavy showers',
+  95:'Thunderstorm', 96:'Thunderstorm + hail', 99:'Heavy thunderstorm',
+};
+
+function renderWeather() {
+  const body = document.getElementById('weather-body');
+  if (!weatherData) {
+    body.innerHTML = '<div class="weather-loading">Could not load weather.</div>';
+    return;
+  }
+  const d = weatherData;
+  const temp = weatherUseCelsius
+    ? Math.round(d.current.temperature_2m) + '°C'
+    : Math.round(d.current.temperature_2m * 9/5 + 32) + '°F';
+  const fl = weatherUseCelsius
+    ? Math.round(d.current.apparent_temperature) + '°C'
+    : Math.round(d.current.apparent_temperature * 9/5 + 32) + '°F';
+  const wmo  = d.current.weather_code ?? 0;
+  const icon = WMO_ICONS[wmo] ?? '🌡';
+  const desc = WMO_DESC[wmo] ?? 'Unknown';
+  const wind = Math.round(d.current.wind_speed_10m);
+  const hum  = d.current.relative_humidity_2m;
+
+  document.getElementById('weather-unit-btn').textContent =
+    weatherUseCelsius ? '°C' : '°F';
+
+  body.innerHTML = `
+    <div class="weather-main">
+      <div class="weather-icon">${icon}</div>
+      <div class="weather-temp">${temp.replace(/[°CF]/g,'')}<span class="weather-unit">${weatherUseCelsius?'°C':'°F'}</span></div>
+    </div>
+    <div class="weather-desc">${desc}</div>
+    <div class="weather-meta">
+      <span>Feels like ${fl}</span>
+      <span>Wind ${wind} km/h</span>
+      <span>Humidity ${hum}%</span>
+    </div>
+  `;
+}
+
+async function fetchWeather() {
+  document.getElementById('weather-body').innerHTML =
+    '<div class="weather-loading">Fetching weather...</div>';
+  try {
+    // Get rough location via IP
+    const geoRes = await fetch('https://ipapi.co/json/');
+    const geo = await geoRes.json();
+    const lat = geo.latitude;
+    const lon = geo.longitude;
+    const city = geo.city || 'Your location';
+
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
+      `&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m` +
+      `&timezone=auto`;
+    const res  = await fetch(url);
+    const data = await res.json();
+    weatherData = data;
+
+    // Inject city name into card title
+    const title = document.querySelector('#weather-reload-btn').closest('.card').querySelector('.card-title');
+    const existingCity = title.querySelector('.weather-city');
+    if (!existingCity) {
+      const citySpan = document.createElement('span');
+      citySpan.className = 'weather-city';
+      citySpan.style.cssText = 'margin-left:4px;font-size:9.5px;letter-spacing:0.2px;text-transform:none;color:var(--text-faint);font-weight:400;';
+      citySpan.textContent = city;
+      title.appendChild(citySpan);
+    }
+
+    renderWeather();
+  } catch {
+    document.getElementById('weather-body').innerHTML =
+      '<div class="weather-loading">Weather unavailable (no internet?)</div>';
+  }
+}
+
+document.getElementById('weather-reload-btn').addEventListener('click', fetchWeather);
+document.getElementById('weather-unit-btn').addEventListener('click', () => {
+  weatherUseCelsius = !weatherUseCelsius;
+  renderWeather();
+});
+
+fetchWeather();
+
+// ── Todo Widget ───────────────────────────────────────────────────────────────
+let todos = JSON.parse(localStorage.getItem('sp-todos') || '[]');
+
+function saveTodos() {
+  localStorage.setItem('sp-todos', JSON.stringify(todos));
+}
+
+function renderTodos() {
+  const list = document.getElementById('todo-list');
+  const count = document.getElementById('todo-count');
+  list.innerHTML = '';
+  todos.forEach((t, i) => {
+    const li = document.createElement('li');
+    li.className = 'todo-item' + (t.done ? ' done' : '');
+    li.innerHTML = `
+      <input type="checkbox" class="todo-cb" ${t.done ? 'checked' : ''} data-i="${i}" />
+      <span class="todo-text">${t.text.replace(/</g,'&lt;')}</span>
+      <button class="todo-del" data-i="${i}" title="Delete">×</button>`;
+    list.appendChild(li);
+  });
+  const total = todos.length;
+  const done  = todos.filter(t => t.done).length;
+  count.textContent = total === 0 ? 'No tasks' : `${done}/${total} done`;
+}
+
+function addTodo() {
+  const inp = document.getElementById('todo-input');
+  const text = inp.value.trim();
+  if (!text) return;
+  todos.unshift({ text, done: false, id: Date.now() });
+  saveTodos();
+  renderTodos();
+  inp.value = '';
+}
+
+document.getElementById('todo-add-btn').addEventListener('click', addTodo);
+document.getElementById('todo-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') addTodo();
+});
+
+document.getElementById('todo-list').addEventListener('change', e => {
+  if (e.target.classList.contains('todo-cb')) {
+    const i = +e.target.dataset.i;
+    todos[i].done = e.target.checked;
+    saveTodos();
+    renderTodos();
+  }
+});
+
+document.getElementById('todo-list').addEventListener('click', e => {
+  const btn = e.target.closest('.todo-del');
+  if (btn) {
+    const i = +btn.dataset.i;
+    todos.splice(i, 1);
+    saveTodos();
+    renderTodos();
+  }
+});
+
+document.getElementById('todo-clear-done-btn').addEventListener('click', () => {
+  todos = todos.filter(t => !t.done);
+  saveTodos();
+  renderTodos();
+  showToast('Cleared completed tasks');
+});
+
+renderTodos();
+
+// ── Countdown Timers ──────────────────────────────────────────────────────────
+let countdowns = JSON.parse(localStorage.getItem('sp-countdowns') || '[]');
+
+function saveCountdowns() {
+  localStorage.setItem('sp-countdowns', JSON.stringify(countdowns));
+}
+
+function daysUntil(dateStr) {
+  const target = new Date(dateStr + 'T00:00:00');
+  const now    = new Date();
+  now.setHours(0, 0, 0, 0);
+  return Math.round((target - now) / 86400000);
+}
+
+function renderCountdowns() {
+  const list = document.getElementById('countdown-list');
+  list.innerHTML = '';
+  if (countdowns.length === 0) {
+    list.innerHTML = '<li style="color:var(--text-faint);font-size:11px;padding:8px 0;">No countdowns yet</li>';
+    return;
+  }
+  countdowns.forEach((cd, i) => {
+    const days = daysUntil(cd.date);
+    const li = document.createElement('li');
+    li.className = 'countdown-item';
+    const daysClass = days < 0 ? 'countdown-days past' : 'countdown-days';
+    const daysLabel = days === 0 ? 'Today!' : days < 0 ? `${Math.abs(days)}d ago` : `${days}d`;
+    const subtitle = days === 0 ? 'Today!' : days < 0 ? 'Past' : 'remaining';
+    li.innerHTML = `
+      <div class="countdown-info">
+        <div class="countdown-event">${cd.name.replace(/</g,'&lt;')}</div>
+        <div class="countdown-date-lbl">${cd.date}</div>
+      </div>
+      <div class="${daysClass}">${daysLabel}<div class="countdown-days-label">${subtitle}</div></div>
+      <button class="countdown-del" data-i="${i}" title="Delete">×</button>`;
+    list.appendChild(li);
+  });
+}
+
+document.getElementById('cd-add-btn').addEventListener('click', () => {
+  const name = document.getElementById('cd-name').value.trim();
+  const date = document.getElementById('cd-date').value;
+  if (!name || !date) { showToast('Enter both a name and date'); return; }
+  countdowns.push({ name, date, id: Date.now() });
+  countdowns.sort((a, b) => new Date(a.date) - new Date(b.date));
+  saveCountdowns();
+  renderCountdowns();
+  document.getElementById('cd-name').value = '';
+  document.getElementById('cd-date').value = '';
+});
+
+document.getElementById('countdown-list').addEventListener('click', e => {
+  const btn = e.target.closest('.countdown-del');
+  if (btn) {
+    const i = +btn.dataset.i;
+    countdowns.splice(i, 1);
+    saveCountdowns();
+    renderCountdowns();
+  }
+});
+
+renderCountdowns();
+
+// ── HN Headlines ─────────────────────────────────────────────────────────────
+function hnDomain(url) {
+  try { return new URL(url).hostname.replace(/^www\./, ''); } catch { return ''; }
+}
+
+async function fetchHN() {
+  const body = document.getElementById('hn-body');
+  body.innerHTML = '<div class="hn-loading">Loading stories…</div>';
+  try {
+    const ids = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json').then(r => r.json());
+    const top10 = ids.slice(0, 10);
+    const stories = await Promise.all(
+      top10.map(id => fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(r => r.json()))
+    );
+    body.innerHTML = stories.map((s, idx) => `
+      <div class="hn-item">
+        <span class="hn-num">${idx + 1}</span>
+        <div>
+          <a class="hn-link" href="${s.url || `https://news.ycombinator.com/item?id=${s.id}`}" target="_blank">${(s.title||'').replace(/</g,'&lt;')}</a>
+          <div class="hn-meta">
+            <span>${s.score} pts</span>
+            ${s.url ? `<span>${hnDomain(s.url)}</span>` : ''}
+            <a href="https://news.ycombinator.com/item?id=${s.id}" target="_blank" style="color:var(--text-faint);text-decoration:none;">${s.descendants||0} comments</a>
+          </div>
+        </div>
+      </div>`).join('');
+  } catch {
+    body.innerHTML = '<div class="hn-loading">Could not load HN stories</div>';
+  }
+}
+
+document.getElementById('hn-reload-btn').addEventListener('click', fetchHN);
+fetchHN();
+
+// ── GitHub Activity ───────────────────────────────────────────────────────────
+const GH_USER = 'tghimanshu';
+
+const GH_EVENT_MAP = {
+  PushEvent:        { icon: '⬆', label: e => `Pushed to ${e.repo.name.split('/')[1]}` },
+  PullRequestEvent: { icon: '⎇', label: e => `${e.payload.action} PR in ${e.repo.name.split('/')[1]}` },
+  IssuesEvent:      { icon: '○', label: e => `${e.payload.action} issue in ${e.repo.name.split('/')[1]}` },
+  WatchEvent:       { icon: '★', label: e => `Starred ${e.repo.name}` },
+  ForkEvent:        { icon: '⑂', label: e => `Forked ${e.repo.name}` },
+  CreateEvent:      { icon: '+', label: e => `Created ${e.payload.ref_type} in ${e.repo.name.split('/')[1]}` },
+  DeleteEvent:      { icon: '−', label: e => `Deleted ${e.payload.ref_type} in ${e.repo.name.split('/')[1]}` },
+  IssueCommentEvent:{ icon: '💬', label: e => `Commented in ${e.repo.name.split('/')[1]}` },
+  ReleaseEvent:     { icon: '🏷', label: e => `Released in ${e.repo.name.split('/')[1]}` },
+  PublicEvent:      { icon: '🌐', label: e => `Made ${e.repo.name} public` },
+};
+
+function ghRelTime(isoStr) {
+  const diff = (Date.now() - new Date(isoStr)) / 1000;
+  if (diff < 60) return 'just now';
+  if (diff < 3600) return `${Math.floor(diff/60)}m ago`;
+  if (diff < 86400) return `${Math.floor(diff/3600)}h ago`;
+  return `${Math.floor(diff/86400)}d ago`;
+}
+
+async function fetchGHActivity() {
+  const body = document.getElementById('gh-activity-body');
+  body.innerHTML = '<div class="hn-loading">Loading activity…</div>';
+  try {
+    const events = await fetch(`https://api.github.com/users/${GH_USER}/events/public?per_page=15`).then(r => r.json());
+    if (!Array.isArray(events) || events.length === 0) {
+      body.innerHTML = '<div class="hn-loading">No public activity found</div>';
+      return;
+    }
+    const shown = events.slice(0, 10);
+    body.innerHTML = shown.map(e => {
+      const map = GH_EVENT_MAP[e.type] || { icon: '•', label: ev => ev.type.replace('Event','') };
+      const repoUrl = `https://github.com/${e.repo.name}`;
+      return `<div class="gh-act-item">
+        <span class="gh-act-icon">${map.icon}</span>
+        <span class="gh-act-text">${map.label(e)} — <a href="${repoUrl}" target="_blank">${e.repo.name}</a></span>
+        <span class="gh-act-time">${ghRelTime(e.created_at)}</span>
+      </div>`;
+    }).join('');
+  } catch {
+    body.innerHTML = '<div class="hn-loading">Could not load GitHub activity</div>';
+  }
+}
+
+document.getElementById('gh-reload-btn').addEventListener('click', fetchGHActivity);
+fetchGHActivity();
+
+// ── GitHub Contribution Graph ─────────────────────────────────────────────────
+async function fetchContribGraph() {
+  const wrap  = document.getElementById('contrib-wrap');
+  const total = document.getElementById('contrib-total');
+  wrap.innerHTML = '<div class="hn-loading">Loading contributions…</div>';
+  try {
+    const data = await fetch(`https://github-contributions-api.jogruber.de/v4/${GH_USER}?y=last`).then(r => r.json());
+    const contributions = data.contributions;  // array of {date, count, level}
+
+    // Group into weeks (columns of 7 days)
+    const weeks = [];
+    let week = [];
+    contributions.forEach((day, idx) => {
+      week.push(day);
+      if (week.length === 7) { weeks.push(week); week = []; }
+    });
+    if (week.length) weeks.push(week);
+
+    const totalCount = contributions.reduce((s, d) => s + d.count, 0);
+    total.textContent = `${totalCount} contributions in the last year`;
+
+    const grid = document.createElement('div');
+    grid.className = 'contrib-grid';
+
+    weeks.forEach(w => {
+      const col = document.createElement('div');
+      col.className = 'contrib-col';
+      w.forEach(d => {
+        const cell = document.createElement('div');
+        cell.className = 'contrib-cell';
+        cell.dataset.level = d.level;
+        cell.title = `${d.date}: ${d.count} contribution${d.count !== 1 ? 's' : ''}`;
+        col.appendChild(cell);
+      });
+      grid.appendChild(col);
+    });
+
+    // Legend
+    const legend = document.getElementById('contrib-legend');
+    legend.innerHTML = '<span style="font-size:9.5px;color:var(--text-faint);margin-right:4px;">Less</span>';
+    [0,1,2,3,4].forEach(lvl => {
+      const c = document.createElement('div');
+      c.className = 'contrib-legend-cell contrib-cell';
+      c.dataset.level = lvl;
+      legend.appendChild(c);
+    });
+    legend.innerHTML += '<span style="font-size:9.5px;color:var(--text-faint);margin-left:4px;">More</span>';
+
+    wrap.innerHTML = '';
+    wrap.appendChild(grid);
+  } catch(err) {
+    wrap.innerHTML = '<div class="hn-loading">Could not load contribution data</div>';
+  }
+}
+
+fetchContribGraph();
+
+// ── Command Palette ───────────────────────────────────────────────────────────
+const cmdOverlay = document.getElementById('cmd-overlay');
+const cmdInput   = document.getElementById('cmd-input');
+const cmdResults = document.getElementById('cmd-results');
+
+// Build index of all links + actions
+function buildCmdIndex() {
+  const items = [];
+
+  // All link-items across all pages
+  document.querySelectorAll('.link-item').forEach(el => {
+    const name    = el.querySelector('.link-name')?.textContent || '';
+    const desc    = el.querySelector('.link-desc')?.textContent || '';
+    const href    = el.getAttribute('href') || '';
+    const iconImg = el.querySelector('.link-icon');
+    const iconTxt = el.querySelector('.link-icon-txt')?.textContent || '';
+    const page    = el.closest('.card')?.dataset?.page ?? '';
+    const pageLabel = page === '0' ? 'Life OS' : page === '1' ? 'Feeds' : 'Tools';
+    items.push({
+      type: 'link', name, desc, href,
+      iconImg: iconImg ? iconImg.src : null, iconTxt,
+      tag: pageLabel,
+    });
+  });
+
+  // Actions
+  const actions = [
+    { type:'action', name:'Toggle Theme', desc:'Switch dark/light mode', iconTxt:'☾', action: () => themeBtn.click() },
+    { type:'action', name:'Page 1 — Life OS', desc:'Switch to page 1', iconTxt:'1', action: () => switchPage(0) },
+    { type:'action', name:'Page 2 — Feeds', desc:'Switch to page 2', iconTxt:'2', action: () => switchPage(1) },
+    { type:'action', name:'Page 3 — Tools', desc:'Switch to page 3', iconTxt:'3', action: () => switchPage(2) },
+    { type:'action', name:'Start Pomodoro', desc:'Start/pause focus timer', iconTxt:'⏱', action: () => document.getElementById('pomo-start').click() },
+  ];
+  return [...items, ...actions];
+}
+
+let cmdIndex = [];
+let cmdSelected = -1;
+let cmdFiltered = [];
+
+function cmdScore(item, q) {
+  const haystack = (item.name + ' ' + item.desc).toLowerCase();
+  const needle   = q.toLowerCase();
+  if (haystack.startsWith(needle)) return 2;
+  if (haystack.includes(needle)) return 1;
+  // fuzzy: all chars of needle appear in order
+  let hi = 0;
+  for (const ch of needle) {
+    hi = haystack.indexOf(ch, hi);
+    if (hi === -1) return 0;
+    hi++;
+  }
+  return 0.5;
+}
+
+function cmdHighlight(text, q) {
+  if (!q) return text.replace(/</g,'&lt;');
+  const safe = text.replace(/</g,'&lt;');
+  const idx = safe.toLowerCase().indexOf(q.toLowerCase());
+  if (idx === -1) return safe;
+  return safe.slice(0, idx) +
+    `<mark>${safe.slice(idx, idx + q.length)}</mark>` +
+    safe.slice(idx + q.length);
+}
+
+function renderCmdResults(q) {
+  cmdSelected = -1;
+  if (!q) {
+    // Show top 8 from all pages
+    cmdFiltered = cmdIndex.slice(0, 8);
+  } else {
+    cmdFiltered = cmdIndex
+      .map(item => ({ item, score: cmdScore(item, q) }))
+      .filter(x => x.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 12)
+      .map(x => x.item);
+  }
+
+  if (cmdFiltered.length === 0) {
+    cmdResults.innerHTML = '<div style="padding:20px 16px;color:var(--text-faint);font-size:12px;text-align:center;">No results</div>';
+    return;
+  }
+
+  cmdResults.innerHTML = cmdFiltered.map((item, i) => {
+    let iconHtml;
+    if (item.iconImg) {
+      iconHtml = `<img class="cmd-item-img" src="${item.iconImg}" alt="" />`;
+    } else {
+      iconHtml = `<div class="cmd-item-icon">${(item.iconTxt||'•').replace(/</g,'&lt;')}</div>`;
+    }
+    return `<div class="cmd-item" data-i="${i}" tabindex="-1">
+      ${iconHtml}
+      <div class="cmd-item-text">
+        <div class="cmd-item-name">${cmdHighlight(item.name, q)}</div>
+        ${item.desc ? `<div class="cmd-item-sub">${item.desc.replace(/</g,'&lt;')}</div>` : ''}
+      </div>
+      ${item.tag ? `<div class="cmd-item-tag">${item.tag}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function cmdOpen() {
+  cmdIndex = buildCmdIndex();
+  cmdOverlay.classList.add('open');
+  cmdInput.value = '';
+  renderCmdResults('');
+  requestAnimationFrame(() => cmdInput.focus());
+}
+
+function cmdClose() {
+  cmdOverlay.classList.remove('open');
+}
+
+function cmdActivate(i) {
+  const item = cmdFiltered[i];
+  if (!item) return;
+  cmdClose();
+  if (item.type === 'link') {
+    window.open(item.href, '_blank');
+  } else if (item.type === 'action') {
+    item.action();
+  }
+}
+
+function cmdMoveSelection(dir) {
+  const items = cmdResults.querySelectorAll('.cmd-item');
+  if (items.length === 0) return;
+  items[cmdSelected]?.classList.remove('cmd-selected');
+  cmdSelected = Math.max(0, Math.min(items.length - 1, cmdSelected + dir));
+  items[cmdSelected].classList.add('cmd-selected');
+  items[cmdSelected].scrollIntoView({ block: 'nearest' });
+}
+
+cmdInput.addEventListener('input', () => renderCmdResults(cmdInput.value.trim()));
+
+cmdInput.addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown') { e.preventDefault(); cmdMoveSelection(1); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); cmdMoveSelection(-1); }
+  else if (e.key === 'Enter') {
+    e.preventDefault();
+    const idx = cmdSelected >= 0 ? cmdSelected : 0;
+    cmdActivate(idx);
+  }
+  else if (e.key === 'Escape') cmdClose();
+});
+
+cmdResults.addEventListener('click', e => {
+  const item = e.target.closest('.cmd-item');
+  if (item) cmdActivate(+item.dataset.i);
+});
+
+cmdResults.addEventListener('mousemove', e => {
+  const item = e.target.closest('.cmd-item');
+  if (!item) return;
+  cmdResults.querySelectorAll('.cmd-item').forEach(el => el.classList.remove('cmd-selected'));
+  item.classList.add('cmd-selected');
+  cmdSelected = +item.dataset.i;
+});
+
+cmdOverlay.addEventListener('click', e => { if (e.target === cmdOverlay) cmdClose(); });
+
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    cmdOverlay.classList.contains('open') ? cmdClose() : cmdOpen();
+  }
+});
+
+document.getElementById('bm-cmd-open').addEventListener('click', cmdOpen);
+
+
+
 </script>
 </body>
 </html>
