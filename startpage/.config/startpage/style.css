@@ -65,11 +65,11 @@
   --bg2:       hsl(222, 14%, 11%);
   --bg3:       hsl(222, 14%, 16%);
   --bg4:       hsl(222, 14%, 20%);
-  --border:    hsl(222, 14%, 22%);
-  --border-hi: hsl(222, 14%, 30%);
-  --text:      hsl(220, 15%, 88%);
-  --text-dim:  hsl(220, 10%, 55%);
-  --text-faint:hsl(220, 10%, 36%);
+  --border:    hsl(222, 14%, 24%);
+  --border-hi: hsl(222, 14%, 36%);
+  --text:      hsl(220, 30%, 97%);
+  --text-dim:  hsl(220, 20%, 82%);
+  --text-faint:hsl(220, 16%, 65%);
   --shadow:    0 1px 3px hsl(0 0% 0% / 0.4), 0 4px 16px hsl(0 0% 0% / 0.3);
 }
 
@@ -78,11 +78,11 @@
   --bg2:       hsl(220, 20%, 100%);
   --bg3:       hsl(220, 20%, 94%);
   --bg4:       hsl(220, 20%, 90%);
-  --border:    hsl(220, 15%, 86%);
-  --border-hi: hsl(220, 15%, 72%);
-  --text:      hsl(222, 20%, 15%);
-  --text-dim:  hsl(222, 12%, 45%);
-  --text-faint:hsl(222, 10%, 64%);
+  --border:    hsl(220, 15%, 84%);
+  --border-hi: hsl(220, 15%, 68%);
+  --text:      hsl(222, 25%, 8%);
+  --text-dim:  hsl(222, 18%, 25%);
+  --text-faint:hsl(222, 14%, 42%);
   --shadow:    0 1px 3px hsl(0 0% 0% / 0.06), 0 4px 16px hsl(0 0% 0% / 0.06);
 }
 

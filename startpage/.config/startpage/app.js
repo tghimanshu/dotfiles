@@ -1453,8 +1453,14 @@ document.addEventListener('keydown', e => {
     const over = getCardFromTarget(e.target);
     if (!over || over === dragSrc || over === placeholder) return;
     if (over.dataset.page !== dragPage) return;
-    const rect = over.getBoundingClientRect();
-    if (e.clientY < rect.top + rect.height / 2) {
+
+    // Use DOM order rather than clientY to decide insertion point.
+    // CSS columns reflows cards visually, making clientY unreliable.
+    const children = [...grid.children];
+    const overIdx  = children.indexOf(over);
+    const phIdx    = children.indexOf(placeholder);
+
+    if (phIdx === -1 || phIdx > overIdx) {
       grid.insertBefore(placeholder, over);
     } else {
       grid.insertBefore(placeholder, over.nextSibling);
