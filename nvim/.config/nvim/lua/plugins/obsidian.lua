@@ -578,6 +578,218 @@ return {
         vim.cmd('edit ' .. pick)
         vim.notify('Review: ' .. vim.fn.fnamemodify(pick, ':t'), vim.log.levels.INFO)
       end, 'Design Pattern: Open random note')
+
+      -- ─────────────────────────────────────────────────────────────
+      -- <leader>nN — Unified new-note picker
+      -- Single entrypoint: pick a note type, get prompted for title.
+      -- The individual nN* bindings still exist as fast-path shortcuts.
+      -- ─────────────────────────────────────────────────────────────
+      map('<leader>nN', function()
+        local pickers      = require 'telescope.pickers'
+        local finders      = require 'telescope.finders'
+        local conf         = require('telescope.config').values
+        local actions      = require 'telescope.actions'
+        local action_state = require 'telescope.actions.state'
+
+        -- Table of all note types. creator is a zero-arg function to call.
+        local note_types = {
+          { label = 'Project',       desc = 'projects/',         creator = new_typed_note('projects',         'project_template',       'Project') },
+          { label = 'Learning',      desc = 'learning/',         creator = new_typed_note('learning',         'learning_template',       'Learning') },
+          { label = 'Article',       desc = 'ai/',               creator = new_typed_note('ai',               'article_template',        'Article') },
+          { label = 'TIL',           desc = 'daily/',            creator = new_typed_note('daily',            'til_template',            'TIL') },
+          { label = 'System Design', desc = 'systems/',          creator = new_typed_note('systems',          'system_design_template',  'System Design') },
+          { label = 'Pattern',       desc = 'systems/patterns/', creator = new_typed_note('systems/patterns', 'pattern_template',        'Design Pattern') },
+          { label = 'DSA (manual)',  desc = 'dsa/  — no API',    creator = function()
+              vim.ui.input({ prompt = 'Problem number: ' }, function(num)
+                if not num or num == '' then return end
+                vim.ui.input({ prompt = 'Title slug (e.g. two-sum): ' }, function(slug)
+                  if not slug or slug == '' then return end
+                  local filename = string.format('%s/%03d-%s.md', DSA_PATH, tonumber(num) or 0, slug)
+                  local q = { questionFrontendId = num, title = slug:gsub('-', ' '), titleSlug = slug, difficulty = '' }
+                  local content = build_lc_content(q, nil, false)
+                  Path:new(filename):touch { parents = true }
+                  Path:new(filename):write(table.concat(content, '\n'), 'w')
+                  vim.cmd('edit ' .. filename)
+                  vim.notify('New DSA note: ' .. num .. '-' .. slug, vim.log.levels.INFO)
+                end)
+              end)
+            end,
+          },
+        }
+
+        pickers.new({}, {
+          prompt_title = 'New Note — pick a type',
+          finder = finders.new_table {
+            results = note_types,
+            entry_maker = function(t)
+              return {
+                value   = t,
+                display = string.format('%-16s  %s', t.label, t.desc),
+                ordinal = t.label,
+              }
+            end,
+          },
+          sorter = conf.generic_sorter {},
+          attach_mappings = function(prompt_bufnr)
+            actions.select_default:replace(function()
+              actions.close(prompt_bufnr)
+              local entry = action_state.get_selected_entry()
+              entry.value.creator()
+            end)
+            return true
+          end,
+        }):find()
+      end, 'New note — pick type from picker')
+
+      -- ─────────────────────────────────────────────────────────────
+      -- <leader>nR — Unified random reviewer
+      -- Pick a domain, open a random note from it for review.
+      -- ─────────────────────────────────────────────────────────────
+      map('<leader>nR', function()
+        local pickers      = require 'telescope.pickers'
+        local finders      = require 'telescope.finders'
+        local conf         = require('telescope.config').values
+        local actions      = require 'telescope.actions'
+        local action_state = require 'telescope.actions.state'
+
+        local domains = {
+          { label = 'DSA',            path = DSA_PATH,                              glob = '*.md' },
+          { label = 'System Design',  path = SD_PATH,                               glob = '*.md' },
+          { label = 'Design Pattern', path = PAT_PATH,                              glob = '*.md' },
+          { label = 'Learning',       path = vim.fn.expand '~/personal/notes/learning', glob = '*.md' },
+          { label = 'Article / AI',   path = vim.fn.expand '~/personal/notes/ai',       glob = '*.md' },
+        }
+
+        pickers.new({}, {
+          prompt_title = 'Random Review — pick a domain',
+          finder = finders.new_table {
+            results = domains,
+            entry_maker = function(d)
+              return { value = d, display = d.label, ordinal = d.label }
+            end,
+          },
+          sorter = conf.generic_sorter {},
+          attach_mappings = function(prompt_bufnr)
+            actions.select_default:replace(function()
+              actions.close(prompt_bufnr)
+              local domain = action_state.get_selected_entry().value
+              local files  = vim.fn.globpath(domain.path, domain.glob, false, true)
+              if #files == 0 then
+                vim.notify('No notes in ' .. domain.label, vim.log.levels.WARN)
+                return
+              end
+              math.randomseed(os.time())
+              local pick = files[math.random(#files)]
+              vim.cmd('edit ' .. pick)
+              vim.notify('[' .. domain.label .. '] ' .. vim.fn.fnamemodify(pick, ':t'), vim.log.levels.INFO)
+            end)
+            return true
+          end,
+        }):find()
+      end, 'Random review — pick domain from picker')
+
+      -- ─────────────────────────────────────────────────────────────
+      -- <leader>nSt — Cycle status field in current note's frontmatter
+      -- Detects note type from tags: line, cycles through valid states.
+      -- ─────────────────────────────────────────────────────────────
+      map('<leader>nSt', function()
+        local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+
+        -- Detect note type from tags frontmatter line
+        local tag_line = ''
+        for _, l in ipairs(lines) do
+          if l:match '^tags:' then tag_line = l break end
+        end
+
+        -- Cycle sequences per note type
+        local cycles = {
+          ['system-design'] = { 'draft', 'in-progress', 'complete' },
+          ['design-pattern'] = { 'draft', 'in-progress', 'complete' },
+          ['learning']      = { 'in-progress', 'completed', 'paused' },
+          ['project']       = { 'active', 'paused', 'shipped', 'abandoned' },
+        }
+
+        local cycle = { 'draft', 'in-progress', 'complete' }  -- default
+        for tag, seq in pairs(cycles) do
+          if tag_line:match(tag) then cycle = seq break end
+        end
+
+        -- Find and update the status: line
+        local status_i = nil
+        local cur_status = nil
+        for i, l in ipairs(lines) do
+          local s = l:match '^status:%s*(.+)$'
+          if s then
+            status_i   = i
+            cur_status = s:match '^([^%s#]+)'  -- strip inline comments
+            break
+          end
+        end
+
+        if not status_i then
+          vim.notify('No status: field found in frontmatter', vim.log.levels.WARN)
+          return
+        end
+
+        -- Find current position in cycle, advance by 1
+        local next_status = cycle[1]
+        for idx, v in ipairs(cycle) do
+          if v == cur_status then
+            next_status = cycle[(idx % #cycle) + 1]
+            break
+          end
+        end
+
+        lines[status_i] = 'status: ' .. next_status
+        vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
+        vim.cmd 'write'
+        vim.notify('Status: ' .. (cur_status or '?') .. ' → ' .. next_status, vim.log.levels.INFO)
+      end, 'Cycle status field in frontmatter')
+
+      -- ─────────────────────────────────────────────────────────────
+      -- <leader>nDg — Domain-scoped live grep
+      -- Pick a domain (or full vault), then full-text search within it.
+      -- ─────────────────────────────────────────────────────────────
+      map('<leader>nDg', function()
+        local pickers      = require 'telescope.pickers'
+        local finders      = require 'telescope.finders'
+        local conf         = require('telescope.config').values
+        local actions      = require 'telescope.actions'
+        local action_state = require 'telescope.actions.state'
+        local VAULT        = vim.fn.expand '~/personal/notes'
+
+        local domains = {
+          { label = 'DSA',            path = DSA_PATH },
+          { label = 'System Design',  path = SD_PATH },
+          { label = 'Design Pattern', path = PAT_PATH },
+          { label = 'Learning',       path = VAULT .. '/learning' },
+          { label = 'Article / AI',   path = VAULT .. '/ai' },
+          { label = 'Projects',       path = VAULT .. '/projects' },
+          { label = 'All Notes',      path = VAULT },
+        }
+
+        pickers.new({}, {
+          prompt_title = 'Grep in domain — pick one',
+          finder = finders.new_table {
+            results = domains,
+            entry_maker = function(d)
+              return { value = d, display = d.label, ordinal = d.label }
+            end,
+          },
+          sorter = conf.generic_sorter {},
+          attach_mappings = function(prompt_bufnr)
+            actions.select_default:replace(function()
+              actions.close(prompt_bufnr)
+              local domain = action_state.get_selected_entry().value
+              require('telescope.builtin').live_grep {
+                prompt_title = 'Grep: ' .. domain.label,
+                search_dirs  = { domain.path },
+              }
+            end)
+            return true
+          end,
+        }):find()
+      end, 'Domain-scoped live grep — pick domain then search')
     end,
   },
 }
