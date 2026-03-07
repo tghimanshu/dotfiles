@@ -2203,3 +2203,90 @@ a.reading-title:hover { color: var(--accent); text-decoration: underline; }
   background: var(--accent);
   color: var(--bg1);
 }
+
+/* ── LEETCODE WIDGET ──────────────────────────────────────────────────────── */
+.lc-widget-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0 8px;
+}
+
+.lc-widget-stat-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.lc-widget-stat-num {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-bright);
+  line-height: 1;
+}
+
+.lc-widget-stat-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--text-faint);
+  margin-top: 2px;
+}
+
+.lc-widget-stat-sep {
+  width: 1px;
+  height: 28px;
+  background: var(--border);
+}
+
+.lc-widget-difficulty {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.lc-diff {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.lc-easy   { color: hsl(145, 60%, 45%); background: hsla(145, 60%, 45%, .12); }
+.lc-medium { color: hsl(35,  90%, 55%); background: hsla(35,  90%, 55%, .12); }
+.lc-hard   { color: hsl(0,   70%, 55%); background: hsla(0,   70%, 55%, .12); }
+
+.lc-widget-daily {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+  flex-wrap: wrap;
+}
+
+.lc-daily-label {
+  color: var(--text-faint);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  flex-shrink: 0;
+}
+
+.lc-daily-link {
+  color: var(--text);
+  text-decoration: none;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lc-daily-link:hover { color: var(--accent); text-decoration: underline; }
+
+.lc-daily-diff {
+  flex-shrink: 0;
+}

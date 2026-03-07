@@ -22,6 +22,7 @@ const CONFIG = {
     HN:          5 * 60_000,
     GH_ACTIVITY: 10 * 60_000,
     CONTRIB:     30 * 60_000,
+    LC_DAILY:    60 * 60_000,
   },
   HABITS: ['LeetCode', 'Read', 'Deep Work', 'GitHub Commit'],
 };
@@ -1652,9 +1653,10 @@ function renderWeeklyNudge() {
   if (day !== 5 && day !== 6) return;
 
   const week = getISOWeek(now);
-  const dismissKey = `sp-weekly-review-dismissed`;
+  const year = now.getFullYear();
+  const dismissKey = `sp-weekly-review-dismissed-${year}-${String(week).padStart(2, '0')}`;
   const dismissed  = localStorage.getItem(dismissKey);
-  if (dismissed === String(week)) return;
+  if (dismissed) return;
 
   const nudge = document.createElement('div');
   nudge.className = 'weekly-review-nudge';
@@ -1662,7 +1664,7 @@ function renderWeeklyNudge() {
     <span>Weekly review pending — Week ${week}</span>
     <button class="weekly-review-dismiss" title="Dismiss for this week">dismiss</button>`;
   nudge.querySelector('.weekly-review-dismiss').addEventListener('click', () => {
-    localStorage.setItem(dismissKey, String(week));
+    localStorage.setItem(dismissKey, '1');
     nudge.remove();
   });
   focusCard.appendChild(nudge);
@@ -1746,6 +1748,7 @@ function renderStudyStats() {
 
   // Last review label
   const revEl = document.getElementById('study-last-review');
+  const reviewedBtn = document.getElementById('study-reviewed-btn');
   if (review) {
     const diff = studyDaysBetween(review, studyToday());
     revEl.textContent = diff === 0 ? 'Last review: today'
@@ -1756,6 +1759,11 @@ function renderStudyStats() {
     revEl.textContent = 'Last review: —';
     revEl.classList.remove('study-review-stale');
   }
+
+  // Dim the Reviewed button if already clicked today
+  const alreadyReviewedToday = streak.lastDate === studyToday();
+  reviewedBtn.textContent = alreadyReviewedToday ? 'reviewed ✓' : 'reviewed';
+  reviewedBtn.style.opacity = alreadyReviewedToday ? '0.5' : '';
 }
 
 // + Note button — increment today's count
@@ -1769,10 +1777,16 @@ document.getElementById('study-note-btn').addEventListener('click', () => {
 
 // Reviewed button — advance streak + record last review date
 document.getElementById('study-reviewed-btn').addEventListener('click', () => {
+  const streak = loadStreak();
+  const alreadyToday = streak.lastDate === studyToday();
   const count = advanceStreak();
   localStorage.setItem('sp-study-review', studyToday());
   renderStudyStats();
-  showToast('Streak: ' + count + ' day' + (count === 1 ? '' : 's'));
+  if (alreadyToday) {
+    showToast('Already reviewed today');
+  } else {
+    showToast('Streak: ' + count + ' day' + (count === 1 ? '' : 's'));
+  }
 });
 
 // Domain checkboxes
@@ -1794,6 +1808,90 @@ document.getElementById('study-reset-btn').addEventListener('click', () => {
 });
 
 renderStudyStats();
+
+// ── LEETCODE WIDGET ───────────────────────────────────────────────────────────
+// Shows: streak, total solved, this-week count, E/M/H breakdown, today's daily.
+// APIs: https://leetcode-api-pied.vercel.app/
+//   GET /user/:username          → submitStats
+//   GET /user/:username/calendar → streak, submissionCalendar
+//   GET /daily                   → today's daily problem
+// Cache TTLs: user/calendar = 30 min, daily = 60 min
+
+const LC_API = 'https://leetcode-api-pied.vercel.app';
+
+function lcWeekSubmissions(calendar) {
+  // calendar is { "unix_timestamp": count, ... }
+  // sum submissions for the 7 days up to and including today
+  const now  = Date.now();
+  const week = 7 * 24 * 3600 * 1000;
+  return Object.entries(calendar).reduce((sum, [ts, count]) => {
+    return (now - Number(ts) * 1000) <= week ? sum + count : sum;
+  }, 0);
+}
+
+async function renderLCWidget() {
+  const card = document.getElementById('lc-widget-card');
+  if (!card) return;
+
+  try {
+    // --- Daily problem ---
+    let daily = cacheGet('cache-lc-daily-widget', CONFIG.CACHE_TTL.LC_DAILY);
+    if (!daily) {
+      const d = await fetch(`${LC_API}/daily`).then(r => r.json());
+      daily = {
+        title:      d.question.title,
+        slug:       d.question.titleSlug,
+        difficulty: d.question.difficulty,
+        link:       `https://leetcode.com${d.link}`,
+      };
+      cacheSet('cache-lc-daily-widget', daily);
+    }
+
+    // --- User calendar (streak + week count) ---
+    let cal = cacheGet('cache-lc-widget-cal', CONFIG.CACHE_TTL.CONTRIB);
+    if (!cal) {
+      const c = await fetch(`${LC_API}/user/${CONFIG.LC_USER}/calendar`).then(r => r.json());
+      cal = { streak: c.streak, calendar: c.submissionCalendar };
+      cacheSet('cache-lc-widget-cal', cal);
+    }
+
+    // --- User profile (solve counts) ---
+    let stats = cacheGet('cache-lc-widget-stats', CONFIG.CACHE_TTL.CONTRIB);
+    if (!stats) {
+      const u = await fetch(`${LC_API}/user/${CONFIG.LC_USER}`).then(r => r.json());
+      const ac = u.submitStats.acSubmissionNum;
+      stats = {
+        total:  ac.find(x => x.difficulty === 'All')?.count    ?? 0,
+        easy:   ac.find(x => x.difficulty === 'Easy')?.count   ?? 0,
+        medium: ac.find(x => x.difficulty === 'Medium')?.count ?? 0,
+        hard:   ac.find(x => x.difficulty === 'Hard')?.count   ?? 0,
+      };
+      cacheSet('cache-lc-widget-stats', stats);
+    }
+
+    const weekCount = lcWeekSubmissions(cal.calendar);
+
+    document.getElementById('lc-streak').textContent       = cal.streak;
+    document.getElementById('lc-solved-total').textContent = stats.total;
+    document.getElementById('lc-week-count').textContent   = weekCount;
+    document.getElementById('lc-easy').textContent         = `E: ${stats.easy}`;
+    document.getElementById('lc-medium').textContent       = `M: ${stats.medium}`;
+    document.getElementById('lc-hard').textContent         = `H: ${stats.hard}`;
+
+    const linkEl = document.getElementById('lc-daily-link');
+    linkEl.textContent = daily.title;
+    linkEl.href        = daily.link;
+
+    const diffEl = document.getElementById('lc-daily-diff');
+    diffEl.textContent  = daily.difficulty;
+    diffEl.className    = 'lc-daily-diff lc-diff lc-' + daily.difficulty.toLowerCase();
+
+  } catch (err) {
+    console.warn('LeetCode widget error:', err);
+  }
+}
+
+renderLCWidget();
 
 // ── SERVICE WORKER REGISTRATION ───────────────────────────────────────────────
 if ('serviceWorker' in navigator) {
