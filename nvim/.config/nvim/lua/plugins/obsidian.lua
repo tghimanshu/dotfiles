@@ -790,6 +790,253 @@ return {
           end,
         }):find()
       end, 'Domain-scoped live grep — pick domain then search')
+
+      -- ─────────────────────────────────────────────────────────────
+      -- Vault git sync  (<leader>ng*)
+      -- ─────────────────────────────────────────────────────────────
+      local VAULT = vim.fn.expand '~/personal/notes'
+
+      -- <leader>ngs — vault git status in a floating scratch buffer
+      map('<leader>ngs', function()
+        local lines = vim.fn.systemlist('git -C ' .. VAULT .. ' status -s')
+        if #lines == 0 then lines = { '(nothing to commit, working tree clean)' } end
+        local buf = vim.api.nvim_create_buf(false, true)
+        vim.api.nvim_buf_set_lines(buf, 0, -1, false,
+          vim.list_extend({ '# Vault git status', '' }, lines))
+        vim.bo[buf].filetype  = 'markdown'
+        vim.bo[buf].modifiable = false
+        local w = math.min(60, vim.o.columns - 4)
+        local h = math.min(#lines + 4, vim.o.lines - 6)
+        vim.api.nvim_open_win(buf, true, {
+          relative = 'editor', style = 'minimal', border = 'rounded',
+          width = w, height = h,
+          row = math.floor((vim.o.lines - h) / 2),
+          col = math.floor((vim.o.columns - w) / 2),
+        })
+        vim.keymap.set('n', 'q',     '<cmd>close<CR>', { buffer = buf, silent = true })
+        vim.keymap.set('n', '<Esc>', '<cmd>close<CR>', { buffer = buf, silent = true })
+      end, 'Vault: git status')
+
+      -- <leader>ngp — stage all + auto-commit + push
+      map('<leader>ngp', function()
+        local ts  = os.date '%Y-%m-%d %H:%M'
+        local msg = 'vault: sync ' .. ts
+        vim.ui.input({ prompt = 'Commit message: ', default = msg }, function(input)
+          if not input or input == '' then return end
+          local out = vim.fn.system(
+            'git -C ' .. VAULT .. ' add -A && git -C ' .. VAULT
+            .. ' commit -m ' .. vim.fn.shellescape(input)
+            .. ' ; git -C ' .. VAULT .. ' push 2>&1'
+          )
+          vim.notify(out, vim.log.levels.INFO)
+        end)
+      end, 'Vault: stage all, commit and push')
+
+      -- <leader>ngl — vault git log in Telescope
+      map('<leader>ngl', function()
+        require('telescope.builtin').git_commits { cwd = VAULT }
+      end, 'Vault: git log in Telescope')
+
+      -- ─────────────────────────────────────────────────────────────
+      -- <leader>n<leader> — Note Dashboard (floating window)
+      -- Shows at-a-glance status: daily note, weekly review, unsolved
+      -- DSA count, in-progress notes by type, vault git status.
+      -- ─────────────────────────────────────────────────────────────
+      map('<leader>n<leader>', function()
+        local today      = os.date '%Y-%m-%d'
+        local week       = os.date '%Y-W%V'
+        local daily_path = vim.fn.expand('~/personal/notes/daily/') .. today .. '.md'
+        local weekly_path= vim.fn.expand('~/personal/notes/daily/') .. week .. '-weekly-review.md'
+
+        -- Helper: count files in a glob that match a pattern in their contents
+        local function count_matching(glob_path, pattern)
+          local files = vim.fn.globpath(glob_path, '*.md', false, true)
+          local n = 0
+          for _, f in ipairs(files) do
+            local ok, txt = pcall(function() return Path:new(f):read() end)
+            if ok and txt:match(pattern) then n = n + 1 end
+          end
+          return n
+        end
+
+        local function count_files(glob_path)
+          return #vim.fn.globpath(glob_path, '*.md', false, true)
+        end
+
+        -- Gather stats
+        local daily_done   = vim.fn.filereadable(daily_path) == 1
+        local weekly_done  = vim.fn.filereadable(weekly_path) == 1
+        local dsa_total    = count_files(DSA_PATH)
+        local dsa_solved   = count_matching(DSA_PATH, '%*%*Solved%*%*')
+        local dsa_unsolved = dsa_total - dsa_solved
+        local sd_ip        = count_matching(SD_PATH,  'status:%s*in%-progress')
+        local pat_ip       = count_matching(PAT_PATH, 'status:%s*in%-progress')
+        local learn_ip     = count_matching(vim.fn.expand '~/personal/notes/learning', 'status:%s*in%-progress')
+        local proj_active  = count_matching(vim.fn.expand '~/personal/notes/projects', 'status:%s*active')
+
+        -- Vault git status summary
+        local git_lines = vim.fn.systemlist('git -C ' .. VAULT .. ' status -s')
+        local git_summary = #git_lines == 0 and 'clean' or (#git_lines .. ' change' .. (#git_lines == 1 and '' or 's'))
+
+        local function tick(v) return v and '✓' or '✗' end
+
+        local lines = {
+          '  Note Dashboard — ' .. today,
+          '  ────────────────────────────────────────',
+          ('  Daily note      %s  %s'):format(tick(daily_done),  daily_done  and today or 'not created'),
+          ('  Weekly review   %s  %s'):format(tick(weekly_done), weekly_done and week  or 'pending'),
+          '  ────────────────────────────────────────',
+          ('  DSA             %d total  /  %d solved  /  %d unsolved'):format(dsa_total, dsa_solved, dsa_unsolved),
+          ('  System Design   %d in-progress'):format(sd_ip),
+          ('  Design Pattern  %d in-progress'):format(pat_ip),
+          ('  Learning        %d in-progress'):format(learn_ip),
+          ('  Projects        %d active'):format(proj_active),
+          '  ────────────────────────────────────────',
+          ('  Vault git       %s'):format(git_summary),
+          '',
+          '  q / <Esc> to close',
+        }
+
+        local w   = 52
+        local h   = #lines + 2
+        local buf = vim.api.nvim_create_buf(false, true)
+        vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+        vim.bo[buf].modifiable = false
+        vim.bo[buf].filetype   = 'markdown'
+
+        -- Highlight the tick marks
+        local ns = vim.api.nvim_create_namespace 'note_dashboard'
+        for i, line in ipairs(lines) do
+          if line:match '✓' then
+            vim.api.nvim_buf_add_highlight(buf, ns, 'DiagnosticOk',   i - 1, 0, -1)
+          elseif line:match '✗' then
+            vim.api.nvim_buf_add_highlight(buf, ns, 'DiagnosticWarn', i - 1, 0, -1)
+          end
+        end
+
+        vim.api.nvim_open_win(buf, true, {
+          relative = 'editor', style = 'minimal', border = 'rounded',
+          width  = w, height = h,
+          row    = math.floor((vim.o.lines - h) / 2),
+          col    = math.floor((vim.o.columns - w) / 2),
+        })
+        vim.keymap.set('n', 'q',     '<cmd>close<CR>', { buffer = buf, silent = true })
+        vim.keymap.set('n', '<Esc>', '<cmd>close<CR>', { buffer = buf, silent = true })
+      end, 'Open note dashboard')
+
+      -- ─────────────────────────────────────────────────────────────
+      -- <leader>nhl — Vault health linter
+      -- Scans notes and reports issues in a Telescope picker:
+      --   • No tags in frontmatter
+      --   • status: draft  older than 14 days (by mtime)
+      --   • Empty sections (heading with nothing below it)
+      -- Select an issue to jump to that file.
+      -- ─────────────────────────────────────────────────────────────
+      map('<leader>nhl', function()
+        vim.notify('Linting vault…', vim.log.levels.INFO)
+
+        local scan_dirs = {
+          vim.fn.expand '~/personal/notes/projects',
+          vim.fn.expand '~/personal/notes/learning',
+          vim.fn.expand '~/personal/notes/ai',
+          DSA_PATH,
+          SD_PATH,
+          PAT_PATH,
+        }
+
+        local issues = {}
+        local stale_days = 14
+        local now = os.time()
+
+        local function short(f)
+          return f:gsub(vim.fn.expand '~/personal/notes/', '')
+        end
+
+        for _, dir in ipairs(scan_dirs) do
+          local files = vim.fn.globpath(dir, '*.md', false, true)
+          for _, f in ipairs(files) do
+            local ok, txt = pcall(function() return Path:new(f):read() end)
+            if not ok then goto continue end
+
+            local fname = short(f)
+
+            -- 1. No tags
+            if not txt:match 'tags:%s*%[.+%]' and not txt:match 'tags:%s*%[%]' == false then
+              if not txt:match 'tags:' or txt:match 'tags:%s*%[%]' then
+                table.insert(issues, { file = f, display = fname, issue = 'no tags' })
+              end
+            end
+
+            -- 2. Draft older than stale_days
+            if txt:match 'status:%s*draft' then
+              local mtime = vim.fn.getftime(f)
+              local age   = math.floor((now - mtime) / 86400)
+              if age >= stale_days then
+                table.insert(issues, { file = f, display = fname,
+                  issue = 'draft for ' .. age .. ' days' })
+              end
+            end
+
+            -- 3. Empty sections: a ## heading followed immediately by another heading or EOF
+            local prev_heading = nil
+            for line in txt:gmatch '[^\n]+' do
+              if line:match '^##+ ' then
+                if prev_heading then
+                  table.insert(issues, { file = f, display = fname,
+                    issue = 'empty section: ' .. prev_heading })
+                  prev_heading = nil  -- report once per file per heading
+                end
+                prev_heading = line:match '^(##+ .-)%s*$'
+              elseif line:match '%S' then
+                prev_heading = nil
+              end
+            end
+            if prev_heading then
+              table.insert(issues, { file = f, display = fname,
+                issue = 'empty section: ' .. prev_heading })
+            end
+
+            ::continue::
+          end
+        end
+
+        if #issues == 0 then
+          vim.notify('Vault is healthy — no issues found', vim.log.levels.INFO)
+          return
+        end
+
+        local pickers      = require 'telescope.pickers'
+        local finders      = require 'telescope.finders'
+        local conf         = require('telescope.config').values
+        local actions      = require 'telescope.actions'
+        local action_state = require 'telescope.actions.state'
+
+        pickers.new({}, {
+          prompt_title = 'Vault Health (' .. #issues .. ' issues)',
+          finder = finders.new_table {
+            results = issues,
+            entry_maker = function(issue)
+              local display = string.format('%-40s  %s', issue.display, issue.issue)
+              return {
+                value   = issue,
+                display = display,
+                ordinal = display,
+                path    = issue.file,
+              }
+            end,
+          },
+          sorter    = conf.generic_sorter {},
+          previewer = conf.file_previewer {},
+          attach_mappings = function(prompt_bufnr)
+            actions.select_default:replace(function()
+              actions.close(prompt_bufnr)
+              local entry = action_state.get_selected_entry()
+              vim.cmd('edit ' .. entry.value.file)
+            end)
+            return true
+          end,
+        }):find()
+      end, 'Vault health lint — show issues in Telescope')
     end,
   },
 }
