@@ -4,6 +4,10 @@ fip() {
   local host="$1"
   shift
   for port in "$@"; do
+    if pgrep -f "ssh.*-L $port:localhost:$port" > /dev/null 2>&1; then
+      echo "Port $port already forwarded — skipping"
+      continue
+    fi
     ssh -f -N -L "$port:localhost:$port" "$host" && echo "Forwarding localhost:$port -> $host:$port"
   done
 }

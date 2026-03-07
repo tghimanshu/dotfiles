@@ -1,3 +1,21 @@
 # Compression
 compress() { tar -czf "${1%/}.tar.gz" "${1%/}"; }
-alias decompress="tar -xzf"
+
+decompress() {
+  [[ $# -eq 0 ]] && echo "Usage: decompress <file>" && return 1
+  local file="$1"
+  case "$file" in
+    *.tar.gz|*.tgz)   tar -xzf  "$file" ;;
+    *.tar.xz)         tar -xJf  "$file" ;;
+    *.tar.bz2|*.tbz2) tar -xjf  "$file" ;;
+    *.tar.zst)        tar --zstd -xf "$file" ;;
+    *.tar)            tar -xf   "$file" ;;
+    *.zip)            unzip     "$file" ;;
+    *.7z)             7z x      "$file" ;;
+    *.gz)             gunzip    "$file" ;;
+    *.bz2)            bunzip2   "$file" ;;
+    *.xz)             unxz      "$file" ;;
+    *.zst)            zstd -d   "$file" ;;
+    *) echo "decompress: unknown format: $file" && return 1 ;;
+  esac
+}

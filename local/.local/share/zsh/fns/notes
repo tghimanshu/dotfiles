@@ -1,0 +1,4 @@
+# Open today's daily note in Neovim (requires obsidian.nvim)
+daily() {
+  nvim +"ObsidianToday"
+}

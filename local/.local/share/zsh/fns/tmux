@@ -18,8 +18,8 @@ tml() {
   # Split editor pane horizontally - AI on right 30% (capture new pane ID directly)
   ai_pane=$(tmux split-window -h -p 30 -t "$editor_pane" -c "$current_dir" -P -F '#{pane_id}')
 
-  # Run ai in the right pane
-  tmux send-keys -t "$ai_pane" "$ai" C-m
+  # Run ai in the right pane (only if a command was given)
+  [[ -n $ai ]] && tmux send-keys -t "$ai_pane" "$ai" C-m
 
   # Run nvim in the left pane
   tmux send-keys -t "$editor_pane" "$EDITOR ." C-m
