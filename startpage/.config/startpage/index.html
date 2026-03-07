@@ -520,6 +520,39 @@
       </div>
     </div>
 
+    <!-- Study Stats -->
+    <div class="card page active" data-page="0" id="study-stats-card">
+      <div class="card-title">
+        <span class="card-title-dot"></span>Study Stats
+        <div class="card-title-actions">
+          <button class="card-action-btn" id="study-reset-btn">reset</button>
+        </div>
+      </div>
+      <div class="study-hero">
+        <div class="study-stat-block">
+          <span class="study-stat-num" id="study-notes-today">0</span>
+          <span class="study-stat-label">notes today</span>
+        </div>
+        <div class="study-stat-sep"></div>
+        <div class="study-stat-block">
+          <span class="study-stat-num" id="study-streak">0</span>
+          <span class="study-stat-label">day streak</span>
+        </div>
+      </div>
+      <div class="study-domains">
+        <span class="study-domain-label">Domains:</span>
+        <label class="study-domain-check"><input type="checkbox" data-domain="dsa" /> DSA</label>
+        <label class="study-domain-check"><input type="checkbox" data-domain="sd" /> SD</label>
+        <label class="study-domain-check"><input type="checkbox" data-domain="pattern" /> Pattern</label>
+        <label class="study-domain-check"><input type="checkbox" data-domain="learn" /> Learn</label>
+      </div>
+      <div class="study-last-review" id="study-last-review">Last review: —</div>
+      <div class="study-actions">
+        <button class="study-btn" id="study-note-btn">+ Note</button>
+        <button class="study-btn study-btn-accent" id="study-reviewed-btn">Reviewed</button>
+      </div>
+    </div>
+
     <!-- Countdown Timers -->    <div class="card page active" data-page="0" id="countdown-card">
       <div class="card-title"><span class="card-title-dot"></span>Countdowns</div>
       <div class="countdown-add-row">

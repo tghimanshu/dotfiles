@@ -2088,3 +2088,118 @@ a.reading-title:hover { color: var(--accent); text-decoration: underline; }
 .weekly-review-dismiss:hover {
   background: hsl(var(--accent-h),var(--accent-s),25%);
 }
+
+/* ── Study Stats ─────────────────────────────────────────────────────────── */
+.study-hero {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 12px 0 10px;
+}
+
+.study-stat-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.study-stat-num {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.study-stat-label {
+  font-size: 10px;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 3px;
+}
+
+.study-stat-sep {
+  width: 1px;
+  height: 36px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+.study-domains {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  padding: 8px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+
+.study-domain-label {
+  font-size: 11px;
+  color: var(--text-faint);
+  flex-shrink: 0;
+}
+
+.study-domain-check {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-dim);
+  cursor: pointer;
+  user-select: none;
+}
+
+.study-domain-check input[type="checkbox"] {
+  accent-color: var(--accent);
+  width: 12px;
+  height: 12px;
+  cursor: pointer;
+}
+
+.study-last-review {
+  font-size: 11px;
+  color: var(--text-faint);
+  margin-bottom: 10px;
+}
+
+.study-review-stale {
+  color: var(--warn);
+}
+
+.study-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.study-btn {
+  flex: 1;
+  padding: 6px 10px;
+  font: inherit;
+  font-size: 11px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.study-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.study-btn-accent {
+  background: var(--accent-glow);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.study-btn-accent:hover {
+  background: var(--accent);
+  color: var(--bg1);
+}

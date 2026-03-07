@@ -1670,6 +1670,131 @@ function renderWeeklyNudge() {
 
 renderWeeklyNudge();
 
+// ── STUDY STATS ───────────────────────────────────────────────────────────────
+// All data lives in localStorage — no vault access required.
+// Keys:
+//   sp-study-stats   → { date: 'YYYY-MM-DD', notes: N }
+//   sp-study-streak  → { lastDate: 'YYYY-MM-DD', count: N }
+//   sp-study-domains → { dsa: bool, sd: bool, pattern: bool, learn: bool }
+//   sp-study-review  → 'YYYY-MM-DD'
+
+function studyToday() {
+  return new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD
+}
+
+function studyDaysBetween(a, b) {
+  // a, b are 'YYYY-MM-DD' strings
+  return Math.round((new Date(b) - new Date(a)) / 86400000);
+}
+
+function loadStudyStats() {
+  const raw = localStorage.getItem('sp-study-stats');
+  if (!raw) return { date: studyToday(), notes: 0 };
+  try {
+    const s = JSON.parse(raw);
+    if (s.date !== studyToday()) return { date: studyToday(), notes: 0 };
+    return s;
+  } catch { return { date: studyToday(), notes: 0 }; }
+}
+
+function saveStudyStats(s) {
+  localStorage.setItem('sp-study-stats', JSON.stringify(s));
+}
+
+function loadStreak() {
+  try { return JSON.parse(localStorage.getItem('sp-study-streak') || '{"lastDate":"","count":0}'); }
+  catch { return { lastDate: '', count: 0 }; }
+}
+
+function saveStreak(s) {
+  localStorage.setItem('sp-study-streak', JSON.stringify(s));
+}
+
+function advanceStreak() {
+  const today  = studyToday();
+  const streak = loadStreak();
+  if (streak.lastDate === today) return streak.count; // already counted today
+  const gap = streak.lastDate ? studyDaysBetween(streak.lastDate, today) : 0;
+  streak.count    = gap <= 1 ? streak.count + 1 : 1;
+  streak.lastDate = today;
+  saveStreak(streak);
+  return streak.count;
+}
+
+function loadDomains() {
+  try { return JSON.parse(localStorage.getItem('sp-study-domains') || '{}'); }
+  catch { return {}; }
+}
+
+function saveDomains(d) {
+  localStorage.setItem('sp-study-domains', JSON.stringify(d));
+}
+
+function renderStudyStats() {
+  const stats   = loadStudyStats();
+  const streak  = loadStreak();
+  const domains = loadDomains();
+  const review  = localStorage.getItem('sp-study-review') || '';
+
+  document.getElementById('study-notes-today').textContent = stats.notes;
+  document.getElementById('study-streak').textContent      = streak.count;
+
+  // Domain checkboxes
+  document.querySelectorAll('#study-stats-card input[data-domain]').forEach(cb => {
+    cb.checked = !!domains[cb.dataset.domain];
+  });
+
+  // Last review label
+  const revEl = document.getElementById('study-last-review');
+  if (review) {
+    const diff = studyDaysBetween(review, studyToday());
+    revEl.textContent = diff === 0 ? 'Last review: today'
+                      : diff === 1 ? 'Last review: yesterday'
+                      : `Last review: ${diff} days ago`;
+    revEl.classList.toggle('study-review-stale', diff >= 3);
+  } else {
+    revEl.textContent = 'Last review: —';
+    revEl.classList.remove('study-review-stale');
+  }
+}
+
+// + Note button — increment today's count
+document.getElementById('study-note-btn').addEventListener('click', () => {
+  const s = loadStudyStats();
+  s.notes += 1;
+  saveStudyStats(s);
+  renderStudyStats();
+  showToast('Note counted');
+});
+
+// Reviewed button — advance streak + record last review date
+document.getElementById('study-reviewed-btn').addEventListener('click', () => {
+  const count = advanceStreak();
+  localStorage.setItem('sp-study-review', studyToday());
+  renderStudyStats();
+  showToast('Streak: ' + count + ' day' + (count === 1 ? '' : 's'));
+});
+
+// Domain checkboxes
+document.querySelectorAll('#study-stats-card input[data-domain]').forEach(cb => {
+  cb.addEventListener('change', () => {
+    const d = loadDomains();
+    d[cb.dataset.domain] = cb.checked;
+    saveDomains(d);
+  });
+});
+
+// Reset button — clear today's stats but keep streak
+document.getElementById('study-reset-btn').addEventListener('click', () => {
+  if (!confirm('Reset today\'s study stats?')) return;
+  saveStudyStats({ date: studyToday(), notes: 0 });
+  saveDomains({});
+  renderStudyStats();
+  showToast('Study stats reset');
+});
+
+renderStudyStats();
+
 // ── SERVICE WORKER REGISTRATION ───────────────────────────────────────────────
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
