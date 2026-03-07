@@ -28,13 +28,12 @@ eval "$(oh-my-posh init zsh --config $HOME/.config/ohmyposh/zen.toml)"
 set -o vi
 
 . "$HOME/.local/share/../bin/env"
-export PATH=$PATH:/home/himanshu/.local/scripts
+. "$HOME/.cargo/env"
+export PATH=$PATH:$HOME/.local/scripts
 
-HISTSIZE=5000
+HISTSIZE=32768
 HISTFILE="$HOME/.zsh_history"
 SAVEHIST=$HISTSIZE
-HISTDUP=erase
-
 setopt appendhistory
 setopt sharehistory
 setopt hist_ignore_space
@@ -48,16 +47,14 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color'
 
-alias ls='ls --color'
-alias v='nvim'
-alias vi='nvim'
-alias vim='nvim'
-alias c='clear'
+# Arrow key history search (match typed prefix against history)
+bindkey '^[[A' history-search-backward
+bindkey '^[[B' history-search-forward
 
 eval "$(fzf --zsh)"
 bindkey -s '^f' 'tmux-sessionizer^M'
 
-source ~/.local/share/omarchy/default/bash/aliases
-
 source $HOME/.config/taskwarrior/taskrc_aliases.sh
 alias wtf='wtfutil'
+
+source ~/.local/share/zsh/rc

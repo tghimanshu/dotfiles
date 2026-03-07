@@ -1,0 +1,2 @@
+
+for f in ~/.local/share/omarchy/default/bash/fns/*; do source "$f"; done

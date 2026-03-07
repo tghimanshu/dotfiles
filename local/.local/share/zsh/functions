@@ -1,0 +1,2 @@
+
+for f in ~/.local/share/zsh/fns/*; do source "$f"; done
