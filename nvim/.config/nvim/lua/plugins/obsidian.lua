@@ -279,6 +279,243 @@ return {
           end,
         })
       end, 'LeetCode: Fetch daily problem note')
+
+      -- <leader>nDn — fetch note by problem number via API
+      map('<leader>nDn', function()
+        vim.ui.input({ prompt = 'LeetCode problem number: ' }, function(num)
+          if not num or num == '' then return end
+          print('Fetching problem #' .. num .. '...')
+          curl.get('https://leetcode-api-pied.vercel.app/problems', {
+            callback = function(response)
+              vim.schedule(function()
+                if response.status ~= 200 then
+                  vim.notify('LeetCode API error: ' .. tostring(response.status), vim.log.levels.ERROR)
+                  return
+                end
+                local ok, data = pcall(vim.json.decode, response.body)
+                if not ok or not data then
+                  vim.notify('Failed to parse response', vim.log.levels.ERROR)
+                  return
+                end
+                local problem = nil
+                for _, p in ipairs(data) do
+                  if tostring(p.questionFrontendId) == tostring(num) then
+                    problem = p
+                    break
+                  end
+                end
+                if not problem then
+                  vim.notify('Problem #' .. num .. ' not found', vim.log.levels.ERROR)
+                  return
+                end
+                local filename = string.format('%s/%03d-%s.md', DSA_PATH, problem.questionFrontendId, problem.titleSlug)
+                if vim.fn.filereadable(filename) == 1 then
+                  vim.cmd('edit ' .. filename)
+                  vim.notify('Opened existing note: ' .. problem.title, vim.log.levels.INFO)
+                  return
+                end
+                local content = build_lc_content(problem, nil, false)
+                Path:new(filename):touch { parents = true }
+                Path:new(filename):write(table.concat(content, '\n'), 'w')
+                vim.cmd('edit ' .. filename)
+                vim.notify('New note: ' .. problem.title, vim.log.levels.INFO)
+              end)
+            end,
+          })
+        end)
+      end, 'LeetCode: Fetch problem by number')
+
+      -- <leader>nDs — Telescope fuzzy search inside dsa/
+      map('<leader>nDs', function()
+        require('telescope.builtin').find_files {
+          prompt_title = 'DSA Notes',
+          cwd = DSA_PATH,
+          hidden = false,
+        }
+      end, 'LeetCode: Browse DSA notes')
+
+      -- <leader>nDr — open a random existing DSA note for review
+      map('<leader>nDr', function()
+        local files = vim.fn.globpath(DSA_PATH, '*.md', false, true)
+        if #files == 0 then
+          vim.notify('No DSA notes found', vim.log.levels.WARN)
+          return
+        end
+        math.randomseed(os.time())
+        local pick = files[math.random(#files)]
+        vim.cmd('edit ' .. pick)
+        vim.notify('Review: ' .. vim.fn.fnamemodify(pick, ':t'), vim.log.levels.INFO)
+      end, 'LeetCode: Open random DSA note')
+
+      -- <leader>nDx — mark current note as solved (appends Solved line + updates tags)
+      map('<leader>nDx', function()
+        local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+        -- Check if already solved
+        for _, line in ipairs(lines) do
+          if line:match '^%*%*Solved%*%*' then
+            vim.notify('Already marked as solved', vim.log.levels.WARN)
+            return
+          end
+        end
+        -- Find the --- line after frontmatter block (second ---)
+        local dash_count = 0
+        local insert_at = nil
+        for i, line in ipairs(lines) do
+          if line == '---' then
+            dash_count = dash_count + 1
+            if dash_count == 2 then
+              insert_at = i
+              break
+            end
+          end
+        end
+        local solved_line = '**Solved**: ' .. os.date '%Y-%m-%d'
+        if insert_at then
+          vim.api.nvim_buf_set_lines(0, insert_at - 1, insert_at - 1, false, { solved_line })
+        else
+          -- Fallback: append after line 1 (title)
+          vim.api.nvim_buf_set_lines(0, 1, 1, false, { '', solved_line })
+        end
+        vim.cmd 'write'
+        vim.notify('Marked as solved', vim.log.levels.INFO)
+      end, 'LeetCode: Mark current note solved')
+
+      -- <leader>nDu — Telescope list of DSA notes NOT containing "**Solved**"
+      map('<leader>nDu', function()
+        local files = vim.fn.globpath(DSA_PATH, '*.md', false, true)
+        local unsolved = {}
+        for _, f in ipairs(files) do
+          local content = Path:new(f):read()
+          if not content:match '%*%*Solved%*%*' then
+            table.insert(unsolved, f)
+          end
+        end
+        if #unsolved == 0 then
+          vim.notify('All DSA notes are marked solved!', vim.log.levels.INFO)
+          return
+        end
+        local pickers   = require 'telescope.pickers'
+        local finders   = require 'telescope.finders'
+        local conf      = require('telescope.config').values
+        local actions   = require 'telescope.actions'
+        local action_state = require 'telescope.actions.state'
+        pickers.new({}, {
+          prompt_title = 'Unsolved DSA Notes (' .. #unsolved .. ')',
+          finder = finders.new_table {
+            results = unsolved,
+            entry_maker = function(f)
+              return {
+                value   = f,
+                display = vim.fn.fnamemodify(f, ':t'),
+                ordinal = vim.fn.fnamemodify(f, ':t'),
+                path    = f,
+              }
+            end,
+          },
+          sorter = conf.generic_sorter {},
+          previewer = conf.file_previewer {},
+          attach_mappings = function(prompt_bufnr)
+            actions.select_default:replace(function()
+              actions.close(prompt_bufnr)
+              local entry = action_state.get_selected_entry()
+              vim.cmd('edit ' .. entry.path)
+            end)
+            return true
+          end,
+        }):find()
+      end, 'LeetCode: List unsolved DSA notes')
+
+      -- <leader>nDo — open the LeetCode URL from the current note in the browser
+      map('<leader>nDo', function()
+        local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+        for _, line in ipairs(lines) do
+          local url = line:match '%*%*URL%*%*:%s*(https?://%S+)'
+          if url then
+            vim.fn.jobstart({ 'xdg-open', url })
+            vim.notify('Opening: ' .. url, vim.log.levels.INFO)
+            return
+          end
+        end
+        vim.notify('No URL found in this note', vim.log.levels.WARN)
+      end, 'LeetCode: Open problem URL in browser')
+
+      -- <leader>nDT — Telescope DSA notes last modified today (by mtime)
+      map('<leader>nDT', function()
+        local files = vim.fn.globpath(DSA_PATH, '*.md', false, true)
+        local today_files = {}
+        local today_str = os.date '%Y-%m-%d'
+        for _, f in ipairs(files) do
+          local mtime = vim.fn.getftime(f)
+          if os.date('%Y-%m-%d', mtime) == today_str then
+            table.insert(today_files, f)
+          end
+        end
+        if #today_files == 0 then
+          vim.notify('No DSA notes modified today', vim.log.levels.INFO)
+          return
+        end
+        if #today_files == 1 then
+          vim.cmd('edit ' .. today_files[1])
+          return
+        end
+        local pickers      = require 'telescope.pickers'
+        local finders      = require 'telescope.finders'
+        local conf         = require('telescope.config').values
+        local actions      = require 'telescope.actions'
+        local action_state = require 'telescope.actions.state'
+        pickers.new({}, {
+          prompt_title = "Today's DSA Notes",
+          finder = finders.new_table {
+            results = today_files,
+            entry_maker = function(f)
+              return {
+                value   = f,
+                display = vim.fn.fnamemodify(f, ':t'),
+                ordinal = vim.fn.fnamemodify(f, ':t'),
+                path    = f,
+              }
+            end,
+          },
+          sorter = conf.generic_sorter {},
+          previewer = conf.file_previewer {},
+          attach_mappings = function(prompt_bufnr)
+            actions.select_default:replace(function()
+              actions.close(prompt_bufnr)
+              local entry = action_state.get_selected_entry()
+              vim.cmd('edit ' .. entry.path)
+            end)
+            return true
+          end,
+        }):find()
+      end, "LeetCode: Jump to today's DSA note")
+
+      -- <leader>nDc — prompt for Time + Space complexity, replace in current note
+      map('<leader>nDc', function()
+        vim.ui.input({ prompt = 'Time complexity (e.g. O(n log n)): ' }, function(time_c)
+          if not time_c or time_c == '' then return end
+          vim.ui.input({ prompt = 'Space complexity (e.g. O(n)): ' }, function(space_c)
+            if not space_c or space_c == '' then return end
+            local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+            local replaced = false
+            for i, line in ipairs(lines) do
+              if line:match '^%- Time:' then
+                lines[i] = '- Time: ' .. time_c
+                replaced = true
+              elseif line:match '^%- Space:' then
+                lines[i] = '- Space: ' .. space_c
+                replaced = true
+              end
+            end
+            if replaced then
+              vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
+              vim.cmd 'write'
+              vim.notify('Complexity updated', vim.log.levels.INFO)
+            else
+              vim.notify('No "- Time:" / "- Space:" lines found in note', vim.log.levels.WARN)
+            end
+          end)
+        end)
+      end, 'LeetCode: Fill complexity section')
     end,
   },
 }
