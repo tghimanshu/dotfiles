@@ -1810,3 +1810,281 @@ body.hint-mode .link-item  { padding-left: 30px; }
   font-size: 10px;
   color: var(--text-faint);
 }
+
+/* ── Reading List widget ─────────────────────────────────────────────────── */
+.reading-input-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.reading-title-input {
+  flex: 1.5;
+  min-width: 80px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13px;
+  padding: 7px 11px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.reading-url-input {
+  flex: 2;
+  min-width: 80px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13px;
+  padding: 7px 11px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.reading-title-input:focus,
+.reading-url-input:focus { border-color: var(--accent); }
+
+.reading-title-input::placeholder,
+.reading-url-input::placeholder { color: var(--text-faint); }
+
+.reading-add-btn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 16px;
+  padding: 5px 12px;
+  transition: all 0.15s;
+  line-height: 1;
+}
+
+.reading-add-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+.reading-list { list-style: none; }
+
+.reading-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 8px;
+  border-radius: var(--radius-sm);
+  transition: background 0.1s;
+  margin: 2px 0;
+}
+
+.reading-item:hover { background: var(--bg3); }
+.reading-item:hover .reading-del { opacity: 1; }
+
+.reading-cb {
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--border-hi);
+  border-radius: 3px;
+  cursor: pointer;
+  flex-shrink: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg3);
+  transition: all 0.15s;
+  position: relative;
+}
+
+.reading-cb:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.reading-cb:checked::after {
+  content: '';
+  display: block;
+  width: 9px;
+  height: 5px;
+  border-left: 2px solid var(--bg);
+  border-bottom: 2px solid var(--bg);
+  transform: rotate(-45deg) translateY(-1px);
+  position: absolute;
+}
+
+.reading-title {
+  flex: 1;
+  font-size: 13px;
+  color: var(--text);
+  text-decoration: none;
+  line-height: 1.4;
+  word-break: break-word;
+  transition: color 0.1s;
+}
+
+a.reading-title:hover { color: var(--accent); text-decoration: underline; }
+
+.reading-item.read .reading-title {
+  color: var(--text-faint);
+  text-decoration: line-through;
+}
+
+.reading-del {
+  background: none;
+  border: none;
+  color: var(--text-faint);
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  opacity: 0;
+  padding: 0 2px;
+  transition: color 0.1s, opacity 0.15s;
+  flex-shrink: 0;
+}
+
+.reading-del:hover { color: var(--danger); }
+
+.reading-footer {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+/* ── Active Projects widget ──────────────────────────────────────────────── */
+.project-add-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.project-name-input {
+  flex: 1;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13px;
+  padding: 6px 10px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.project-name-input:focus { border-color: var(--accent); }
+.project-name-input::placeholder { color: var(--text-faint); }
+
+.project-save-btn,
+.project-cancel-btn {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 12px;
+  padding: 5px 10px;
+  transition: all 0.15s;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.project-save-btn:hover { border-color: var(--accent); color: var(--accent); }
+.project-cancel-btn:hover { border-color: var(--danger); color: var(--danger); }
+
+.project-list { list-style: none; }
+
+.project-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 8px;
+  border-radius: var(--radius-sm);
+  transition: background 0.1s;
+  margin: 2px 0;
+}
+
+.project-item:hover { background: var(--bg3); }
+.project-item:hover .project-del { opacity: 1; }
+
+.project-link {
+  font-size: 13px;
+  color: var(--text-faint);
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: color 0.1s;
+  line-height: 1;
+}
+
+.project-link:hover { color: var(--accent); }
+
+.project-name {
+  flex: 1;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.project-del {
+  background: none;
+  border: none;
+  color: var(--text-faint);
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  opacity: 0;
+  padding: 0 2px;
+  transition: color 0.1s, opacity 0.15s;
+  flex-shrink: 0;
+}
+
+.project-del:hover { color: var(--danger); }
+
+.project-footer {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+/* ── Weekly review nudge ─────────────────────────────────────────────────── */
+.weekly-review-nudge {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 7px 12px;
+  background: hsl(var(--accent-h),var(--accent-s),15%);
+  border: 1px solid hsl(var(--accent-h),var(--accent-s),28%);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  color: var(--accent);
+}
+
+[data-theme="light"] .weekly-review-nudge {
+  background: hsl(var(--accent-h),var(--accent-s),92%);
+  border-color: hsl(var(--accent-h),var(--accent-s),70%);
+}
+
+.weekly-review-dismiss {
+  background: none;
+  border: 1px solid hsl(var(--accent-h),var(--accent-s),40%);
+  border-radius: var(--radius-sm);
+  color: var(--accent);
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 10px;
+  padding: 2px 8px;
+  transition: all 0.15s;
+  flex-shrink: 0;
+  line-height: 1.5;
+}
+
+.weekly-review-dismiss:hover {
+  background: hsl(var(--accent-h),var(--accent-s),25%);
+}

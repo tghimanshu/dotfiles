@@ -16,7 +16,7 @@ return {
         {
           name = 'personal',
           -- Change this to wherever your vault lives, e.g. '~/notes'
-          path = '~/notes',
+          path = '~/personal/notes',
         },
       },
 
@@ -136,6 +136,16 @@ return {
       map('<leader>ny', '<cmd>ObsidianYesterday<CR>', 'Open yesterday\'s note')
       map('<leader>nm', '<cmd>ObsidianTomorrow<CR>',  'Open tomorrow\'s note')
 
+      -- Weekly review
+      map('<leader>nw', function()
+        local week = os.date '%Y-W%V'
+        local path = vim.fn.expand('~/personal/notes/daily/') .. week .. '-weekly-review.md'
+        vim.cmd('edit ' .. path)
+        if vim.fn.filereadable(path) == 0 then
+          vim.cmd 'ObsidianTemplate weekly_review_template'
+        end
+      end, 'Open / create weekly review note')
+
       -- Create / Navigate
       map('<leader>nn', '<cmd>ObsidianNew<CR>',         'New note')
       map('<leader>nf', '<cmd>ObsidianSearch<CR>',      'Search notes (full-text grep)')
@@ -145,66 +155,105 @@ return {
       map('<leader>nl', '<cmd>ObsidianLinks<CR>',       'Show all links in note')
       map('<leader>ni', '<cmd>ObsidianTemplate<CR>',    'Insert a template')
 
+      -- Open vault root files
+      map('<leader>n.', function()
+        vim.cmd('edit ' .. vim.fn.expand '~/personal/notes/tasks.md')
+      end, 'Open tasks.md')
+
       -- Linking (also visual mode)
       vim.keymap.set('v', '<leader>nk', '<cmd>ObsidianLink<CR>',    { desc = 'Notes: Link selection to existing note' })
       vim.keymap.set('n', '<leader>nk', '<cmd>ObsidianLinkNew<CR>', { desc = 'Notes: Create & link new note' })
 
       -- ─────────────────────────────────────────────────────────────
-      -- LeetCode / DSA note creator  (restored + improved)
-      -- Creates structured markdown notes in ~/notes/dsa/
+      -- Typed note creators  (<leader>nN*)
+      -- Each prompts for a title then opens a pre-templated note in
+      -- the correct folder.
       -- ─────────────────────────────────────────────────────────────
-      local curl = require 'plenary.curl'
       local Path = require 'plenary.path'
-      local DSA_PATH = vim.fn.expand '~/notes/dsa'
 
+      local function new_typed_note(folder, template, label)
+        return function()
+          vim.ui.input({ prompt = label .. ' title: ' }, function(title)
+            if not title or title == '' then return end
+            local slug     = title:gsub('%s+', '-'):gsub('[^A-Za-z0-9-]', ''):lower()
+            local ts       = tostring(os.time())
+            local filename = vim.fn.expand('~/personal/notes/' .. folder .. '/') .. ts .. '-' .. slug .. '.md'
+            Path:new(filename):touch { parents = true }
+            vim.cmd('edit ' .. filename)
+            vim.cmd('ObsidianTemplate ' .. template)
+            vim.notify('New ' .. label .. ': ' .. title, vim.log.levels.INFO)
+          end)
+        end
+      end
+
+      map('<leader>nNp', new_typed_note('projects',  'project_template',  'Project'),  'New project note')
+      map('<leader>nNl', new_typed_note('learning',  'learning_template', 'Learning'), 'New learning note')
+      map('<leader>nNa', new_typed_note('ai',        'article_template',  'Article'),  'New article / reading note')
+      map('<leader>nNt', new_typed_note('daily',     'til_template',      'TIL'),      'New TIL note')
+
+      -- ─────────────────────────────────────────────────────────────
+      -- LeetCode / DSA note creators
+      -- Creates structured markdown notes in ~/personal/notes/dsa/
+      -- ─────────────────────────────────────────────────────────────
+      local curl    = require 'plenary.curl'
+      local DSA_PATH = vim.fn.expand '~/personal/notes/dsa'
+
+      -- Shared content builder for LeetCode notes
       local function build_lc_content(q, url, is_daily)
-        local tag = is_daily and '#daily' or ''
+        local date_label = is_daily and os.date '%Y-%m-%d' .. ' (Daily)' or os.date '%Y-%m-%d'
         return {
           '# ' .. q.questionFrontendId .. '. ' .. q.title,
           '',
-          '| Field      | Value |',
-          '|------------|-------|',
-          '| Difficulty | ' .. q.difficulty .. ' |',
-          '| Date       | ' .. os.date '%Y-%m-%d' .. (is_daily and ' *(Daily)*' or '') .. ' |',
-          '| URL        | [Open](' .. (url or 'https://leetcode.com/problems/' .. q.titleSlug) .. ') |',
-          '| Tags       | #leetcode #dsa ' .. tag .. ' |',
-          '',
+          '---',
+          '**Difficulty**: ' .. (q.difficulty or 'Unknown'),
+          '**Date**: ' .. date_label,
+          '**URL**: ' .. (url or 'https://leetcode.com/problems/' .. q.titleSlug),
+          '**Tags**: #leetcode',
           '---',
           '',
           '## Problem Statement',
           '',
-          '> _Paste or summarise the problem here._',
+          '## Idea (1-2 sentences)',
+          '<!-- What was the core insight? -->',
           '',
-          '## 🧠 Intuition',
-          '',
-          '<!-- What is the core insight? 1-2 sentences max. -->',
-          '',
-          '## 🔧 Approach',
+          '## Approach',
           '',
           '- ',
           '',
-          '## 💻 Solution',
+          '## Edge Cases',
           '',
-          '```python',
-          'class Solution:',
-          '    def solve(self):',
-          '        pass',
+          '- ',
+          '',
+          '## Complexity',
+          '',
+          '- Time: ',
+          '- Space: ',
+          '',
+          '## Solution',
+          '',
           '```',
-          '',
-          '## 🧪 Edge Cases',
-          '',
-          '- ',
-          '',
-          '## ⏱ Complexity',
-          '',
-          '| | |',
-          '|-|-|',
-          '| Time  | O() |',
-          '| Space | O() |',
+          '```',
         }
       end
 
-      -- <leader>nDd — fetch and open today's LeetCode daily
+      -- <leader>nNd — manual DSA/LeetCode note (no API, prompt for number + slug)
+      map('<leader>nNd', function()
+        vim.ui.input({ prompt = 'Problem number: ' }, function(num)
+          if not num or num == '' then return end
+          vim.ui.input({ prompt = 'Title slug (e.g. two-sum): ' }, function(slug)
+            if not slug or slug == '' then return end
+            local filename = string.format('%s/%03d-%s.md', DSA_PATH, tonumber(num) or 0, slug)
+            local q = { questionFrontendId = num, title = slug:gsub('-', ' '), titleSlug = slug, difficulty = '' }
+            local content = build_lc_content(q, nil, false)
+            Path:new(filename):touch { parents = true }
+            Path:new(filename):write(table.concat(content, '\n'), 'w')
+            vim.cmd('edit ' .. filename)
+            vim.notify('New DSA note: ' .. num .. '-' .. slug, vim.log.levels.INFO)
+          end)
+        end)
+      end, 'New manual DSA/LeetCode note')
+
+      -- <leader>nDd — fetch today's LeetCode daily via API
       map('<leader>nDd', function()
         print 'Fetching LeetCode daily...'
         curl.get('https://leetcode-api-pied.vercel.app/daily', {
@@ -222,9 +271,10 @@ return {
               local q = data.question
               local filename = string.format('%s/%03d-%s.md', DSA_PATH, q.questionFrontendId, q.titleSlug)
               local content = build_lc_content(q, data.url, true)
+              Path:new(filename):touch { parents = true }
               Path:new(filename):write(table.concat(content, '\n'), 'w')
               vim.cmd('edit ' .. filename)
-              vim.notify('📝 Daily: ' .. q.title, vim.log.levels.INFO)
+              vim.notify('Daily: ' .. q.title, vim.log.levels.INFO)
             end)
           end,
         })

@@ -482,8 +482,45 @@
       </div>
     </div>
 
-    <!-- Countdown Timers -->
-    <div class="card page active" data-page="0" id="countdown-card">
+    <!-- Reading List -->
+    <div class="card page active" data-page="0" id="reading-card">
+      <div class="card-title">
+        <span class="card-title-dot"></span>Reading List
+        <div class="card-title-actions">
+          <button class="card-action-btn" id="reading-clear-done-btn">clear read</button>
+        </div>
+      </div>
+      <div class="reading-input-row">
+        <input class="reading-title-input" id="reading-title-input" type="text" placeholder="Title…" autocomplete="off" />
+        <input class="reading-url-input" id="reading-url-input" type="text" placeholder="URL (optional)" autocomplete="off" />
+        <button class="reading-add-btn" id="reading-add-btn">+</button>
+      </div>
+      <ul class="reading-list" id="reading-list"></ul>
+      <div class="reading-footer">
+        <span id="reading-count">0 items</span>
+      </div>
+    </div>
+
+    <!-- Active Projects -->
+    <div class="card page active" data-page="0" id="projects-card">
+      <div class="card-title">
+        <span class="card-title-dot"></span>Projects
+        <div class="card-title-actions">
+          <button class="card-action-btn" id="project-add-open-btn">+ add</button>
+        </div>
+      </div>
+      <div class="project-add-row" id="project-add-row" style="display:none">
+        <input class="project-name-input" id="project-name-input" type="text" placeholder="Project name…" autocomplete="off" />
+        <button class="project-save-btn" id="project-save-btn">save</button>
+        <button class="project-cancel-btn" id="project-cancel-btn">×</button>
+      </div>
+      <ul class="project-list" id="project-list"></ul>
+      <div class="project-footer">
+        <span id="project-count">0 projects</span>
+      </div>
+    </div>
+
+    <!-- Countdown Timers -->    <div class="card page active" data-page="0" id="countdown-card">
       <div class="card-title"><span class="card-title-dot"></span>Countdowns</div>
       <div class="countdown-add-row">
         <input class="countdown-name-input" id="cd-name" type="text" placeholder="Event name…" />
@@ -709,11 +746,6 @@
         <span class="hint-badge"></span>
         <span class="link-icon-txt">◉</span>
         <span class="link-text"><span class="link-name">Obsidian</span><span class="link-desc">Knowledge base</span></span>
-      </a>
-      <a class="link-item" href="https://notion.so" target="_blank">
-        <span class="hint-badge"></span>
-        <span class="link-icon-txt">N</span>
-        <span class="link-text"><span class="link-name">Notion</span><span class="link-desc">Notes &amp; projects</span></span>
       </a>
       <a class="link-item" href="https://www.overleaf.com" target="_blank">
         <span class="hint-badge"></span>

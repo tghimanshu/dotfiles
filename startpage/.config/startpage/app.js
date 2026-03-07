@@ -1491,6 +1491,185 @@ document.addEventListener('keydown', e => {
   });
 })();
 
+// ── READING LIST ──────────────────────────────────────────────────────────────
+let readingItems = JSON.parse(localStorage.getItem('sp-reading-list') || '[]');
+
+function saveReading() {
+  localStorage.setItem('sp-reading-list', JSON.stringify(readingItems));
+}
+
+function renderReading() {
+  const list  = document.getElementById('reading-list');
+  const count = document.getElementById('reading-count');
+  list.innerHTML = '';
+  readingItems.forEach((item, i) => {
+    const li = document.createElement('li');
+    li.className = 'reading-item' + (item.read ? ' read' : '');
+    const titleHtml = item.url
+      ? `<a class="reading-title" href="${item.url.replace(/"/g,'&quot;')}" target="_blank">${item.title.replace(/</g,'&lt;')}</a>`
+      : `<span class="reading-title">${item.title.replace(/</g,'&lt;')}</span>`;
+    li.innerHTML = `
+      <input type="checkbox" class="reading-cb" ${item.read ? 'checked' : ''} data-i="${i}" title="Mark as read" />
+      ${titleHtml}
+      <button class="reading-del" data-i="${i}" title="Delete">×</button>`;
+    list.appendChild(li);
+  });
+  const total = readingItems.length;
+  const read  = readingItems.filter(r => r.read).length;
+  count.textContent = total === 0 ? '0 items' : `${read}/${total} read`;
+}
+
+function addReading() {
+  const titleInp = document.getElementById('reading-title-input');
+  const urlInp   = document.getElementById('reading-url-input');
+  const title    = titleInp.value.trim();
+  if (!title) return;
+  const url = urlInp.value.trim();
+  readingItems.unshift({ title, url, read: false, id: Date.now() });
+  saveReading();
+  renderReading();
+  titleInp.value = '';
+  urlInp.value   = '';
+}
+
+document.getElementById('reading-add-btn').addEventListener('click', addReading);
+document.getElementById('reading-title-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') addReading();
+});
+
+document.getElementById('reading-list').addEventListener('change', e => {
+  if (e.target.classList.contains('reading-cb')) {
+    const i = +e.target.dataset.i;
+    readingItems[i].read = e.target.checked;
+    saveReading();
+    renderReading();
+  }
+});
+
+document.getElementById('reading-list').addEventListener('click', e => {
+  const btn = e.target.closest('.reading-del');
+  if (btn) {
+    readingItems.splice(+btn.dataset.i, 1);
+    saveReading();
+    renderReading();
+  }
+});
+
+document.getElementById('reading-clear-done-btn').addEventListener('click', () => {
+  readingItems = readingItems.filter(r => !r.read);
+  saveReading();
+  renderReading();
+  showToast('Cleared read items');
+});
+
+renderReading();
+
+// ── ACTIVE PROJECTS ───────────────────────────────────────────────────────────
+let projects = JSON.parse(localStorage.getItem('sp-projects') || '[]');
+
+function saveProjects() {
+  localStorage.setItem('sp-projects', JSON.stringify(projects));
+}
+
+function renderProjects() {
+  const list  = document.getElementById('project-list');
+  const count = document.getElementById('project-count');
+  list.innerHTML = '';
+  if (projects.length === 0) {
+    list.innerHTML = '<li style="color:var(--text-faint);font-size:11px;padding:8px 0;">No projects yet — add one above</li>';
+  }
+  projects.forEach((proj, i) => {
+    const li = document.createElement('li');
+    li.className = 'project-item';
+    const vaultLink = `obsidian://open?vault=notes&file=projects%2F${encodeURIComponent(proj.name)}`;
+    li.innerHTML = `
+      <a class="project-link" href="${vaultLink}" title="Open in Obsidian">◉</a>
+      <span class="project-name">${proj.name.replace(/</g,'&lt;')}</span>
+      <button class="project-del" data-i="${i}" title="Remove">×</button>`;
+    list.appendChild(li);
+  });
+  count.textContent = projects.length === 1 ? '1 project' : `${projects.length} projects`;
+}
+
+const projectAddRow    = document.getElementById('project-add-row');
+const projectNameInput = document.getElementById('project-name-input');
+
+document.getElementById('project-add-open-btn').addEventListener('click', () => {
+  projectAddRow.style.display = 'flex';
+  projectNameInput.focus();
+});
+
+document.getElementById('project-cancel-btn').addEventListener('click', () => {
+  projectAddRow.style.display = 'none';
+  projectNameInput.value = '';
+});
+
+function saveNewProject() {
+  const name = projectNameInput.value.trim();
+  if (!name) return;
+  projects.unshift({ name, id: Date.now() });
+  saveProjects();
+  renderProjects();
+  projectNameInput.value = '';
+  projectAddRow.style.display = 'none';
+}
+
+document.getElementById('project-save-btn').addEventListener('click', saveNewProject);
+projectNameInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter') saveNewProject();
+  if (e.key === 'Escape') { projectAddRow.style.display = 'none'; projectNameInput.value = ''; }
+});
+
+document.getElementById('project-list').addEventListener('click', e => {
+  const btn = e.target.closest('.project-del');
+  if (btn) {
+    projects.splice(+btn.dataset.i, 1);
+    saveProjects();
+    renderProjects();
+  }
+});
+
+renderProjects();
+
+// ── WEEKLY REVIEW NUDGE ───────────────────────────────────────────────────────
+function getISOWeek(date) {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+}
+
+function renderWeeklyNudge() {
+  const focusCard = document.getElementById('focus-card');
+  if (!focusCard) return;
+
+  // Remove any existing nudge
+  const existing = focusCard.querySelector('.weekly-review-nudge');
+  if (existing) existing.remove();
+
+  const now = new Date();
+  const day = now.getDay(); // 0=Sun,5=Fri,6=Sat
+  if (day !== 5 && day !== 6) return;
+
+  const week = getISOWeek(now);
+  const dismissKey = `sp-weekly-review-dismissed`;
+  const dismissed  = localStorage.getItem(dismissKey);
+  if (dismissed === String(week)) return;
+
+  const nudge = document.createElement('div');
+  nudge.className = 'weekly-review-nudge';
+  nudge.innerHTML = `
+    <span>Weekly review pending — Week ${week}</span>
+    <button class="weekly-review-dismiss" title="Dismiss for this week">dismiss</button>`;
+  nudge.querySelector('.weekly-review-dismiss').addEventListener('click', () => {
+    localStorage.setItem(dismissKey, String(week));
+    nudge.remove();
+  });
+  focusCard.appendChild(nudge);
+}
+
+renderWeeklyNudge();
+
 // ── SERVICE WORKER REGISTRATION ───────────────────────────────────────────────
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
