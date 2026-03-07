@@ -958,9 +958,15 @@ async function fetchHN() {
   const body = document.getElementById('hn-body');
   body.innerHTML = '<div class="hn-loading">Loading stories…</div>';
   try {
-    const ids    = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json').then(r => r.json());
+    const idsRes = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
+    if (!idsRes.ok) throw new Error(`HN top stories: ${idsRes.status}`);
+    const ids    = await idsRes.json();
     const stories = await Promise.all(
-      ids.slice(0, 10).map(id => fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(r => r.json()))
+      ids.slice(0, 10).map(async id => {
+        const r = await fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`);
+        if (!r.ok) throw new Error(`HN item ${id}: ${r.status}`);
+        return r.json();
+      })
     );
     cacheSet('cache-hn', stories);
     renderHN(stories);
@@ -977,16 +983,16 @@ fetchHN();
 
 // ── GITHUB ACTIVITY ───────────────────────────────────────────────────────────
 const GH_EVENT_MAP = {
-  PushEvent:         { icon: '⬆', label: e => `Pushed to ${e.repo.name.split('/')[1]}` },
-  PullRequestEvent:  { icon: '⎇', label: e => `${e.payload.action} PR in ${e.repo.name.split('/')[1]}` },
-  IssuesEvent:       { icon: '○', label: e => `${e.payload.action} issue in ${e.repo.name.split('/')[1]}` },
-  WatchEvent:        { icon: '★', label: e => `Starred ${e.repo.name}` },
-  ForkEvent:         { icon: '⑂', label: e => `Forked ${e.repo.name}` },
-  CreateEvent:       { icon: '+', label: e => `Created ${e.payload.ref_type} in ${e.repo.name.split('/')[1]}` },
-  DeleteEvent:       { icon: '−', label: e => `Deleted ${e.payload.ref_type} in ${e.repo.name.split('/')[1]}` },
-  IssueCommentEvent: { icon: '💬', label: e => `Commented in ${e.repo.name.split('/')[1]}` },
-  ReleaseEvent:      { icon: '🏷', label: e => `Released in ${e.repo.name.split('/')[1]}` },
-  PublicEvent:       { icon: '🌐', label: e => `Made ${e.repo.name} public` },
+  PushEvent:         { icon: '⬆', label: e => `Pushed to ${e.repo?.name?.split('/')?.[1] ?? e.repo?.name ?? '?'}` },
+  PullRequestEvent:  { icon: '⎇', label: e => `${e.payload.action} PR in ${e.repo?.name?.split('/')?.[1] ?? '?'}` },
+  IssuesEvent:       { icon: '○', label: e => `${e.payload.action} issue in ${e.repo?.name?.split('/')?.[1] ?? '?'}` },
+  WatchEvent:        { icon: '★', label: e => `Starred ${e.repo?.name ?? '?'}` },
+  ForkEvent:         { icon: '⑂', label: e => `Forked ${e.repo?.name ?? '?'}` },
+  CreateEvent:       { icon: '+', label: e => `Created ${e.payload.ref_type} in ${e.repo?.name?.split('/')?.[1] ?? '?'}` },
+  DeleteEvent:       { icon: '−', label: e => `Deleted ${e.payload.ref_type} in ${e.repo?.name?.split('/')?.[1] ?? '?'}` },
+  IssueCommentEvent: { icon: '💬', label: e => `Commented in ${e.repo?.name?.split('/')?.[1] ?? '?'}` },
+  ReleaseEvent:      { icon: '🏷', label: e => `Released in ${e.repo?.name?.split('/')?.[1] ?? '?'}` },
+  PublicEvent:       { icon: '🌐', label: e => `Made ${e.repo?.name ?? '?'} public` },
 };
 
 function ghRelTime(isoStr) {
@@ -1023,6 +1029,7 @@ async function fetchGHActivity() {
       body.innerHTML = '<div class="hn-loading">GitHub API rate limit reached — try again later</div>';
       return;
     }
+    if (!res.ok) throw new Error(`GitHub activity: ${res.status}`);
     const events = await res.json();
     if (!Array.isArray(events) || events.length === 0) {
       body.innerHTML = '<div class="hn-loading">No public activity found</div>';
@@ -1098,7 +1105,9 @@ async function fetchContribGraph() {
 
   wrap.innerHTML = '<div class="hn-loading">Loading contributions…</div>';
   try {
-    const data          = await fetch(`https://github-contributions-api.jogruber.de/v4/${CONFIG.GH_USER}?y=last`).then(r => r.json());
+    const res           = await fetch(`https://github-contributions-api.jogruber.de/v4/${CONFIG.GH_USER}?y=last`);
+    if (!res.ok) throw new Error(`GH contrib: ${res.status}`);
+    const data          = await res.json();
     const contributions = data.contributions;
     cacheSet('cache-gh-contrib', contributions);
     renderContribGraph(contributions);
@@ -1181,8 +1190,18 @@ async function fetchLCContribGraph() {
 
   wrap.innerHTML = '<div class="hn-loading">Loading submissions…</div>';
   try {
-    const data     = await fetch(`https://alfa-leetcode-api.onrender.com/${CONFIG.LC_USER}/calendar`).then(r => r.json());
-    const calendar = JSON.parse(data.submissionCalendar || '{}');
+    const res  = await fetch(`https://leetcode-api-pied.vercel.app/user/${CONFIG.LC_USER}/calendar`);
+    if (!res.ok) throw new Error(`LC calendar: ${res.status}`);
+    const data = await res.json();
+
+    let calendar = {};
+    try {
+      calendar = typeof data.submissionCalendar === 'string'
+        ? JSON.parse(data.submissionCalendar)
+        : (data.submissionCalendar || {});
+    } catch {
+      calendar = {};
+    }
 
     const todayUTC = new Date();
     const todayMs  = Date.UTC(todayUTC.getFullYear(), todayUTC.getMonth(), todayUTC.getDate());
