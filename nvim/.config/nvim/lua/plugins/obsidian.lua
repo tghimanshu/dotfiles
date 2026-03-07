@@ -516,6 +516,68 @@ return {
           end)
         end)
       end, 'LeetCode: Fill complexity section')
+
+      -- ─────────────────────────────────────────────────────────────
+      -- System Design keymaps  (<leader>nSD*)
+      -- Notes land in ~/personal/notes/systems/
+      -- ─────────────────────────────────────────────────────────────
+      local SD_PATH = vim.fn.expand '~/personal/notes/systems'
+
+      -- <leader>nSDn — new system design note (prompt title)
+      map('<leader>nSDn', new_typed_note('systems', 'system_design_template', 'System Design'), 'New system design note')
+
+      -- <leader>nSDs — Telescope search inside systems/
+      map('<leader>nSDs', function()
+        require('telescope.builtin').find_files {
+          prompt_title = 'System Design Notes',
+          cwd = SD_PATH,
+          hidden = false,
+        }
+      end, 'System Design: Browse notes')
+
+      -- <leader>nSDr — open a random system design note for review
+      map('<leader>nSDr', function()
+        local files = vim.fn.globpath(SD_PATH, '*.md', false, true)
+        if #files == 0 then
+          vim.notify('No system design notes found', vim.log.levels.WARN)
+          return
+        end
+        math.randomseed(os.time())
+        local pick = files[math.random(#files)]
+        vim.cmd('edit ' .. pick)
+        vim.notify('Review: ' .. vim.fn.fnamemodify(pick, ':t'), vim.log.levels.INFO)
+      end, 'System Design: Open random note')
+
+      -- ─────────────────────────────────────────────────────────────
+      -- Design Pattern keymaps  (<leader>nP*)
+      -- Notes land in ~/personal/notes/systems/patterns/
+      -- ─────────────────────────────────────────────────────────────
+      local PAT_PATH = vim.fn.expand '~/personal/notes/systems/patterns'
+
+      -- <leader>nPn — new design pattern note (prompt title)
+      map('<leader>nPn', new_typed_note('systems/patterns', 'pattern_template', 'Design Pattern'), 'New design pattern note')
+
+      -- <leader>nPs — Telescope search inside systems/patterns/
+      map('<leader>nPs', function()
+        require('telescope.builtin').find_files {
+          prompt_title = 'Design Pattern Notes',
+          cwd = PAT_PATH,
+          hidden = false,
+        }
+      end, 'Design Pattern: Browse notes')
+
+      -- <leader>nPr — open a random design pattern note for review
+      map('<leader>nPr', function()
+        local files = vim.fn.globpath(PAT_PATH, '*.md', false, true)
+        if #files == 0 then
+          vim.notify('No design pattern notes found', vim.log.levels.WARN)
+          return
+        end
+        math.randomseed(os.time())
+        local pick = files[math.random(#files)]
+        vim.cmd('edit ' .. pick)
+        vim.notify('Review: ' .. vim.fn.fnamemodify(pick, ':t'), vim.log.levels.INFO)
+      end, 'Design Pattern: Open random note')
     end,
   },
 }
