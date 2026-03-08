@@ -11,7 +11,7 @@
 	defaultBranch = master
 
 [pull]
-	rebase = false             # merge-based pull (explicit rebase with git pull --rebase)
+	rebase = true             # merge-based pull (explicit rebase with git pull --rebase)
 
 [push]
 	default      = current     # push to same-name remote branch automatically

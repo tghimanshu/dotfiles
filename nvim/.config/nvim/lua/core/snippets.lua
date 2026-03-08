@@ -1,181 +1,181 @@
--- Custom LuaSnip snippet definitions
--- Snippets are available in insert mode; expand with <Tab> or <C-l>
-
-local ls = require 'luasnip'
-local s  = ls.snippet
-local t  = ls.text_node
-local i  = ls.insert_node
-local f  = ls.function_node
-local c  = ls.choice_node
-local fmt = require('luasnip.extras.fmt').fmt
-
--- ── PYTHON ────────────────────────────────────────────────────────────────────
-ls.add_snippets('python', {
-  -- Main guard
-  s('main', fmt([[
-if __name__ == '__main__':
-    {}
-]], { i(1, 'pass') })),
-
-  -- dataclass
-  s('dc', fmt([[
-from dataclasses import dataclass
-
-@dataclass
-class {}:
-    {}
-]], { i(1, 'MyClass'), i(2, '# fields') })),
-
-  -- type-annotated function
-  s('fn', fmt([[
-def {}({}) -> {}:
-    {}
-]], { i(1, 'func'), i(2), i(3, 'None'), i(4, 'pass') })),
-
-  -- list comprehension
-  s('lc', fmt([[
-[{} for {} in {}]
-]], { i(1, 'x'), i(2, 'x'), i(3, 'iterable') })),
-
-  -- try/except
-  s('try', fmt([[
-try:
-    {}
-except {} as e:
-    {}
-]], { i(1, 'pass'), i(2, 'Exception'), i(3, 'raise') })),
-})
-
--- ── GO ────────────────────────────────────────────────────────────────────────
-ls.add_snippets('go', {
-  -- error check
-  s('iferr', fmt([[
-if err != nil {{
-    {}
-}}
-]], { i(1, 'return err') })),
-
-  -- function
-  s('fn', fmt([[
-func {}({}) {} {{
-    {}
-}}
-]], { i(1, 'name'), i(2), i(3, 'error'), i(4) })),
-
-  -- goroutine
-  s('go', fmt([[
-go func() {{
-    {}
-}}()
-]], { i(1) })),
-
-  -- struct
-  s('st', fmt([[
-type {} struct {{
-    {}
-}}
-]], { i(1, 'MyStruct'), i(2) })),
-
-  -- interface
-  s('iface', fmt([[
-type {} interface {{
-    {}
-}}
-]], { i(1, 'MyInterface'), i(2) })),
-
-  -- table-driven test
-  s('ttest', fmt([[
-func Test{}(t *testing.T) {{
-    tests := []struct {{
-        name string
-        {}
-    }}{{
-        {{name: "{}"}},
-    }}
-    for _, tt := range tests {{
-        t.Run(tt.name, func(t *testing.T) {{
-            {}
-        }})
-    }}
-}}
-]], { i(1, 'Func'), i(2), i(3, 'case1'), i(4) })),
-})
-
--- ── LUA ───────────────────────────────────────────────────────────────────────
-ls.add_snippets('lua', {
-  -- local function
-  s('fn', fmt([[
-local function {}({})
-  {}
-end
-]], { i(1, 'name'), i(2), i(3) })),
-
-  -- local variable
-  s('loc', fmt([[
-local {} = {}
-]], { i(1, 'name'), i(2) })),
-
-  -- for ipairs
-  s('fori', fmt([[
-for {}, {} in ipairs({}) do
-  {}
-end
-]], { i(1, 'i'), i(2, 'v'), i(3, 'tbl'), i(4) })),
-
-  -- for pairs
-  s('forp', fmt([[
-for {}, {} in pairs({}) do
-  {}
-end
-]], { i(1, 'k'), i(2, 'v'), i(3, 'tbl'), i(4) })),
-
-  -- require
-  s('req', fmt([[
-local {} = require '{}'
-]], { i(1, 'mod'), i(2) })),
-})
-
--- ── MARKDOWN ─────────────────────────────────────────────────────────────────
-ls.add_snippets('markdown', {
-  -- fenced code block
-  s('cb', fmt([[
-```{}
-{}
-```
-]], { i(1, 'language'), i(2) })),
-
-  -- YAML front matter
-  s('fm', fmt([[
----
-title: {}
-date: {}
-tags: [{}]
----
-
-{}
-]], {
-    i(1, 'Title'),
-    f(function() return os.date '%Y-%m-%d' end),
-    i(2),
-    i(3),
-  })),
-
-  -- TODO item
-  s('todo', t '- [ ] '),
-
-  -- link
-  s('link', fmt([[
-[{}]({})
-]], { i(1, 'text'), i(2, 'url') })),
-
-  -- callout / admonition (Obsidian style)
-  s('note', fmt([[
-> [!NOTE]
-> {}
-]], { i(1) })),
-
-  s('warn', fmt([[
-> [!WARNING]
-> {}
-]], { i(1) })),
-})
+-- -- Custom LuaSnip snippet definitions
+-- -- Snippets are available in insert mode; expand with <Tab> or <C-l>
+--
+-- -- local ls = require 'luasnip'
+-- local s  = ls.snippet
+-- local t  = ls.text_node
+-- local i  = ls.insert_node
+-- local f  = ls.function_node
+-- local c  = ls.choice_node
+-- local fmt = require('luasnip.extras.fmt').fmt
+--
+-- -- ── PYTHON ────────────────────────────────────────────────────────────────────
+-- ls.add_snippets('python', {
+--   -- Main guard
+--   s('main', fmt([[
+-- if __name__ == '__main__':
+--     {}
+-- ]], { i(1, 'pass') })),
+--
+--   -- dataclass
+--   s('dc', fmt([[
+-- from dataclasses import dataclass
+--
+-- @dataclass
+-- class {}:
+--     {}
+-- ]], { i(1, 'MyClass'), i(2, '# fields') })),
+--
+--   -- type-annotated function
+--   s('fn', fmt([[
+-- def {}({}) -> {}:
+--     {}
+-- ]], { i(1, 'func'), i(2), i(3, 'None'), i(4, 'pass') })),
+--
+--   -- list comprehension
+--   s('lc', fmt([[
+-- [{} for {} in {}]
+-- ]], { i(1, 'x'), i(2, 'x'), i(3, 'iterable') })),
+--
+--   -- try/except
+--   s('try', fmt([[
+-- try:
+--     {}
+-- except {} as e:
+--     {}
+-- ]], { i(1, 'pass'), i(2, 'Exception'), i(3, 'raise') })),
+-- })
+--
+-- -- ── GO ────────────────────────────────────────────────────────────────────────
+-- ls.add_snippets('go', {
+--   -- error check
+--   s('iferr', fmt([[
+-- if err != nil {{
+--     {}
+-- }}
+-- ]], { i(1, 'return err') })),
+--
+--   -- function
+--   s('fn', fmt([[
+-- func {}({}) {} {{
+--     {}
+-- }}
+-- ]], { i(1, 'name'), i(2), i(3, 'error'), i(4) })),
+--
+--   -- goroutine
+--   s('go', fmt([[
+-- go func() {{
+--     {}
+-- }}()
+-- ]], { i(1) })),
+--
+--   -- struct
+--   s('st', fmt([[
+-- type {} struct {{
+--     {}
+-- }}
+-- ]], { i(1, 'MyStruct'), i(2) })),
+--
+--   -- interface
+--   s('iface', fmt([[
+-- type {} interface {{
+--     {}
+-- }}
+-- ]], { i(1, 'MyInterface'), i(2) })),
+--
+--   -- table-driven test
+--   s('ttest', fmt([[
+-- func Test{}(t *testing.T) {{
+--     tests := []struct {{
+--         name string
+--         {}
+--     }}{{
+--         {{name: "{}"}},
+--     }}
+--     for _, tt := range tests {{
+--         t.Run(tt.name, func(t *testing.T) {{
+--             {}
+--         }})
+--     }}
+-- }}
+-- ]], { i(1, 'Func'), i(2), i(3, 'case1'), i(4) })),
+-- })
+--
+-- -- ── LUA ───────────────────────────────────────────────────────────────────────
+-- ls.add_snippets('lua', {
+--   -- local function
+--   s('fn', fmt([[
+-- local function {}({})
+--   {}
+-- end
+-- ]], { i(1, 'name'), i(2), i(3) })),
+--
+--   -- local variable
+--   s('loc', fmt([[
+-- local {} = {}
+-- ]], { i(1, 'name'), i(2) })),
+--
+--   -- for ipairs
+--   s('fori', fmt([[
+-- for {}, {} in ipairs({}) do
+--   {}
+-- end
+-- ]], { i(1, 'i'), i(2, 'v'), i(3, 'tbl'), i(4) })),
+--
+--   -- for pairs
+--   s('forp', fmt([[
+-- for {}, {} in pairs({}) do
+--   {}
+-- end
+-- ]], { i(1, 'k'), i(2, 'v'), i(3, 'tbl'), i(4) })),
+--
+--   -- require
+--   s('req', fmt([[
+-- local {} = require '{}'
+-- ]], { i(1, 'mod'), i(2) })),
+-- })
+--
+-- -- ── MARKDOWN ─────────────────────────────────────────────────────────────────
+-- ls.add_snippets('markdown', {
+--   -- fenced code block
+--   s('cb', fmt([[
+-- ```{}
+-- {}
+-- ```
+-- ]], { i(1, 'language'), i(2) })),
+--
+--   -- YAML front matter
+--   s('fm', fmt([[
+-- ---
+-- title: {}
+-- date: {}
+-- tags: [{}]
+-- ---
+--
+-- {}
+-- ]], {
+--     i(1, 'Title'),
+--     f(function() return os.date '%Y-%m-%d' end),
+--     i(2),
+--     i(3),
+--   })),
+--
+--   -- TODO item
+--   s('todo', t '- [ ] '),
+--
+--   -- link
+--   s('link', fmt([[
+-- [{}]({})
+-- ]], { i(1, 'text'), i(2, 'url') })),
+--
+--   -- callout / admonition (Obsidian style)
+--   s('note', fmt([[
+-- > [!NOTE]
+-- > {}
+-- ]], { i(1) })),
+--
+--   s('warn', fmt([[
+-- > [!WARNING]
+-- > {}
+-- ]], { i(1) })),
+-- })
