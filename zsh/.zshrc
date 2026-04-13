@@ -59,3 +59,12 @@ alias wtf='wtfutil'
 
 source ~/.local/share/zsh/rc
 export PATH=$PATH:/home/himanshu/.local/scripts
+
+# Env Variables
+export CHROME_EXECUTABLE=/bin/google-chrome-stable
+export ANDROID_HOME=/home/himanshu/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/emulator
+

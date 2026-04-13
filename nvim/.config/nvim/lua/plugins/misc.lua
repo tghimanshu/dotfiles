@@ -19,12 +19,12 @@ return {
     opts = {},
     cmd = 'Trouble',
     keys = {
-      { '<leader>xx', '<cmd>Trouble diagnostics toggle<cr>',              desc = 'Diagnostics (Trouble)' },
+      { '<leader>xx', '<cmd>Trouble diagnostics toggle<cr>', desc = 'Diagnostics (Trouble)' },
       { '<leader>xX', '<cmd>Trouble diagnostics toggle filter.buf=0<cr>', desc = 'Buffer Diagnostics (Trouble)' },
-      { '<leader>cs', '<cmd>Trouble symbols toggle focus=false<cr>',      desc = 'Symbols (Trouble)' },
+      { '<leader>cs', '<cmd>Trouble symbols toggle focus=false<cr>', desc = 'Symbols (Trouble)' },
       { '<leader>cl', '<cmd>Trouble lsp toggle focus=false win.position=right<cr>', desc = 'LSP Refs/Defs (Trouble)' },
-      { '<leader>xL', '<cmd>Trouble loclist toggle<cr>',                  desc = 'Location List (Trouble)' },
-      { '<leader>xQ', '<cmd>Trouble qflist toggle<cr>',                   desc = 'Quickfix List (Trouble)' },
+      { '<leader>xL', '<cmd>Trouble loclist toggle<cr>', desc = 'Location List (Trouble)' },
+      { '<leader>xQ', '<cmd>Trouble qflist toggle<cr>', desc = 'Quickfix List (Trouble)' },
     },
   },
 
@@ -38,13 +38,27 @@ return {
   {
     'tpope/vim-fugitive',
     config = function()
-      vim.keymap.set('n', '<leader>ga', function() vim.cmd.Git 'add .'        end, { desc = 'Git Add all' })
-      vim.keymap.set('n', '<leader>gc', function() vim.cmd.Git 'commit'        end, { desc = 'Git Commit' })
-      vim.keymap.set('n', '<leader>gP', function() vim.cmd.Git 'push'          end, { desc = 'Git Push' })
-      vim.keymap.set('n', '<leader>gp', function() vim.cmd.Git { 'pull', '--rebase' } end, { desc = 'Git Pull (rebase)' })
-      vim.keymap.set('n', '<leader>gs', function() vim.cmd.Git()               end, { desc = 'Git Status' })
-      vim.keymap.set('n', '<leader>gd', function() vim.cmd.Gdiffsplit()        end, { desc = 'Git Diff split' })
-      vim.keymap.set('n', '<leader>gb', function() vim.cmd.Git 'blame'         end, { desc = 'Git Blame' })
+      vim.keymap.set('n', '<leader>ga', function()
+        vim.cmd.Git 'add .'
+      end, { desc = 'Git Add all' })
+      vim.keymap.set('n', '<leader>gc', function()
+        vim.cmd.Git 'commit'
+      end, { desc = 'Git Commit' })
+      vim.keymap.set('n', '<leader>gP', function()
+        vim.cmd.Git 'push'
+      end, { desc = 'Git Push' })
+      vim.keymap.set('n', '<leader>gp', function()
+        vim.cmd.Git { 'pull', '--rebase' }
+      end, { desc = 'Git Pull (rebase)' })
+      vim.keymap.set('n', '<leader>gs', function()
+        vim.cmd.Git()
+      end, { desc = 'Git Status' })
+      vim.keymap.set('n', '<leader>gd', function()
+        vim.cmd.Gdiffsplit()
+      end, { desc = 'Git Diff split' })
+      vim.keymap.set('n', '<leader>gb', function()
+        vim.cmd.Git 'blame'
+      end, { desc = 'Git Blame' })
     end,
   },
   { 'tpope/vim-rhubarb' }, -- GBrowse → open in GitHub
@@ -58,22 +72,31 @@ return {
       icons = {
         mappings = vim.g.have_nerd_font,
         keys = vim.g.have_nerd_font and {} or {
-          Up = '<Up> ', Down = '<Down> ', Left = '<Left> ', Right = '<Right> ',
-          C = '<C-…> ', M = '<M-…> ', D = '<D-…> ', S = '<S-…> ',
-          CR = '<CR> ', Esc = '<Esc> ', Space = '<Space> ', Tab = '<Tab> ',
+          Up = '<Up> ',
+          Down = '<Down> ',
+          Left = '<Left> ',
+          Right = '<Right> ',
+          C = '<C-…> ',
+          M = '<M-…> ',
+          D = '<D-…> ',
+          S = '<S-…> ',
+          CR = '<CR> ',
+          Esc = '<Esc> ',
+          Space = '<Space> ',
+          Tab = '<Tab> ',
         },
       },
       spec = {
-        { '<leader>a',  group = '[A]vante AI' },
-        { '<leader>c',  group = '[C]ode / Symbols' },
-        { '<leader>d',  group = '[D]iagnostics / Debug' },
-        { '<leader>g',  group = '[G]it' },
-        { '<leader>h',  group = 'Git [H]unk', mode = { 'n', 'v' } },
-        { '<leader>n',  group = '[N]otes / Vault' },
+        { '<leader>a', group = '[A]vante AI' },
+        { '<leader>c', group = '[C]ode / Symbols' },
+        { '<leader>d', group = '[D]iagnostics / Debug' },
+        { '<leader>g', group = '[G]it' },
+        { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { '<leader>n', group = '[N]otes / Vault' },
         { '<leader>nD', group = '[D]SA / LeetCode notes' },
-        { '<leader>s',  group = '[S]earch' },
-        { '<leader>t',  group = '[T]oggle / Tabs' },
-        { '<leader>x',  group = 'Trouble / Close' },
+        { '<leader>s', group = '[S]earch' },
+        { '<leader>t', group = '[T]oggle / Tabs' },
+        { '<leader>x', group = 'Trouble / Close' },
       },
     },
   },
@@ -105,8 +128,8 @@ return {
   {
     'echasnovski/mini.nvim',
     config = function()
-      require('mini.ai').setup { n_lines = 500 }  -- va), yinq, ci'
-      require('mini.surround').setup()             -- saiw), sd', sr)'
+      require('mini.ai').setup { n_lines = 500 } -- va), yinq, ci'
+      require('mini.surround').setup() -- saiw), sd', sr)'
     end,
   },
 
@@ -117,7 +140,7 @@ return {
     config = function()
       require('markview').setup {
         preview = {
-          modes        = { 'n', 'i', 'no', 'c' },
+          modes = { 'n', 'i', 'no', 'c' },
           hybrid_modes = { 'n', 'i' },
         },
       }
@@ -147,20 +170,24 @@ return {
       modes = {
         -- Disable flash in regular / search so n/N still work normally
         search = { enabled = false },
-        char   = { enabled = false },
+        char = { enabled = false },
       },
     },
     keys = {
       {
         '<leader>j',
         mode = { 'n', 'x', 'o' },
-        function() require('flash').jump() end,
+        function()
+          require('flash').jump()
+        end,
         desc = 'Flash Jump',
       },
       {
         '<leader>J',
         mode = { 'n', 'x', 'o' },
-        function() require('flash').treesitter() end,
+        function()
+          require('flash').treesitter()
+        end,
         desc = 'Flash Treesitter',
       },
     },
@@ -176,12 +203,16 @@ return {
       {
         '<leader>Y',
         mode = { 'n', 'v' },
-        function() require('yazi').yazi() end,
+        function()
+          require('yazi').yazi()
+        end,
         desc = 'Yazi: Open file manager (cwd)',
       },
       {
         '<leader>fy',
-        function() require('yazi').yazi(nil, vim.fn.getcwd()) end,
+        function()
+          require('yazi').yazi(nil, vim.fn.getcwd())
+        end,
         desc = 'Yazi: Open in working directory',
       },
     },
@@ -190,17 +221,26 @@ return {
       -- Opens yazi instead of netrw when opening a directory
       open_for_directories = false,
       keymaps = {
-        show_help      = '<f1>',
-        open_file_in_vertical_split   = '<c-v>',
+        show_help = '<f1>',
+        open_file_in_vertical_split = '<c-v>',
         open_file_in_horizontal_split = '<c-s>',
-        open_file_in_tab              = '<c-t>',
-        grep_in_directory             = '<c-g>',
-        replace_in_directory          = '<c-r>',
-        cycle_open_buffers            = '<tab>',
+        open_file_in_tab = '<c-t>',
+        grep_in_directory = '<c-g>',
+        replace_in_directory = '<c-r>',
+        cycle_open_buffers = '<tab>',
         copy_relative_path_to_clipboard = '<c-y>',
-        change_working_directory      = '<c-\\>',
-        open_url_in_browser           = 'gu',
+        change_working_directory = '<c-\\>',
+        open_url_in_browser = 'gu',
       },
     },
+  },
+  {
+    'nvim-flutter/flutter-tools.nvim',
+    lazy = false,
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'stevearc/dressing.nvim', -- optional for vim.ui.select
+    },
+    config = true,
   },
 }
