@@ -1,6 +1,6 @@
 # Application bindings
+bindd = SUPER ALT, RETURN, Tmux, exec, uwsm-app -- xdg-terminal-exec --dir="$(omarchy-cmd-terminal-cwd)" tmux
 bindd = SUPER, RETURN, Terminal, exec, uwsm-app -- xdg-terminal-exec --dir="$(omarchy-cmd-terminal-cwd)"
-bindd = SUPER ALT, RETURN, Tmux, exec, uwsm-app -- xdg-terminal-exec --dir="$(omarchy-cmd-terminal-cwd)" bash -c "tmux attach || tmux new -s Work"
 bindd = SUPER SHIFT, RETURN, Browser, exec, omarchy-launch-browser
 bindd = SUPER SHIFT, F, File manager, exec, uwsm-app -- nautilus --new-window
 bindd = SUPER ALT SHIFT, F, File manager (cwd), exec, uwsm-app -- nautilus --new-window "$(omarchy-cmd-terminal-cwd)"
@@ -32,3 +32,7 @@ bindd = SUPER SHIFT ALT, X, X Post, exec, omarchy-launch-webapp "https://x.com/c
 # Overwrite existing bindings, like putting Omarchy Menu on Super + Space
 # unbind = SUPER, SPACE
 # bindd = SUPER, SPACE, Omarchy menu, exec, omarchy-menu
+
+# LifeOS dashboard bindings (added by install-lifeos.sh)
+bindd = SUPER, D, Glance Dashboard, exec, omarchy-launch-webapp "http://localhost:4000"
+bindd = SUPER SHIFT, T, WTF Dashboard, exec, uwsm-app -- xdg-terminal-exec wtf

@@ -7,6 +7,7 @@ input {
   # Use a specific keyboard variant if needed (e.g. intl for international keyboards)
   # kb_variant = intl
 
+  kb_layout = us
   # kb_options = compose:caps # ,grp:alts_toggle
   kb_options = caps:escape # ,grp:alts_toggle
 
@@ -19,13 +20,13 @@ input {
 
   # Increase sensitivity for mouse/trackpad (default: 0)
   # sensitivity = 0.35
-
+  
   # Turn off mouse acceleration (default: false)
   # force_no_accel = true
 
   touchpad {
     # Use natural (inverse) scrolling
-    # natural_scroll = true
+    natural_scroll = true
 
     # Use two-finger clicks for right-click instead of lower-right corner
     # clickfinger_behavior = true
@@ -48,7 +49,3 @@ windowrule = match:class com.mitchellh.ghostty, scroll_touchpad 0.2
 # Enable touchpad gestures for changing workspaces
 # See https://wiki.hyprland.org/Configuring/Gestures/
 # gesture = 3, horizontal, workspace
-
-# Enable touchpad gestures for moving focus (helpful on scrolling layout)
-# gesture = 3, left,  dispatcher, movefocus, l
-# gesture = 3, right, dispatcher, movefocus, r
