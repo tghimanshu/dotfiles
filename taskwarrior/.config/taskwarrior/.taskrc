@@ -77,3 +77,27 @@ color.completed=color244            # completed — grey
 # taskd.certificate=~/.task/inthe.am.cert.pem
 # taskd.key=~/.task/inthe.am.key.pem
 # taskd.ca=~/.task/inthe.am.ca.pem
+
+# ── display ──────────────────────────────────────────
+
+
+# ── display ──────────────────────────────────────────
+color=on
+defaultwidth=120
+
+# ── PARA projects ────────────────────────────────────
+# usage: task add "thing" project:job-hunt
+# projects mirror your ~/brain/01-projects/ folders
+
+# ── urgency tweaks ───────────────────────────────────
+urgency.user.tag.next.coefficient=10
+urgency.age.coefficient=0.1
+
+# ── reports ──────────────────────────────────────────
+report.next.columns=id,project,tags,description,due,urgency
+report.next.labels=ID,Project,Tags,Task,Due,Urg
+report.next.sort=urgency-
+
+# ── useful contexts (filter by area) ─────────────────
+context.work.read=project:job-hunt or project:dev
+context.personal.read=project:youtube or project:personal

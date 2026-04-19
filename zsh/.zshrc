@@ -68,3 +68,24 @@ export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+
+# ── capture ──────────────────────────────────────────
+cap() { echo "- $(date '+%Y-%m-%d %H:%M') $*" >>~/personal/notes/inbox.md && echo "→ inbox"; }
+
+# ── taskwarrior shortcuts ─────────────────────────────
+alias t='task'
+alias tl='task list'
+alias tn='task next'
+alias ta='task add'
+alias td='task done'
+alias tui='taskwarrior-tui'
+
+# ── nb shortcuts ──────────────────────────────────────
+alias nb='nb'
+alias nba='nb add'
+alias nbs='nb search'
+alias nbw='nb browse --print' # web view in terminal
+
+# ── brain shortcuts ───────────────────────────────────
+alias inbox='nvim ~/personal/notes/inbox.md'
+alias brain='cd ~/personal/notes && nvim .'
