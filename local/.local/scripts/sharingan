@@ -17,9 +17,9 @@ PROJECTS=$(find $HOME/personal/ -maxdepth 1 -mindepth 1 -type d)
 # TODO: Add an option show non git folder list too
 
 # Header
-echo "-------------------------------------------------------"
-printf "| $BOLD%-15s$NC | $BOLD%-15s$NC | $BOLD%-15s$NC |\n" "REPOSITORY" "BRANCH" "STATUS"
-echo "-------------------------------------------------------"
+echo "-----------------------------------------------------------------"
+printf "| $BOLD%-25s$NC | $BOLD%-15s$NC | $BOLD%-15s$NC |\n" "REPOSITORY" "BRANCH" "STATUS"
+echo "-----------------------------------------------------------------"
 
 for project in $PROJECTS; do
     pushd $project >/dev/null
