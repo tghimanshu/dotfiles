@@ -8,7 +8,7 @@
 	whitespace = fix           # fix trailing whitespace on commit
 
 [init]
-	defaultBranch = master
+	defaultBranch = main
 
 [pull]
 	rebase = true             # merge-based pull (explicit rebase with git pull --rebase)

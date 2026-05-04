@@ -89,3 +89,6 @@ alias nbw='nb browse --print' # web view in terminal
 # ── brain shortcuts ───────────────────────────────────
 alias inbox='nvim ~/personal/notes/inbox.md'
 alias brain='cd ~/personal/notes && nvim .'
+
+# Generated for envman. Do not edit.
+[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
