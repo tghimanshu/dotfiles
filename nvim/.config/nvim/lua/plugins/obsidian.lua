@@ -15,7 +15,7 @@ return {
       workspaces = {
         {
           name = 'main',
-          path = '~/personal/my-daily-driver',
+          path = '~/personal/notes',
         },
       },
       notes_subdir = '03-resources',
@@ -62,21 +62,21 @@ return {
       {
         '<leader>nh',
         function()
-          vim.cmd('edit ' .. vim.fn.expand '~/personal/my-daily-driver/Home.md')
+          vim.cmd('edit ' .. vim.fn.expand '~/personal/notes/Home.md')
         end,
         desc = 'Notes: Home',
       },
       {
         '<leader>nI',
         function()
-          vim.cmd('edit ' .. vim.fn.expand '~/personal/my-daily-driver/00-inbox/inbox.md')
+          vim.cmd('edit ' .. vim.fn.expand '~/personal/notes/00-inbox/inbox.md')
         end,
         desc = 'Notes: Inbox',
       },
       {
         '<leader>n.',
         function()
-          vim.cmd('edit ' .. vim.fn.expand '~/personal/my-daily-driver/tasks.md')
+          vim.cmd('edit ' .. vim.fn.expand '~/personal/notes/tasks.md')
         end,
         desc = 'Notes: Tasks',
       },
@@ -92,21 +92,21 @@ return {
       {
         '<leader>np',
         function()
-          require('telescope.builtin').find_files { cwd = vim.fn.expand '~/personal/my-daily-driver/01-projects' }
+          require('telescope.builtin').find_files { cwd = vim.fn.expand '~/personal/notes/01-projects' }
         end,
         desc = 'Notes: Projects',
       },
       {
         '<leader>na',
         function()
-          require('telescope.builtin').find_files { cwd = vim.fn.expand '~/personal/my-daily-driver/02-areas' }
+          require('telescope.builtin').find_files { cwd = vim.fn.expand '~/personal/notes/02-areas' }
         end,
         desc = 'Notes: Areas',
       },
       {
         '<leader>nr',
         function()
-          require('telescope.builtin').find_files { cwd = vim.fn.expand '~/personal/my-daily-driver/03-resources' }
+          require('telescope.builtin').find_files { cwd = vim.fn.expand '~/personal/notes/03-resources' }
         end,
         desc = 'Notes: Resources',
       },
@@ -118,7 +118,7 @@ return {
               return
             end
             local slug = title:gsub('%s+', '-'):gsub('[^A-Za-z0-9-]', ''):lower()
-            local path = vim.fn.expand '~/personal/my-daily-driver/01-projects/' .. slug .. '.md'
+            local path = vim.fn.expand '~/personal/notes/01-projects/' .. slug .. '.md'
             local exists = vim.fn.filereadable(path) == 1
             vim.cmd('edit ' .. path)
             if not exists then
@@ -136,7 +136,7 @@ return {
               return
             end
             local slug = title:gsub('%s+', '-'):gsub('[^A-Za-z0-9-]', ''):lower()
-            local path = vim.fn.expand '~/personal/my-daily-driver/02-areas/' .. slug .. '.md'
+            local path = vim.fn.expand '~/personal/notes/02-areas/' .. slug .. '.md'
             local exists = vim.fn.filereadable(path) == 1
             vim.cmd('edit ' .. path)
             if not exists then
@@ -154,7 +154,7 @@ return {
               return
             end
             local slug = title:gsub('%s+', '-'):gsub('[^A-Za-z0-9-]', ''):lower()
-            local path = vim.fn.expand '~/personal/my-daily-driver/03-resources/' .. slug .. '.md'
+            local path = vim.fn.expand '~/personal/notes/03-resources/' .. slug .. '.md'
             local exists = vim.fn.filereadable(path) == 1
             vim.cmd('edit ' .. path)
             if not exists then
@@ -168,7 +168,7 @@ return {
 
     config = function(_, opts)
       require('obsidian').setup(opts)
-      vim.opt.conceallevel = 2
+      vim.opt_local.conceallevel = 0
     end,
   },
 }

@@ -187,15 +187,23 @@ return {
         },
       }
 
-      -- ── Mason: ensure everything is installed ────────────────────────
-      local ensure_installed = vim.tbl_keys(servers or {})
-      vim.list_extend(ensure_installed, {
-        'stylua',           -- Lua formatter
-        'codelldb',         -- C/C++/Rust debugger
-        'gofumpt',          -- Go formatter (stricter gofmt)
-        'goimports',        -- Go import organiser
-      })
-      require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+      -- ── Mason: ensure LSP servers + tools are installed ──────────────
+      require('mason-lspconfig').setup {
+        ensure_installed = vim.tbl_keys(servers or {}),
+      }
+
+      require('mason-tool-installer').setup {
+        ensure_installed = {
+          'stylua',           -- Lua formatter
+          'codelldb',         -- C/C++/Rust debugger
+          'gofumpt',          -- Go formatter (stricter gofmt)
+          'goimports',        -- Go import organiser
+          'prettier',         -- Web + Markdown formatter
+          'ruff',             -- Python linter/formatter
+          'shfmt',            -- Shell formatter
+          'clang-format',     -- C/C++ formatter
+        },
+      }
 
       -- ── Register & enable each server ───────────────────────────────
       for server, cfg in pairs(servers) do
