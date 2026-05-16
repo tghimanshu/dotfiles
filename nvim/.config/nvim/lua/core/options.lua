@@ -67,3 +67,5 @@ vim.g.loaded_netrwPlugin = 1
 -- vim.schedule(function()
 --   vim.o.clipboard = 'unnamedplus'
 -- end)
+
+vim.opt.conceallevel = 1

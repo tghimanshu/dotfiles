@@ -2,7 +2,18 @@ return {
   {
     'obsidian-nvim/obsidian.nvim',
     version = '*',
-    ft = 'markdown',
+    -- ft = 'markdown',
+    cmd = {
+      "ObsidianCheck",
+      "ObsidianNew",
+      "ObsidianQuickSwitch",
+      "ObsidianSearch",
+      "ObsidianToday",
+      "ObsidianYesterday",
+      "ObsidianTemplate",
+      "ObsidianBacklinks",
+      "ObsidianTags",
+    },
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope.nvim',
@@ -19,7 +30,7 @@ return {
         },
       },
       notes_subdir = '03-resources',
-      new_notes_location = '00-inbox',
+      new_notes_location = '00-Inbox',
 
       daily_notes = {
         folder = '10-daily',
@@ -56,6 +67,12 @@ return {
         end
         return ts
       end,
+
+      ui = {
+        enable = true,
+        conceal = true,
+        warn_on_conceal_not_set = false,
+      },
     },
 
     keys = {
@@ -69,7 +86,7 @@ return {
       {
         '<leader>nI',
         function()
-          vim.cmd('edit ' .. vim.fn.expand '~/personal/notes/00-inbox/inbox.md')
+          vim.cmd('edit ' .. vim.fn.expand '~/personal/notes/00-Inbox/00-Inbox.md')
         end,
         desc = 'Notes: Inbox',
       },
@@ -165,10 +182,5 @@ return {
         desc = 'Notes: New resource',
       },
     },
-
-    config = function(_, opts)
-      require('obsidian').setup(opts)
-      vim.opt_local.conceallevel = 0
-    end,
   },
 }

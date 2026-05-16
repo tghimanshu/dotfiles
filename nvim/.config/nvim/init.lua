@@ -17,6 +17,8 @@ require 'core.snippets'
 
 vim.g.have_nerd_font = true -- Set to true if you have a Nerd Font installed and selected in the terminal
 
+vim.g.markdown_recommended_style = 0
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
