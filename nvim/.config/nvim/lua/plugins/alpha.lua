@@ -10,67 +10,75 @@ return {
     local alpha     = require 'alpha'
     local dashboard = require 'alpha.themes.dashboard'
 
+    local heading = function(text)
+      return {
+        type = 'text',
+        val = text,
+        opts = { hl = 'Comment', position = 'center' },
+      }
+    end
+
+    local group = function(val)
+      return {
+        type = 'group',
+        val = val,
+        opts = { spacing = 1 },
+      }
+    end
+
     -- ─── Header ──────────────────────────────────────────────────────
     dashboard.section.header.val = {
-      '                                                     ',
-      '  ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ',
-      '  ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ',
-      '  ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║ ',
-      '  ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║ ',
-      '  ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ',
-      '  ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ',
-      '                                                     ',
+      '',
+      'Neovim',
+      '------',
+      '',
+    }
+    dashboard.section.header.opts = { hl = 'Title', position = 'center' }
+
+    -- ─── Sections ─────────────────────────────────────────────────────
+    local quick_actions = group {
+      dashboard.button('e', ' New file',      ':ene <BAR> startinsert<CR>'),
+      dashboard.button('f', ' Find file',     ':cd $HOME/Workspace | Telescope find_files<CR>'),
+      dashboard.button('r', ' Recent files',  ':Telescope oldfiles<CR>'),
+      dashboard.button('g', ' Live grep',     ':Telescope live_grep<CR>'),
     }
 
-    -- ─── Buttons ─────────────────────────────────────────────────────
-    dashboard.section.buttons.val = {
-      -- File ops
-      dashboard.button('e', '  New file',          ':ene <BAR> startinsert<CR>'),
-      dashboard.button('f', '  Find file',          ':cd $HOME/Workspace | Telescope find_files<CR>'),
-      dashboard.button('r', '  Recent files',       ':Telescope oldfiles<CR>'),
-      dashboard.button('g', '  Live grep',          ':Telescope live_grep<CR>'),
-
-      dashboard.button('', ''),   -- spacer
-
-      -- Notes
-      dashboard.button('d', '  Today\'s daily note', ':ObsidianToday<CR>'),
-      dashboard.button('n', '  New note',            ':ObsidianNew<CR>'),
-      dashboard.button('s', '  Search notes',        ':ObsidianSearch<CR>'),
-
-      dashboard.button('', ''),   -- spacer
-
-      -- Config / quit
-      dashboard.button('c', '  Neovim config',     ':e $MYVIMRC | :cd %:p:h<CR>'),
-      dashboard.button('l', '󰒲  Lazy plugin manager', ':Lazy<CR>'),
-      dashboard.button('q', '  Quit',               ':qa<CR>'),
+    local notes = group {
+      dashboard.button('d', ' Today\'s daily note', ':ObsidianToday<CR>'),
+      dashboard.button('n', ' New note',           ':ObsidianNew<CR>'),
+      dashboard.button('s', ' Search notes',       ':ObsidianSearch<CR>'),
     }
 
-    -- ─── Footer — rotating dev quotes ────────────────────────────────
-    local quotes = {
-      '"First, solve the problem. Then, write the code." — John Johnson',
-      '"Make it work, make it right, make it fast." — Kent Beck',
-      '"Programs must be written for people to read." — Abelson & Sussman',
-      '"Simplicity is the soul of efficiency." — Austin Freeman',
-      '"Code is like humor. When you have to explain it, it\'s bad." — Cory House',
-      '"The best code is no code at all." — Jeff Atwood',
-      '"An idiot admires complexity, a genius admires simplicity." — Terry Davis',
-      '"Talk is cheap. Show me the code." — Linus Torvalds',
-      '"Debugging is twice as hard as writing code." — Brian Kernighan',
-      '"You ship it, you own it." — Werner Vogels',
+    local config = group {
+      dashboard.button('c', ' Neovim config',       ':e $MYVIMRC | :cd %:p:h<CR>'),
+      dashboard.button('l', ' Lazy plugin manager', ':Lazy<CR>'),
+      dashboard.button('q', ' Quit',                ':qa<CR>'),
     }
-    math.randomseed(os.time())
-    dashboard.section.footer.val = quotes[math.random(#quotes)]
-    dashboard.section.footer.opts.hl = 'Comment'
+
+    -- ─── Footer ───────────────────────────────────────────────────────
+    dashboard.section.footer.val = 'Ready.'
+    dashboard.section.footer.opts = { hl = 'Comment', position = 'center' }
 
     -- ─── Layout tweaks ────────────────────────────────────────────────
     dashboard.config.layout = {
-      { type = 'padding', val = 2 },
+      { type = 'padding', val = 3 },
       dashboard.section.header,
       { type = 'padding', val = 1 },
-      dashboard.section.buttons,
+      heading 'Quick actions',
       { type = 'padding', val = 1 },
+      quick_actions,
+      { type = 'padding', val = 1 },
+      heading 'Notes',
+      { type = 'padding', val = 1 },
+      notes,
+      { type = 'padding', val = 1 },
+      heading 'Config',
+      { type = 'padding', val = 1 },
+      config,
+      { type = 'padding', val = 2 },
       dashboard.section.footer,
     }
+    dashboard.config.opts = { margin = 5 }
 
     alpha.setup(dashboard.config)
   end,

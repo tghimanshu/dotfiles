@@ -1,5 +1,16 @@
 -- Diagnostics configuration and editor utilities
 
+local border = 'rounded'
+local float_opts = {
+  border = border,
+  max_width = 80,
+  max_height = 12,
+  focusable = false,
+}
+
+vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, float_opts)
+vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, float_opts)
+
 -- Prevent LSP from overwriting treesitter color settings
 -- https://github.com/NvChad/NvChad/issues/1907
 vim.hl.priorities.semantic_tokens = 95 -- Or any number lower than 100, treesitter's priority level
@@ -8,6 +19,7 @@ vim.hl.priorities.semantic_tokens = 95 -- Or any number lower than 100, treesitt
 vim.diagnostic.config {
   virtual_text = {
     prefix = '●',
+    spacing = 2,
     -- Add a custom format function to show error codes
     format = function(diagnostic)
       local code = diagnostic.code and string.format('[%s]', diagnostic.code) or ''
@@ -17,7 +29,10 @@ vim.diagnostic.config {
   underline = false,
   update_in_insert = true,
   float = {
-    source = true, -- Or "if_many"
+    source = 'if_many',
+    border = border,
+    header = '',
+    prefix = '',
   },
   signs = {
     text = {
