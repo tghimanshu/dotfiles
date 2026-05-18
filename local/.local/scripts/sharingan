@@ -12,8 +12,20 @@ NC='\e[0m' # No Color
 # %b tells printf to interpret "backslash escapes." This is often necessary to make sure the colors actually render correctly inside the variable.
 # Loop through all the fiels in the ~/personal folder
 PROJECTS=$(find $HOME/personal/ -maxdepth 1 -mindepth 1 -type d)
+SHOW_ALL=false
 
-# TODO: Add an option to hide pushed folder
+if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+    echo "Usage: $0 [OPTIONS]"
+    echo "Options:"
+    echo " -a, --all     Show all repositories, including those that are up to date."
+    echo " -h, --help    Display this help message."
+    exit 0
+fi
+
+if [[ "$1" == "--all" || "$1" == "-a" ]]; then
+    SHOW_ALL=true
+fi
+
 # TODO: Add an option show non git folder list too
 
 # Header
@@ -37,7 +49,9 @@ for project in $PROJECTS; do
         elif [[ -z $remote ]]; then
             printf "| %-25s | %-15s | $RED%-15s$NC |\n" "$(basename $project)" "$branch" "No Remote"
         elif [[ $local = $remote ]]; then
-            printf "| %-25s | %-15s | $GREEN%-15s$NC |\n" "$(basename $project)" "$branch" "Pushed"
+            if [[ $SHOW_ALL == true ]]; then
+                printf "| %-25s | %-15s | $GREEN%-15s$NC |\n" "$(basename $project)" "$branch" "Pushed"
+            fi
         else
             printf "| %-25s | %-15s | $YELLOW%-15s$NC |\n" "$(basename $project)" "$branch" "UnPushed"
         fi
