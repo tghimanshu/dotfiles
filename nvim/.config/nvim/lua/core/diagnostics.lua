@@ -1,15 +1,6 @@
 -- Diagnostics configuration and editor utilities
 
 local border = 'rounded'
-local float_opts = {
-  border = border,
-  max_width = 80,
-  max_height = 12,
-  focusable = false,
-}
-
-vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, float_opts)
-vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, float_opts)
 
 -- Prevent LSP from overwriting treesitter color settings
 -- https://github.com/NvChad/NvChad/issues/1907

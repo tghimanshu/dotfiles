@@ -45,21 +45,56 @@ return {
           end
 
           local tb = require 'telescope.builtin'
+          local client = vim.lsp.get_client_by_id(event.data.client_id)
+          local supports = function(method)
+            return client and client:supports_method(method)
+          end
+          local lsp_float_opts = {
+            border = 'rounded',
+            max_width = 80,
+            max_height = 12,
+            focusable = false,
+          }
 
-          map('gd',         tb.lsp_definitions,              '[G]oto [D]efinition')
-          map('gr',         tb.lsp_references,               '[G]oto [R]eferences')
-          map('gI',         tb.lsp_implementations,          '[G]oto [I]mplementation')
-          map('gD',         vim.lsp.buf.declaration,         '[G]oto [D]eclaration')
-          map('<leader>D',  tb.lsp_type_definitions,         'Type [D]efinition')
-          map('<leader>ds', tb.lsp_document_symbols,         '[D]ocument [S]ymbols')
-          map('<leader>ws', tb.lsp_dynamic_workspace_symbols,'[W]orkspace [S]ymbols')
-          map('<leader>rn', vim.lsp.buf.rename,              '[R]e[n]ame symbol')
-          map('<leader>ca', vim.lsp.buf.code_action,         '[C]ode [A]ction', { 'n', 'x' })
-          map('K',          vim.lsp.buf.hover,               'Hover documentation')
-          map('<C-k>',      vim.lsp.buf.signature_help,      'Signature help', 'i')
+          if supports('textDocument/definition') then
+            map('gd', tb.lsp_definitions, '[G]oto [D]efinition')
+          end
+          if supports('textDocument/references') then
+            map('gr', tb.lsp_references, '[G]oto [R]eferences')
+          end
+          if supports('textDocument/implementation') then
+            map('gI', tb.lsp_implementations, '[G]oto [I]mplementation')
+          end
+          if supports('textDocument/declaration') then
+            map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+          end
+          if supports('textDocument/typeDefinition') then
+            map('<leader>D', tb.lsp_type_definitions, 'Type [D]efinition')
+          end
+          if supports('textDocument/documentSymbol') then
+            map('<leader>ds', tb.lsp_document_symbols, '[D]ocument [S]ymbols')
+          end
+          if supports('workspace/symbol') then
+            map('<leader>ws', tb.lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+          end
+          if supports('textDocument/rename') then
+            map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame symbol')
+          end
+          if supports('textDocument/codeAction') then
+            map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
+          end
+          if supports('textDocument/hover') then
+            map('K', function()
+              vim.lsp.buf.hover(lsp_float_opts)
+            end, 'Hover documentation')
+          end
+          if supports('textDocument/signatureHelp') then
+            map('<C-k>', function()
+              vim.lsp.buf.signature_help(lsp_float_opts)
+            end, 'Signature help', 'i')
+          end
 
           -- Reference highlighting on cursor hold
-          local client = vim.lsp.get_client_by_id(event.data.client_id)
           if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
             local hl_group = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
