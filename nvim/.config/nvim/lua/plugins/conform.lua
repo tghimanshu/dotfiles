@@ -51,7 +51,6 @@ return {
       css = { 'prettier' },
       json = { 'prettier' },
       yaml = { 'prettier' },
-      markdown = { 'prettier' },
 
       -- Shell
       sh = { 'shfmt' },

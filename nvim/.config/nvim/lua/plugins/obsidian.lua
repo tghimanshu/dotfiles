@@ -4,15 +4,15 @@ return {
     version = '*',
     -- ft = 'markdown',
     cmd = {
-      "ObsidianCheck",
-      "ObsidianNew",
-      "ObsidianQuickSwitch",
-      "ObsidianSearch",
-      "ObsidianToday",
-      "ObsidianYesterday",
-      "ObsidianTemplate",
-      "ObsidianBacklinks",
-      "ObsidianTags",
+      'ObsidianCheck',
+      'ObsidianNew',
+      'ObsidianQuickSwitch',
+      'ObsidianSearch',
+      'ObsidianToday',
+      'ObsidianYesterday',
+      'ObsidianTemplate',
+      'ObsidianBacklinks',
+      'ObsidianTags',
     },
     dependencies = {
       'nvim-lua/plenary.nvim',
@@ -69,9 +69,9 @@ return {
       end,
 
       ui = {
-        enable = true,
-        conceal = true,
-        warn_on_conceal_not_set = false,
+        enable = false,
+        -- conceal = true,
+        -- warn_on_conceal_not_set = false,
       },
     },
 

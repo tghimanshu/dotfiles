@@ -107,6 +107,18 @@ return {
     event = 'InsertEnter',
     config = true,
   },
+  {
+    'windwp/nvim-ts-autotag',
+  },
+  {
+    'stevearc/aerial.nvim',
+  },
+  {
+    'kevinhwang91/nvim-ufo',
+    dependencies = {
+      'kevinhwang91/promise-async',
+    },
+  },
 
   -- ── Todo comments ────────────────────────────────────────────────────
   {
@@ -130,20 +142,6 @@ return {
     config = function()
       require('mini.ai').setup { n_lines = 500 } -- va), yinq, ci'
       require('mini.surround').setup() -- saiw), sd', sr)'
-    end,
-  },
-
-  -- ── Markdown preview (inline rendering) ──────────────────────────────
-  {
-    'OXY2DEV/markview.nvim',
-    ft = 'markdown',
-    config = function()
-      require('markview').setup {
-        preview = {
-          modes = { 'n', 'i', 'no', 'c' },
-          hybrid_modes = { 'n', 'i' },
-        },
-      }
     end,
   },
 
@@ -243,4 +241,43 @@ return {
     },
     config = true,
   },
+  {
+    'preservim/nerdcommenter',
+    cmd = 'NERDCommenterToggle', -- loads plugin when command is called
+    keys = {
+      { '<leader>c', mode = { 'n', 'x' } }, -- loads plugin on first comment shortcut use
+    },
+    init = function()
+      -- Disable default mappings so lazy.nvim doesn't create them prematurely
+      vim.g.NERDCreateDefaultMappings = 0
+      vim.g.NERDSpaceDelims = 1
+    end,
+  },
+  {
+    'mbbill/undotree',
+  },
+  {
+    'kdheepak/lazygit.nvim',
+  },
+  {
+    'mattkubej/jest.nvim',
+  },
+  {
+    'Equilibris/nx.nvim',
+
+    dependencies = {
+      'nvim-telescope/telescope.nvim',
+    },
+
+    opts = {
+      -- See below for config options
+      nx_cmd_root = 'npx nx',
+    },
+
+    -- Plugin will load when you use these keys
+    keys = {
+      { '<leader>nx', '<cmd>Telescope nx actions<CR>', desc = 'nx actions' },
+    },
+  },
+  { 'folke/noice.nvim', dependencies = { 'MunifTanjim/nui.nvim' } },
 }

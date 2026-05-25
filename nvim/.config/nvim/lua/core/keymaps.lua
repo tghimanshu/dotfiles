@@ -90,6 +90,24 @@ vim.keymap.set('n', '<leader>tp', ':tabp<CR>', { noremap = true, silent = true, 
 -- Toggle line wrapping
 vim.keymap.set('n', '<leader>lw', '<cmd>set wrap!<CR>', { noremap = true, silent = true, desc = 'Toggle (l)ine (w)rap' })
 
+-- Markdown helpers
+vim.keymap.set(
+  'n',
+  '<leader>da',
+  '<cmd>setlocal formatoptions-=a<cr><cmd>setlocal textwidth=0<cr><cmd>echo "Auto-wrapping disabled"<cr>',
+  { desc = 'Disable auto wrap' }
+)
+vim.keymap.set(
+  'n',
+  '<leader>ea',
+  '<cmd>setlocal formatoptions+=a<cr><cmd>setlocal textwidth=80<cr><cmd>echo "Auto-wrapping enabled"<cr>',
+  { desc = 'Enable auto wrap' }
+)
+vim.keymap.set('v', '<leader>mb', 'di****<esc>hhp', { desc = 'Auto bold' })
+vim.keymap.set('v', '<leader>mi', 'di**<esc>hp', { desc = 'Auto italic' })
+vim.keymap.set('v', '<leader>ml', 'di[]()<esc>hhhpllli', { desc = 'Auto link' })
+vim.keymap.set('v', '<leader>mc', 'di``<esc>hp', { desc = 'Auto backtick' })
+
 -- Stay in indent mode
 vim.keymap.set('v', '<', '<gv', opts)
 vim.keymap.set('v', '>', '>gv', opts)

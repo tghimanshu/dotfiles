@@ -51,44 +51,44 @@ return {
           end
           local lsp_float_opts = {
             border = 'rounded',
-            max_width = 80,
-            max_height = 12,
-            focusable = false,
+            -- max_width = 80,
+            -- max_height = 12,
+            focusable = true,
           }
 
-          if supports('textDocument/definition') then
+          if supports 'textDocument/definition' then
             map('gd', tb.lsp_definitions, '[G]oto [D]efinition')
           end
-          if supports('textDocument/references') then
+          if supports 'textDocument/references' then
             map('gr', tb.lsp_references, '[G]oto [R]eferences')
           end
-          if supports('textDocument/implementation') then
+          if supports 'textDocument/implementation' then
             map('gI', tb.lsp_implementations, '[G]oto [I]mplementation')
           end
-          if supports('textDocument/declaration') then
+          if supports 'textDocument/declaration' then
             map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
           end
-          if supports('textDocument/typeDefinition') then
+          if supports 'textDocument/typeDefinition' then
             map('<leader>D', tb.lsp_type_definitions, 'Type [D]efinition')
           end
-          if supports('textDocument/documentSymbol') then
+          if supports 'textDocument/documentSymbol' then
             map('<leader>ds', tb.lsp_document_symbols, '[D]ocument [S]ymbols')
           end
-          if supports('workspace/symbol') then
+          if supports 'workspace/symbol' then
             map('<leader>ws', tb.lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
           end
-          if supports('textDocument/rename') then
+          if supports 'textDocument/rename' then
             map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame symbol')
           end
-          if supports('textDocument/codeAction') then
+          if supports 'textDocument/codeAction' then
             map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
           end
-          if supports('textDocument/hover') then
+          if supports 'textDocument/hover' then
             map('K', function()
               vim.lsp.buf.hover(lsp_float_opts)
             end, 'Hover documentation')
           end
-          if supports('textDocument/signatureHelp') then
+          if supports 'textDocument/signatureHelp' then
             map('<C-k>', function()
               vim.lsp.buf.signature_help(lsp_float_opts)
             end, 'Signature help', 'i')
@@ -98,13 +98,13 @@ return {
           if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
             local hl_group = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-              buffer   = event.buf,
-              group    = hl_group,
+              buffer = event.buf,
+              group = hl_group,
               callback = vim.lsp.buf.document_highlight,
             })
             vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
-              buffer   = event.buf,
-              group    = hl_group,
+              buffer = event.buf,
+              group = hl_group,
               callback = vim.lsp.buf.clear_references,
             })
             vim.api.nvim_create_autocmd('LspDetach', {
@@ -133,10 +133,10 @@ return {
       -- NOTE: 'copilot' removed — not an LSP, handled by copilot.vim/copilot.lua
       local servers = {
         -- Web
-        angularls   = {},
-        ts_ls       = {},
-        html        = { filetypes = { 'html', 'twig', 'hbs' } },
-        cssls       = {},
+        angularls = {},
+        ts_ls = {},
+        html = { filetypes = { 'html', 'twig', 'hbs' } },
+        cssls = {},
         tailwindcss = {},
 
         -- Python
@@ -147,7 +147,7 @@ return {
             basedpyright = {
               analysis = {
                 typeCheckingMode = 'standard', -- options: off | basic | standard | strict | all
-                autoSearchPaths  = true,
+                autoSearchPaths = true,
                 useLibraryCodeForTypes = true,
               },
             },
@@ -174,7 +174,7 @@ return {
           settings = {
             ['rust-analyzer'] = {
               checkOnSave = { command = 'clippy' },
-              inlayHints  = { enable = true },
+              inlayHints = { enable = true },
             },
           },
         },
@@ -184,33 +184,33 @@ return {
         gopls = {
           settings = {
             gopls = {
-              analyses  = { unusedparams = true },
+              analyses = { unusedparams = true },
               staticcheck = true,
-              gofumpt   = true,
+              gofumpt = true,
             },
           },
         },
 
         -- Infrastructure / Config
-        dockerls   = {},
-        sqlls      = {},
+        dockerls = {},
+        sqlls = {},
         terraformls = {},
-        jsonls     = {},
-        yamlls     = {},
-        bashls     = {},    -- shell scripts
+        jsonls = {},
+        yamlls = {},
+        bashls = {}, -- shell scripts
 
         -- Markdown / Notes
-        marksman   = {},    -- markdown LSP — great for the notes vault
+        marksman = {}, -- markdown LSP — great for the notes vault
 
         -- Lua
         lua_ls = {
           settings = {
             Lua = {
-              completion  = { callSnippet = 'Replace' },
-              runtime     = { version = 'LuaJIT' },
-              workspace   = {
+              completion = { callSnippet = 'Replace' },
+              runtime = { version = 'LuaJIT' },
+              workspace = {
                 checkThirdParty = false,
-                library         = vim.api.nvim_get_runtime_file('', true),
+                library = vim.api.nvim_get_runtime_file('', true),
               },
               diagnostics = {
                 globals = { 'vim' },
@@ -229,14 +229,14 @@ return {
 
       require('mason-tool-installer').setup {
         ensure_installed = {
-          'stylua',           -- Lua formatter
-          'codelldb',         -- C/C++/Rust debugger
-          'gofumpt',          -- Go formatter (stricter gofmt)
-          'goimports',        -- Go import organiser
-          'prettier',         -- Web + Markdown formatter
-          'ruff',             -- Python linter/formatter
-          'shfmt',            -- Shell formatter
-          'clang-format',     -- C/C++ formatter
+          'stylua', -- Lua formatter
+          'codelldb', -- C/C++/Rust debugger
+          'gofumpt', -- Go formatter (stricter gofmt)
+          'goimports', -- Go import organiser
+          'prettier', -- Web + Markdown formatter
+          'ruff', -- Python linter/formatter
+          'shfmt', -- Shell formatter
+          'clang-format', -- C/C++ formatter
         },
       }
 

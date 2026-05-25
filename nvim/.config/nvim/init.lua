@@ -62,6 +62,7 @@ require('lazy').setup({
   require 'plugins.lsp',
   require 'plugins.lualine',
   require 'plugins.misc',
+  require 'plugins.markdown',
   require 'plugins.neotree',
   require 'plugins.noice',
   require 'plugins.none-ls',
