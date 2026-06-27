@@ -95,7 +95,7 @@ return {
       { '<leader>nn', '<cmd>Obsidian new<CR>', desc = 'Notes: New note' },
       { '<leader>no', '<cmd>Obsidian quick_switch<CR>', desc = 'Notes: Quick switch' },
       { '<leader>nf', '<cmd>Obsidian search<CR>', desc = 'Notes: Search' },
-      { '<leader>nb', '<cmd>ObsidianBacklinks<CR>', desc = 'Notes: Backlinks' },
+      -- { '<leader>nb', '<cmd>ObsidianBacklinks<CR>', desc = 'Notes: Backlinks' },
       { '<leader>nt', '<cmd>Obsidian tags<CR>', desc = 'Notes: Tags' },
       { '<leader>ni', '<cmd>ObsidianTemplate<CR>', desc = 'Notes: Insert template' },
       { '<leader><CR>', '<cmd>Obsidian toggle_checkbox<CR>', desc = 'Notes: Toggle checkbox' },
