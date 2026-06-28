@@ -46,14 +46,3 @@ windowrule = center 1, match:title ^(pygame window)$
 
 # Toggle config flags dynamically
 source = ~/.local/state/omarchy/toggles/hypr/*.conf
-
-# DaVinci Resolve - Fix floating dialogs (Hyprland 0.53+ syntax)
-# Tag every floating Resolve window for easy targeting of the cosmetic
-# tweaks below. Do NOT add `stay_focused on` here - it locks focus inside
-# modal dialogs (Project Settings, Preferences, Render) so clicks on the
-# main window do nothing, which feels like a trapped cursor.
-windowrule = tag +drpopup, match:class ^(resolve)$, match:float 1
-windowrule = border_size 0, match:tag drpopup
-windowrule = no_shadow on, match:tag drpopup
-windowrule = rounding 0, match:tag drpopup
-windowrule = opacity 1, match:tag drpopup
