@@ -27,8 +27,8 @@ eval "$(oh-my-posh init zsh --config $HOME/.config/ohmyposh/zen.toml)"
 
 set -o vi
 
-. "$HOME/.local/share/../bin/env"
-. "$HOME/.cargo/env"
+# . "$HOME/.local/share/../bin/env"
+# . "$HOME/.cargo/env"
 export PATH=$PATH:$HOME/.local/scripts
 
 HISTSIZE=32768
@@ -54,8 +54,8 @@ bindkey '^[[B' history-search-forward
 eval "$(fzf --zsh)"
 bindkey -s '^f' 'tmux-sessionizer^M'
 
-source $HOME/.config/taskwarrior/taskrc_aliases.sh
-alias wtf='wtfutil'
+# source $HOME/.config/taskwarrior/taskrc_aliases.sh
+# alias wtf='wtfutil'
 
 source ~/.local/share/zsh/rc
 export PATH=$PATH:/home/himanshu/.local/scripts
@@ -93,3 +93,7 @@ alias brain='cd ~/personal/notes && nvim .'
 # Generated for envman. Do not edit.
 [ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
 export PATH="$HOME/.local/bin:$PATH"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"                                       # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" # This loads nvm bash_completion

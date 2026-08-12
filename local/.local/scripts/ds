@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# This script is used to sync the daily notes from the local directory to github
+
+# check if the git status has any changes or not
+has_changes=$(git status --porcelain)
+
+# executed_from_path=$(pwd)
+# echo "Executed from path: $executed_from_path"
+# if [[ executed_from_path != *notes ]]; then
+#     echo "Please run this script from the correct directory: $HOME/personal/notes"
+#     exit 1
+# fi
+
+if [ -n "$has_changes" ]; then
+    echo "There are changes in the local directory. Syncing to GitHub..."
+    git add .
+    current_date=$(date +"%d %B, %Y")
+    git commit -m "Sync: $current_date"
+    git push origin main
+else
+    echo "No changes detected. Nothing to sync."
+fi
