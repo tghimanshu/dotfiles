@@ -17,7 +17,7 @@ if [ -n "$has_changes" ]; then
     git add .
     current_date=$(date +"%d %B, %Y")
     git commit -m "Sync: $current_date"
-    git push origin main
+    git push
 else
     echo "No changes detected. Nothing to sync."
 fi
