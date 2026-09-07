@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if [ -f $HOME/.local/scripts/.env ]; then
+    source $HOME/.local/scripts/.env
+
+    echo "Please logout and login to agentrouter.org to get additional credits!"
+    # sleep 5
+    read -t 5 -n 1 -s
+
+    # macOS / Linux
+    export ANTHROPIC_AUTH_TOKEN=$AGENT_ROUTER_API_KEY
+    export ANTHROPIC_BASE_URL="https://agentrouter.org"
+    export ANTHROPIC_MODEL="claude-opus-4-8"
+
+    claude
+else
+    echo "Error: .env file not found. please create an .env file with the required environment variables."
+    echo "Required environment variables:"
+    echo "  AGENT_ROUTER_API_KEY=your_api_key_here"
+fi

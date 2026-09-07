@@ -10,3 +10,4 @@ tmux/.config/tmux/plugins/
 
 # stray vault directory that ended up inside dotfiles
 notes/personal/
+.env
