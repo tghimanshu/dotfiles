@@ -21,8 +21,8 @@ return {
           path = '~/personal/notes',
         },
       },
-      notes_subdir = '03-resources',
-      new_notes_location = '00-Inbox',
+      notes_subdir = '00-Inbox',
+      new_notes_location = 'notes_subdir',
 
       daily_notes = {
         folder = '10-daily',
@@ -37,7 +37,6 @@ return {
       },
 
       completion = {
-        nvim_cmp = true,
         min_chars = 2,
       },
 
@@ -95,9 +94,9 @@ return {
       { '<leader>nn', '<cmd>Obsidian new<CR>', desc = 'Notes: New note' },
       { '<leader>no', '<cmd>Obsidian quick_switch<CR>', desc = 'Notes: Quick switch' },
       { '<leader>nf', '<cmd>Obsidian search<CR>', desc = 'Notes: Search' },
-      -- { '<leader>nb', '<cmd>ObsidianBacklinks<CR>', desc = 'Notes: Backlinks' },
+      -- { '<leader>nb', '<cmd>Obsidian backlinks<CR>', desc = 'Notes: Backlinks' },
       { '<leader>nt', '<cmd>Obsidian tags<CR>', desc = 'Notes: Tags' },
-      { '<leader>ni', '<cmd>ObsidianTemplate<CR>', desc = 'Notes: Insert template' },
+      { '<leader>ni', '<cmd>Obsidian template<CR>', desc = 'Notes: Insert template' },
       { '<leader><CR>', '<cmd>Obsidian toggle_checkbox<CR>', desc = 'Notes: Toggle checkbox' },
       {
         '<leader>np',
@@ -132,7 +131,7 @@ return {
             local exists = vim.fn.filereadable(path) == 1
             vim.cmd('edit ' .. path)
             if not exists then
-              vim.cmd 'ObsidianTemplate project'
+              vim.cmd 'Obsidian template project'
             end
           end)
         end,
@@ -150,7 +149,7 @@ return {
             local exists = vim.fn.filereadable(path) == 1
             vim.cmd('edit ' .. path)
             if not exists then
-              vim.cmd 'ObsidianTemplate area'
+              vim.cmd 'Obsidian template area'
             end
           end)
         end,
@@ -168,7 +167,7 @@ return {
             local exists = vim.fn.filereadable(path) == 1
             vim.cmd('edit ' .. path)
             if not exists then
-              vim.cmd 'ObsidianTemplate resource'
+              vim.cmd 'Obsidian template resource'
             end
           end)
         end,
