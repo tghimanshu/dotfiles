@@ -50,3 +50,6 @@
 
 	# Remotes
 	pf  = push --force-with-lease  # safer force push (fails if remote changed)
+
+[includeIf "hasconfig:remote.*.url:git@github.com-behena:*/**"]
+    path = ~/.gitconfig-behena
