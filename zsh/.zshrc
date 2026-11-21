@@ -99,3 +99,4 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" # This loads nvm bash_completion
 
 alias ls='lsd -al --group-dirs first --icon=always --color=always'
+export PATH=/opt/homebrew/opt/openjdk/bin:$PATH
